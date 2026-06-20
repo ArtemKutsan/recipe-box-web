@@ -1,4 +1,4 @@
-# Logs
+# Logs and diagnostics
 logs
 *.log
 npm-debug.log*
@@ -7,41 +7,43 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# Dependencies
+node_modules/
+
+# Build output
 dist
 dist-ssr
-*.local
+
+# Local environment
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+.vscode/
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-# Other
-.vscode
-tmp
+# Temporary files
+tmp/
+temp/
 
-# AI Agent Knowledge Base & Infrastructure
-agent
-docs
-AGENTS.md
-
-# AI Tool State & Cache
-.agents
-.gemini
-.qwen
-.codex
-.kimi
-.cline
-.anthropic
-.openai
-.cody
-.cursor
-.windsurf
-.idx
+# AI tool state and caches
+.agents/
+.anthropic/
+.cline/
+.codex/
+.cody/
+.cursor/
+.gemini/
+.idx/
+.kimi/
+.openai/
+.qwen/
+.windsurf/
