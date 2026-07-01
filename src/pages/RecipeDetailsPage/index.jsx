@@ -59,8 +59,7 @@ const RecipeDetailsPage = () => {
               <Badge>{recipe.difficulty}</Badge>
               <span className="inline-flex items-baseline gap-2 text-sm">
                 <span className="text-lg text-amber-400">★</span>
-                <span className="font-medium">{recipe.rating}</span>
-                <span>({recipe.reviewCount} reviews)</span>
+                <span className="font-medium">{recipe.rating ?? '—'}</span>
               </span>
             </div>
 

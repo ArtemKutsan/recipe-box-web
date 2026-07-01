@@ -1,25 +1,26 @@
 import axios from 'axios';
-import { normalizeMealType } from '../lib/normalizeMealType';
+import { API_BASE_URL } from '@/shared/config/api';
+import { toRecipeListResponse } from './response';
 
 const getRecipesEndpoint = ({ mealType, tag, search }) => {
-  if (mealType) {
-    const normalizedMealType = normalizeMealType(mealType).toLowerCase();
+  const params = new URLSearchParams();
 
-    return `https://dummyjson.com/recipes/meal-type/${encodeURIComponent(normalizedMealType)}`;
+  if (search) {
+    params.set('q', search);
+  }
+
+  if (mealType) {
+    params.set('mealType', mealType);
   }
 
   if (tag) {
-    return `https://dummyjson.com/recipes/tag/${encodeURIComponent(tag)}`;
+    params.set('tag', tag);
   }
 
-  if (search) {
-    return 'https://dummyjson.com/recipes/search';
-  }
-
-  return 'https://dummyjson.com/recipes';
+  return params.toString() ? `${API_BASE_URL}/recipes?${params.toString()}` : `${API_BASE_URL}/recipes`;
 };
 
-// Загружает список рецептов из временного API с поддержкой поиска, фильтров, сортировки и пагинации
+// Загружает список рецептов из нашего API с поддержкой поиска, фильтров, сортировки и пагинации.
 export const getRecipes = async ({
   search = '',
   mealType = '',
@@ -30,15 +31,16 @@ export const getRecipes = async ({
   skip = 0,
 } = {}) => {
   const endpoint = getRecipesEndpoint({ mealType, tag, search });
+  const pageSize = limit > 0 ? limit : 100;
+  const page = pageSize ? Math.floor(skip / pageSize) + 1 : undefined;
   const { data } = await axios.get(endpoint, {
     params: {
-      ...(search && !mealType && !tag ? { q: search } : {}),
       ...(sortBy ? { sortBy } : {}),
-      ...(order ? { order } : {}),
-      limit,
-      skip,
+      ...(order ? { sortOrder: order } : {}),
+      ...(page ? { page } : {}),
+      ...(pageSize ? { pageSize } : {}),
     },
   });
 
-  return data.recipes;
+  return Array.isArray(data.items) ? data.items.map(toRecipeListResponse) : [];
 };
