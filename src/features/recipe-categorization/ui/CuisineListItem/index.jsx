@@ -3,21 +3,15 @@ import { Badge } from '@/shared/ui';
 
 // Компонент CuisineListItem принимает объект cuisine, выбранный тип блюда (mealType) и функцию onSelect для обработки выбора кухни. Он отображает информацию о кухне, включая изображение, название, описание и количество рецептов, а также вызывает функцию onSelect при клике на элемент.
 const CuisineListItem = ({ cuisine, mealType, onSelect }) => {
-  const { name, count, image } = cuisine;
+  const { name, slug, count, image } = cuisine;
 
   return (
     <button
       type="button"
-      onClick={() => onSelect(name)}
+      onClick={() => onSelect(slug)}
       className="flex h-full flex-col overflow-hidden rounded-2xl border bg-card text-left"
     >
-      {image ? (
-        <img src={image} alt={name} className="h-50 w-full object-cover" />
-      ) : (
-        <div className="flex h-50 items-center justify-center bg-muted text-sm text-muted-foreground">
-          No image
-        </div>
-      )}
+      {image ? <img src={image} alt={name} className="h-50 w-full object-cover" /> : null}
 
       <div className="flex flex-1 flex-col justify-between gap-4 p-4">
         <div>

@@ -7,7 +7,7 @@ const CuisineList = ({ cuisines, mealType, onSelect }) => {
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {cuisines.map((cuisine) => (
         <CuisineListItem
-          key={cuisine.name}
+          key={cuisine.slug}
           cuisine={cuisine}
           mealType={mealType}
           onSelect={onSelect}

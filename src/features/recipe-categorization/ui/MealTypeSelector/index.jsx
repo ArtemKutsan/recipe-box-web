@@ -29,9 +29,9 @@ const MealTypeSelector = ({ items, activeItem, onSelect }) => {
       <div ref={listRef} className="flex gap-4 overflow-x-auto pb-4">
         {items.map((item) => (
           <MealTypeSelectorItem
-            key={item.name}
+            key={item.slug}
             item={item}
-            isActive={activeItem === item.name}
+            isActive={activeItem === item.slug}
             onSelect={onSelect}
           />
         ))}
