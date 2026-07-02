@@ -12,6 +12,6 @@ export const buildRecipesQuery = ({
   tag,
   sortBy,
   order,
-  limit: pageSize,
-  skip: pageSize ? (page - 1) * pageSize : 0,
+  page,
+  pageSize,
 });

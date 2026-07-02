@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
-import { getRecipes } from '@/entities/recipe';
-import { buildRecipesQuery } from '@/entities/recipe/lib';
+import { useMemo, useState } from 'react';
 import { RecipeList } from '@/entities/recipe/ui';
+import { useRecipesQuery } from '@/entities/recipe';
+import { buildRecipesQuery } from '@/entities/recipe/lib';
 import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
 import { Button } from '@/shared/ui';
 import useDebounce from '@/shared/hooks/useDebounce';
@@ -13,10 +13,8 @@ const RecipesPage = () => {
   const [sortBy, setSortBy] = useState('');
   const [order, setOrder] = useState('asc');
   const [page, setPage] = useState(1);
-  const [recipes, setRecipes] = useState([]);
-  const [status, setStatus] = useState('idle');
-  const [error, setError] = useState(null);
   const debouncedSearch = useDebounce(search, 300);
+
   const query = useMemo(
     () =>
       buildRecipesQuery({
@@ -28,9 +26,19 @@ const RecipesPage = () => {
       }),
     [debouncedSearch, order, page, sortBy],
   );
-  const hasNextPage = recipes.length === RECIPES_PER_PAGE;
-  const isLoading = status === 'idle' || status === 'loading';
-  const isEmpty = status === 'succeeded' && recipes.length === 0;
+
+  const {
+    recipes,
+    total,
+    totalPages,
+    isLoading,
+    isError,
+    error,
+  } = useRecipesQuery(query);
+
+  const hasNextPage = page < totalPages || recipes.length === RECIPES_PER_PAGE && page === totalPages;
+  const isEmpty = !isLoading && !isError && recipes.length === 0;
+
   const updateSearch = (value) => {
     setSearch(value);
 
@@ -38,43 +46,16 @@ const RecipesPage = () => {
       setPage(1);
     }
   };
+
   const updateSortBy = (value) => {
     setSortBy(value);
     setPage(1);
   };
+
   const updateOrder = (value) => {
     setOrder(value);
     setPage(1);
   };
-
-  useEffect(() => {
-    let isActive = true;
-
-    const loadRecipes = async () => {
-      setStatus('loading');
-      setError(null);
-
-      try {
-        const nextRecipes = await getRecipes(query);
-
-        if (!isActive) return;
-
-        setRecipes(nextRecipes);
-        setStatus('succeeded');
-      } catch {
-        if (!isActive) return;
-
-        setError('Failed to load recipes');
-        setStatus('failed');
-      }
-    };
-
-    loadRecipes();
-
-    return () => {
-      isActive = false;
-    };
-  }, [query]);
 
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
@@ -92,8 +73,8 @@ const RecipesPage = () => {
         onOrderChange={updateOrder}
       />
 
-      {error ? (
-        <p>{error}</p>
+      {isError ? (
+        <p>{error?.data?.message ?? error?.message ?? 'Failed to load recipes'}</p>
       ) : isLoading ? (
         <p>Loading recipes...</p>
       ) : isEmpty ? (
@@ -110,7 +91,10 @@ const RecipesPage = () => {
         >
           Previous
         </Button>
-        <span className="text-sm text-muted-foreground">Page {page}</span>
+        <span className="text-sm text-muted-foreground">
+          Page {page}
+          {total ? ` of ${totalPages}` : ''}
+        </span>
         <Button
           variant="ghost"
           onClick={() => setPage((currentPage) => currentPage + 1)}

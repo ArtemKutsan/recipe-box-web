@@ -1,50 +1,14 @@
-import { useEffect, useState } from 'react';
-import { getRecipeById } from '../api/getRecipeById';
+import { useGetRecipeByIdQuery } from '../api/recipesQuery';
 
-/**
- * useRecipe — загружает один рецепт по ID через API-границу Recipe entity.
- *
- * Возвращает:
- * - recipe — загруженный рецепт или null
- * - status — статус загрузки ('idle' | 'loading' | 'succeeded' | 'failed')
- * - error — текст ошибки, если загрузка не удалась
- */
+// Хук сущности для получения одного рецепта через RTK Query.
 export const useRecipe = (recipeId) => {
-  const [recipe, setRecipe] = useState(null);
-  const [status, setStatus] = useState('idle');
-  const [error, setError] = useState(null);
+  const query = useGetRecipeByIdQuery(recipeId, {
+    skip: !recipeId,
+  });
 
-  useEffect(() => {
-    if (!recipeId) return;
-
-    let isActive = true;
-
-    const loadRecipe = async () => {
-      setStatus('loading');
-      setError(null);
-
-      try {
-        const loadedRecipe = await getRecipeById(recipeId);
-
-        if (!isActive) return;
-
-        setRecipe(loadedRecipe);
-        setStatus('succeeded');
-      } catch {
-        if (!isActive) return;
-
-        setRecipe(null);
-        setError('Failed to load recipe');
-        setStatus('failed');
-      }
-    };
-
-    loadRecipe();
-
-    return () => {
-      isActive = false;
-    };
-  }, [recipeId]);
-
-  return { recipe, status, error };
+  return {
+    recipe: query.data ?? null,
+    status: query.isLoading ? 'loading' : query.isError ? 'failed' : query.isSuccess ? 'succeeded' : 'idle',
+    error: query.error?.data?.message ?? query.error?.message ?? null,
+  };
 };

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_BASE_URL } from '@/shared/config/api';
-import { toRecipeListResponse } from '@/entities/recipe/api/response';
+import { toRecipeDetailResponse, toRecipeListResponse } from '@/entities/recipe/api/response';
 
 export const recipesApi = createApi({
   reducerPath: 'recipesApi',
@@ -10,10 +10,14 @@ export const recipesApi = createApi({
   endpoints: (build) => ({
     getRecipes: build.query({
       // Собираем query string только из тех фильтров, которые реально нужны текущему экрану.
-      // mealType и cuisine идут в backend как slug, page/pageSize нужны для списка рецептов,
-      // а сам ответ backend возвращает и items, и список cuisines для экрана категорий.
-      query: ({ mealType, cuisine, pageSize, page } = {}) => {
+      // mealType, cuisine и tag идут в backend как slug, search/sort управляют списком,
+      // page/pageSize нужны для пагинации, а сам ответ backend возвращает items и cuisines.
+      query: ({ search, mealType, cuisine, tag, sortBy, order, pageSize, page } = {}) => {
         const params = new URLSearchParams();
+
+        if (search) {
+          params.set('q', search);
+        }
 
         if (mealType && mealType !== 'All') {
           params.set('mealType', mealType);
@@ -21,6 +25,18 @@ export const recipesApi = createApi({
 
         if (cuisine) {
           params.set('cuisine', cuisine);
+        }
+
+        if (tag) {
+          params.set('tag', tag);
+        }
+
+        if (sortBy) {
+          params.set('sortBy', sortBy);
+        }
+
+        if (order) {
+          params.set('sortOrder', order);
         }
 
         if (pageSize) {
@@ -48,7 +64,11 @@ export const recipesApi = createApi({
         totalPages: response.totalPages ?? 0,
       }),
     }),
+    getRecipeById: build.query({
+      query: (recipeId) => `/recipes/${recipeId}`,
+      transformResponse: (response) => toRecipeDetailResponse(response.recipe),
+    }),
   }),
 });
 
-export const { useGetRecipesQuery } = recipesApi;
+export const { useGetRecipesQuery, useGetRecipeByIdQuery } = recipesApi;
