@@ -68,7 +68,15 @@ export const recipesApi = createApi({
       query: (recipeId) => `/recipes/${recipeId}`,
       transformResponse: (response) => toRecipeDetailResponse(response.recipe),
     }),
+    createRecipe: build.mutation({
+      query: (recipe) => ({
+        url: '/recipes',
+        method: 'POST',
+        body: recipe,
+      }),
+      transformResponse: (response) => toRecipeDetailResponse(response.recipe),
+    }),
   }),
 });
 
-export const { useGetRecipesQuery, useGetRecipeByIdQuery } = recipesApi;
+export const { useGetRecipesQuery, useGetRecipeByIdQuery, useCreateRecipeMutation } = recipesApi;

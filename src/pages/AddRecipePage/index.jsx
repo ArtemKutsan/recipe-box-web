@@ -1,13 +1,6 @@
-// src/pages/AddRecipePage/index.jsx
-import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { createRecipe } from '@/entities/recipe';
-import {
-  RecipeForm,
-  resetAddRecipeState,
-  selectAddRecipeError,
-  selectAddRecipeStatus,
-} from '@/features/add-recipe';
+import { useCreateRecipeMutation } from '@/entities/recipe';
+import { RecipeForm } from '@/features/add-recipe';
 
 // Начальное состояние формы для создания нового рецепта
 const initialFormValues = {
@@ -26,28 +19,21 @@ const initialFormValues = {
 };
 
 const AddRecipePage = () => {
-  // Диспетчер Redux для отправки действий в store
-  const dispatch = useDispatch();
-  // Селекторы для получения статуса создания рецепта и возможной ошибки из Redux store
-  const addRecipeStatus = useSelector(selectAddRecipeStatus);
-  // Селектор для получения возможной ошибки при создании рецепта из Redux store
-  const addRecipeError = useSelector(selectAddRecipeError);
+  const [createRecipe, { isLoading, isSuccess, isError, error }] = useCreateRecipeMutation();
   // Инициализация React Hook Form с начальными значениями формы
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset: resetForm } = useForm({
     defaultValues: initialFormValues,
   });
 
-  // Обработчик отправки формы, который создает новый рецепт на основе данных из формы и добавляет его в Redux store
   const onSubmit = async (formValues) => {
     const nextRecipe = {
-      name: formValues.name.trim(),
-      image: formValues.image.trim(),
+      title: formValues.name.trim(),
+      thumbnailUrl: formValues.image.trim(),
       cuisine: formValues.cuisine.trim(),
-      // Преобразуем строку типов блюд в массив, удаляя лишние пробелы и пустые строки
       mealType: formValues.mealType
-        .split(',') // Разделяем строку по запятым, чтобы получить массив типов блюд
-        .map((item) => item.trim()) // Удаляем лишние пробелы вокруг каждого типа блюда
-        .filter(Boolean), // Удаляем пустые строки из массива, которые могут возникнуть из-за лишних запятых или пробелов
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean),
       difficulty: formValues.difficulty,
       servings: Number(formValues.servings),
       prepTimeMinutes: Number(formValues.prepTimeMinutes),
@@ -67,19 +53,13 @@ const AddRecipePage = () => {
         .filter(Boolean),
       rating: 0,
       reviewCount: 0,
-      userId: 1,
     };
 
-    // Отправляем действие для создания рецепта и обрабатываем результат
     try {
-      // Диспетчеризуем createRecipe и через unwrap получаем созданный рецепт или ошибку
-      const createdRecipe = await dispatch(createRecipe(nextRecipe)).unwrap();
+      const createdRecipe = await createRecipe(nextRecipe).unwrap();
 
-      console.log('DummyJSON recipe response:', createdRecipe);
-      // Сбрасываем форму к начальному состоянию после успешного создания рецепта
-      reset(initialFormValues);
-      // Сбрасываем состояние создания рецепта в Redux store, чтобы очистить статус и ошибки
-      dispatch(resetAddRecipeState());
+      console.log('Recipe created:', createdRecipe);
+      resetForm(initialFormValues);
     } catch (error) {
       console.error('Failed to create recipe:', error);
     }
@@ -89,7 +69,7 @@ const AddRecipePage = () => {
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold tracking-tight">Add Recipe</h1>
-        <p>Add a new recipe to the local store</p>
+        <p>Add a new recipe</p>
       </header>
 
       <RecipeForm
@@ -97,15 +77,15 @@ const AddRecipePage = () => {
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         message={
-          addRecipeStatus === 'loading'
+          isLoading
             ? 'Creating recipe...'
-            : addRecipeStatus === 'failed'
-              ? addRecipeError
-              : addRecipeStatus === 'succeeded'
-                ? 'Recipe added to store.'
+            : isError
+              ? error?.data?.message ?? error?.message ?? 'Failed to create recipe'
+              : isSuccess
+                ? 'Recipe created.'
                 : ''
         }
-        isSubmitting={addRecipeStatus === 'loading'}
+        isSubmitting={isLoading}
       />
     </section>
   );
