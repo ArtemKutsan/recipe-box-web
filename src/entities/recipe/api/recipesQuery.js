@@ -4,6 +4,7 @@ import { toRecipeDetailResponse, toRecipeListResponse } from '@/entities/recipe/
 
 export const recipesApi = createApi({
   reducerPath: 'recipesApi',
+  tagTypes: ['Recipes'],
   baseQuery: fetchBaseQuery({
     baseUrl: API_BASE_URL,
   }),
@@ -63,10 +64,16 @@ export const recipesApi = createApi({
         pageSize: response.pageSize ?? 20,
         totalPages: response.totalPages ?? 0,
       }),
+      providesTags: (result) => {
+        const items = Array.isArray(result?.items) ? result.items : [];
+
+        return [{ type: 'Recipes', id: 'LIST' }, ...items.map((recipe) => ({ type: 'Recipes', id: recipe.id }))];
+      },
     }),
     getRecipeById: build.query({
       query: (recipeId) => `/recipes/${recipeId}`,
       transformResponse: (response) => toRecipeDetailResponse(response.recipe),
+      providesTags: (_result, _error, recipeId) => [{ type: 'Recipes', id: recipeId }],
     }),
     createRecipe: build.mutation({
       query: (recipe) => ({
@@ -75,6 +82,7 @@ export const recipesApi = createApi({
         body: recipe,
       }),
       transformResponse: (response) => toRecipeDetailResponse(response.recipe),
+      invalidatesTags: [{ type: 'Recipes', id: 'LIST' }],
     }),
   }),
 });
