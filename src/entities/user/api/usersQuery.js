@@ -1,12 +1,10 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_BASE_URL } from '@/shared/config/api';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQuery } from '@/shared/api';
 import { toRecipeListResponse } from '@/entities/recipe/api/response';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: API_BASE_URL,
-  }),
+  baseQuery,
   endpoints: (build) => ({
     getUserById: build.query({
       query: (userId) => `/users/${userId}`,

@@ -1,13 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_BASE_URL } from '@/shared/config/api';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQuery } from '@/shared/api';
 import { toRecipeDetailResponse, toRecipeListResponse } from '@/entities/recipe/api/response';
 
 export const recipesApi = createApi({
   reducerPath: 'recipesApi',
   tagTypes: ['Recipes'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: API_BASE_URL,
-  }),
+  baseQuery,
   endpoints: (build) => ({
     getRecipes: build.query({
       // Собираем query string только из тех фильтров, которые реально нужны текущему экрану.

@@ -1,11 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_BASE_URL } from '@/shared/config/api';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQuery } from '@/shared/api';
 
 export const mealTypesApi = createApi({
   reducerPath: 'mealTypesApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: API_BASE_URL,
-  }),
+  baseQuery,
   endpoints: (build) => ({
     getMealTypes: build.query({
       query: () => '/meal-types',
