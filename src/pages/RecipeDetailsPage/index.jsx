@@ -7,13 +7,10 @@ import UtensilsIcon from '@/assets/icons/utensils.svg?react';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
 import { useRecipe } from '@/entities/recipe';
-import { useUser } from '@/entities/user';
 
 const RecipeDetailsPage = () => {
   const { id } = useParams();
   const { recipe, status, error } = useRecipe(id);
-  const authorId = recipe?.userId;
-  const { user: author } = useUser(authorId);
 
   if (status === 'idle' || status === 'loading') {
     return <p>Loading...</p>;
@@ -31,18 +28,25 @@ const RecipeDetailsPage = () => {
   const mealTypes = recipe.mealType ?? [];
   const ingredients = recipe.ingredients ?? [];
   const instructions = recipe.instructions ?? [];
+  const author = recipe.author;
+  const authorName = author?.name ?? 'RecipeBox user';
+  const authorLetter = authorName.slice(0, 1).toUpperCase();
 
   return (
     <section className="mx-auto">
       <article className="overflow-hidden rounded-4xl border bg-card">
         <div className="grid lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="h-full">
+          {recipe.image ? (
             <img
               src={recipe.image}
               alt={recipe.name}
               className="h-full min-h-64 w-full object-cover"
             />
-          </div>
+          ) : (
+            <div className="flex h-full min-h-64 w-full items-center justify-center bg-muted text-sm text-muted-foreground">
+              No image
+            </div>
+          )}
 
           <div className="flex flex-col gap-8 px-4 py-6 sm:px-8 sm:py-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -59,7 +63,7 @@ const RecipeDetailsPage = () => {
               </h1>
               {/* Описание */}
               <p className="max-w-2xl">
-                {recipe?.description ??
+                {recipe?.description ||
                   `A simple and delicious ${recipe?.cuisine?.toLowerCase() || 'cuisine'} classic with fresh ingredients.`}
               </p>
               {author && (
@@ -67,15 +71,11 @@ const RecipeDetailsPage = () => {
                   to={`/users/${author.id}`}
                   className="inline-flex items-center gap-3 self-start rounded-2xl border px-4 py-3 transition-colors hover:bg-lite"
                 >
-                  {author.avatarUrl ? (
-                    <img src={author.avatarUrl} alt={author.name} className="size-10 rounded-full object-cover" />
-                  ) : (
-                    <span className="flex size-10 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
-                      {author.name?.slice(0, 1)?.toUpperCase() ?? 'U'}
-                    </span>
-                  )}
+                  <span className="flex size-10 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
+                    {authorLetter}
+                  </span>
                   <span className="flex flex-col">
-                    <span className="text-sm font-semibold">{author.name}</span>
+                    <span className="text-sm font-semibold">{authorName}</span>
                     <span className="text-xs text-muted-foreground">User #{author.id}</span>
                   </span>
                 </Link>
