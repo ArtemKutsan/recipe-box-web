@@ -10,6 +10,7 @@ import ProfileIcon from '@/assets/icons/profile.svg?react';
 export const navItems = [
   { to: RouterPath.recipes, label: 'Recipes', Icon: HomeIcon },
   { to: RouterPath.categories, label: 'Categories', Icon: CategoriesIcon },
+  { to: RouterPath.login, label: 'Login', Icon: ProfileIcon },
   { to: RouterPath.add_recipe, label: 'Add Recipe', Icon: ListIcon },
   { to: RouterPath.meal_planner, label: 'Meal Planner', Icon: CalendarIcon },
   { to: RouterPath.profile, label: 'Profile', Icon: ProfileIcon },

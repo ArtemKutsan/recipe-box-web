@@ -1,6 +1,7 @@
 import MainPage from '@/pages/MainPage';
 import RecipesPage from '@/pages/RecipesPage';
 import CategoriesPage from '@/pages/CategoriesPage';
+import LoginPage from '@/pages/LoginPage';
 import AddRecipePage from '@/pages/AddRecipePage';
 import MealPlannerPage from '@/pages/MealPlannerPage';
 import ProfilePage from '@/pages/ProfilePage';
@@ -21,6 +22,10 @@ export const routeConfig = {
   [AppRoute.CATEGORIES]: {
     path: RouterPath.categories,
     element: <CategoriesPage />,
+  },
+  [AppRoute.LOGIN]: {
+    path: RouterPath.login,
+    element: <LoginPage />,
   },
   [AppRoute.ADD_RECIPE]: {
     path: RouterPath.add_recipe,
