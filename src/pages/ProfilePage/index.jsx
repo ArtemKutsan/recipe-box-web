@@ -1,66 +1,29 @@
-import { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { RecipeList } from '@/entities/recipe/ui';
-import { useRecipes } from '@/entities/recipe';
-import {
-  fetchUserById,
-  selectUserById,
-  selectUsersError,
-  selectUsersStatus,
-} from '@/entities/user';
+import { useUser, useUserRecipes } from '@/entities/user';
 import { DEV_USER_ID } from '@/shared/config/devUser';
 
 const ProfilePage = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const userId = id ?? DEV_USER_ID;
-  const user = useSelector((state) => selectUserById(state, userId));
-  const status = useSelector(selectUsersStatus);
-  const error = useSelector(selectUsersError);
-  const { recipes, status: recipesStatus, error: recipesError } = useRecipes();
+  const { user, status, error } = useUser(userId);
+  const { recipes, total, status: recipesStatus, error: recipesError } = useUserRecipes(userId);
   const isCurrentUserProfile = !id;
-  const authoredRecipes = useMemo(
-    () => recipes.filter((recipe) => String(recipe.userId) === String(userId)),
-    [recipes, userId],
-  );
-
-  useEffect(() => {
-    if (!user && status !== 'loading') {
-      dispatch(fetchUserById(userId));
-    }
-  }, [dispatch, status, user, userId]);
 
   if (status === 'idle' || status === 'loading') return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   if (!user) return <p>User not found.</p>;
 
   const profileStats = [
-    { label: 'Recipes', value: authoredRecipes.length },
+    { label: 'Recipes', value: total },
     { label: 'Favorites', value: 0 },
     { label: 'Comments', value: 0 },
   ];
   const profileDetails = [
-    { label: 'Role', value: user.role || 'Member' },
-    { label: 'Age', value: user.age ? `${user.age}` : '—' },
+    { label: 'Age', value: user.age ?? '—' },
     { label: 'Gender', value: user.gender || '—' },
-    {
-      label: 'Location',
-      value:
-        user.location?.city && user.location?.country
-          ? `${user.location.city}, ${user.location.country}`
-          : user.location?.city || user.location?.country || '—',
-    },
-    { label: 'Education', value: user.education || '—' },
-    {
-      label: 'Work',
-      value: user.work?.company
-        ? `${user.work.title}${user.work.department ? ` · ${user.work.department}` : ''} @ ${
-            user.work.company
-          }`
-        : '—',
-    },
-    { label: 'Contact', value: user.phone || user.email },
+    { label: 'Contact', value: user.phone || '—' },
+    { label: 'Bio', value: user.bio || '—' },
   ];
 
   return (
@@ -71,18 +34,17 @@ const ProfilePage = () => {
       </header>
 
       <div className="flex items-center gap-6 rounded-2xl border p-6">
-        <img
-          src={user.image}
-          alt={`${user.firstName} ${user.lastName}`}
-          className="size-24 rounded-full object-cover"
-        />
+        {user.avatarUrl ? (
+          <img src={user.avatarUrl} alt={user.name} className="size-24 rounded-full object-cover" />
+        ) : (
+          <div className="flex size-24 items-center justify-center rounded-full border bg-muted text-2xl font-semibold">
+            {user.name?.slice(0, 1)?.toUpperCase() ?? 'U'}
+          </div>
+        )}
 
         <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-semibold">
-            {user.firstName} {user.lastName}
-          </h2>
-          <span className="text-muted-foreground">@{user.username}</span>
-          <span className="text-sm text-muted-foreground">{user.email}</span>
+          <h2 className="text-xl font-semibold">{user.name}</h2>
+          <span className="text-sm text-muted-foreground">User #{user.id}</span>
         </div>
       </div>
 
@@ -101,7 +63,7 @@ const ProfilePage = () => {
           <p className="mt-2 text-sm leading-6">
             {isCurrentUserProfile
               ? 'This is your RecipeBox profile. Share recipes, save favorites, and join the discussion.'
-              : `${user.firstName} shares recipes on RecipeBox and builds a public profile around their cooking.`}
+              : `${user.name} shares recipes on RecipeBox and builds a public profile around their cooking.`}
           </p>
         </div>
       </section>
@@ -118,9 +80,9 @@ const ProfilePage = () => {
       <section className="flex flex-col gap-4">
         <div className="flex items-end justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-semibold tracking-tight">Recipes by {user.firstName}</h2>
+            <h2 className="text-xl font-semibold tracking-tight">Recipes by {user.name}</h2>
             <p className="text-sm text-muted-foreground">
-              {authoredRecipes.length} {authoredRecipes.length === 1 ? 'recipe' : 'recipes'}
+              {total} {total === 1 ? 'recipe' : 'recipes'}
             </p>
           </div>
         </div>
@@ -129,8 +91,8 @@ const ProfilePage = () => {
           <p className="text-sm text-muted-foreground">Loading recipes...</p>
         ) : recipesError ? (
           <p className="text-sm text-muted-foreground">{recipesError}</p>
-        ) : authoredRecipes.length > 0 ? (
-          <RecipeList recipes={authoredRecipes} />
+        ) : recipes.length > 0 ? (
+          <RecipeList recipes={recipes} />
         ) : (
           <div className="rounded-2xl border border-dashed bg-card p-6 text-sm text-muted-foreground">
             No recipes published yet.

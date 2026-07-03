@@ -1,6 +1,4 @@
 import { Link, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Badge, BulletList, InfoLabel, NumberedList } from '@/shared/ui';
 import TimerIcon from '@/assets/icons/timer.svg?react';
 import FireIcon from '@/assets/icons/fire-line.svg?react';
@@ -9,21 +7,13 @@ import UtensilsIcon from '@/assets/icons/utensils.svg?react';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
 import { useRecipe } from '@/entities/recipe';
-import { fetchUserById, selectUserById, selectUsersStatus } from '@/entities/user';
+import { useUser } from '@/entities/user';
 
 const RecipeDetailsPage = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const { recipe, status, error } = useRecipe(id);
   const authorId = recipe?.userId;
-  const author = useSelector((state) => selectUserById(state, authorId));
-  const usersStatus = useSelector(selectUsersStatus);
-
-  useEffect(() => {
-    if (authorId && !author && usersStatus !== 'loading') {
-      dispatch(fetchUserById(authorId));
-    }
-  }, [author, authorId, dispatch, usersStatus]);
+  const { user: author } = useUser(authorId);
 
   if (status === 'idle' || status === 'loading') {
     return <p>Loading...</p>;
@@ -77,16 +67,16 @@ const RecipeDetailsPage = () => {
                   to={`/users/${author.id}`}
                   className="inline-flex items-center gap-3 self-start rounded-2xl border px-4 py-3 transition-colors hover:bg-lite"
                 >
-                  <img
-                    src={author.image}
-                    alt={`${author.firstName} ${author.lastName}`}
-                    className="size-10 rounded-full object-cover"
-                  />
-                  <span className="flex flex-col">
-                    <span className="text-sm font-semibold">
-                      {author.firstName} {author.lastName}
+                  {author.avatarUrl ? (
+                    <img src={author.avatarUrl} alt={author.name} className="size-10 rounded-full object-cover" />
+                  ) : (
+                    <span className="flex size-10 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
+                      {author.name?.slice(0, 1)?.toUpperCase() ?? 'U'}
                     </span>
-                    <span className="text-xs text-muted-foreground">@{author.username}</span>
+                  )}
+                  <span className="flex flex-col">
+                    <span className="text-sm font-semibold">{author.name}</span>
+                    <span className="text-xs text-muted-foreground">User #{author.id}</span>
                   </span>
                 </Link>
               )}
