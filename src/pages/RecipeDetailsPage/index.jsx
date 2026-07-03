@@ -71,9 +71,17 @@ const RecipeDetailsPage = () => {
                   to={`/users/${author.id}`}
                   className="inline-flex items-center gap-3 self-start rounded-2xl border px-4 py-3 transition-colors hover:bg-lite"
                 >
-                  <span className="flex size-10 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
-                    {authorLetter}
-                  </span>
+                  {author.avatarUrl ? (
+                    <img
+                      src={author.avatarUrl}
+                      alt={authorName}
+                      className="size-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <span className="flex size-10 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
+                      {authorLetter}
+                    </span>
+                  )}
                   <span className="flex flex-col">
                     <span className="text-sm font-semibold">{authorName}</span>
                     <span className="text-xs text-muted-foreground">User #{author.id}</span>
