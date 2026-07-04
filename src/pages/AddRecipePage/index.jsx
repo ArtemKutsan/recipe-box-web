@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useCreateRecipeMutation } from '@/entities/recipe';
@@ -21,6 +22,7 @@ const initialFormValues = {
 };
 
 const AddRecipePage = () => {
+  const navigate = useNavigate();
   const [createRecipe, { isLoading, isSuccess, isError, error }] = useCreateRecipeMutation();
   const {
     data: mealTypes = [],
@@ -83,8 +85,9 @@ const AddRecipePage = () => {
     try {
       const createdRecipe = await createRecipe(nextRecipe).unwrap();
 
-      console.log('Recipe created:', createdRecipe);
       resetForm(initialFormValues);
+      // После создания открываем детальную страницу, чтобы пользователь сразу видел сохраненный рецепт.
+      navigate(`/recipes/${createdRecipe.id}`);
     } catch (error) {
       console.error('Failed to create recipe:', error);
     }
