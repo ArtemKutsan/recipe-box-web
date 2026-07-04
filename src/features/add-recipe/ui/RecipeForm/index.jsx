@@ -1,6 +1,5 @@
 import { Button, FormField } from '@/shared/ui';
-
-const hasListItems = (value) => value.split('\n').some((item) => item.trim());
+import { recipeFormRules } from '../../model/form';
 
 const RecipeForm = ({
   register,
@@ -22,10 +21,7 @@ const RecipeForm = ({
           <FormField
             label="Name"
             required
-            {...register('name', {
-              required: 'Recipe name is required',
-              minLength: { value: 3, message: 'Recipe name must be at least 3 characters' },
-            })}
+            {...register('name', recipeFormRules.name)}
           />
           {renderError('name')}
         </div>
@@ -37,7 +33,7 @@ const RecipeForm = ({
             as="select"
             label="Cuisine"
             required
-            {...register('cuisine', { required: 'Cuisine is required' })}
+            {...register('cuisine', recipeFormRules.cuisine)}
           >
             <option value="">Select cuisine</option>
             {cuisines.map((cuisine) => (
@@ -54,7 +50,7 @@ const RecipeForm = ({
             as="select"
             label="Meal Type"
             required
-            {...register('mealType', { required: 'Meal type is required' })}
+            {...register('mealType', recipeFormRules.mealType)}
           >
             <option value="">Select meal type</option>
             {mealTypes.map((mealType) => (
@@ -76,10 +72,7 @@ const RecipeForm = ({
           <FormField
             label="Servings"
             type="number"
-            {...register('servings', {
-              valueAsNumber: true,
-              min: { value: 1, message: 'Servings must be at least 1' },
-            })}
+            {...register('servings', recipeFormRules.servings)}
           />
           {renderError('servings')}
         </div>
@@ -88,10 +81,7 @@ const RecipeForm = ({
           <FormField
             label="Prep Time"
             type="number"
-            {...register('prepTimeMinutes', {
-              valueAsNumber: true,
-              min: { value: 0, message: 'Prep time cannot be negative' },
-            })}
+            {...register('prepTimeMinutes', recipeFormRules.prepTimeMinutes)}
           />
           {renderError('prepTimeMinutes')}
         </div>
@@ -100,10 +90,7 @@ const RecipeForm = ({
           <FormField
             label="Cook Time"
             type="number"
-            {...register('cookTimeMinutes', {
-              valueAsNumber: true,
-              min: { value: 0, message: 'Cook time cannot be negative' },
-            })}
+            {...register('cookTimeMinutes', recipeFormRules.cookTimeMinutes)}
           />
           {renderError('cookTimeMinutes')}
         </div>
@@ -112,10 +99,7 @@ const RecipeForm = ({
           <FormField
             label="Calories"
             type="number"
-            {...register('caloriesPerServing', {
-              valueAsNumber: true,
-              min: { value: 0, message: 'Calories cannot be negative' },
-            })}
+            {...register('caloriesPerServing', recipeFormRules.caloriesPerServing)}
           />
           {renderError('caloriesPerServing')}
         </div>
@@ -133,9 +117,7 @@ const RecipeForm = ({
             label="Ingredients"
             placeholder="One ingredient per line"
             className="min-h-32"
-            {...register('ingredients', {
-              validate: (value) => hasListItems(value) || 'Add at least one ingredient',
-            })}
+            {...register('ingredients', recipeFormRules.ingredients)}
           />
           {renderError('ingredients')}
         </div>
@@ -146,9 +128,7 @@ const RecipeForm = ({
             label="Instructions"
             placeholder="One instruction per line"
             className="min-h-40"
-            {...register('instructions', {
-              validate: (value) => hasListItems(value) || 'Add at least one instruction',
-            })}
+            {...register('instructions', recipeFormRules.instructions)}
           />
           {renderError('instructions')}
         </div>

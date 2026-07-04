@@ -3,35 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useCreateRecipeMutation } from '@/entities/recipe';
-import { RecipeForm } from '@/features/add-recipe';
-
-// Начальное состояние формы для создания нового рецепта
-const initialFormValues = {
-  name: '',
-  image: '',
-  cuisine: '',
-  mealType: '',
-  difficulty: 'Easy',
-  servings: 4,
-  prepTimeMinutes: 20,
-  cookTimeMinutes: 15,
-  caloriesPerServing: 300,
-  tags: '',
-  ingredients: '',
-  instructions: '',
-};
-
-const splitLines = (value) =>
-  value
-    .split('\n')
-    .map((item) => item.trim())
-    .filter(Boolean);
-
-const splitCommaList = (value) =>
-  value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
+import { buildCreateRecipePayload, initialRecipeFormValues, RecipeForm } from '@/features/add-recipe';
 
 const AddRecipePage = () => {
   const navigate = useNavigate();
@@ -52,7 +24,7 @@ const AddRecipePage = () => {
   const dictionariesError = mealTypesError ?? cuisinesError;
   // Инициализация React Hook Form с начальными значениями формы
   const { register, handleSubmit, reset: resetForm, formState: { errors } } = useForm({
-    defaultValues: initialFormValues,
+    defaultValues: initialRecipeFormValues,
   });
 
   const formMessage = isLoading
@@ -68,27 +40,12 @@ const AddRecipePage = () => {
             : '';
 
   const onSubmit = async (formValues) => {
-    const nextRecipe = {
-      title: formValues.name.trim(),
-      thumbnailUrl: formValues.image.trim(),
-      cuisine: formValues.cuisine.trim(),
-      mealType: [formValues.mealType],
-      difficulty: formValues.difficulty,
-      servings: Number(formValues.servings),
-      prepTimeMinutes: Number(formValues.prepTimeMinutes),
-      cookTimeMinutes: Number(formValues.cookTimeMinutes),
-      caloriesPerServing: Number(formValues.caloriesPerServing),
-      tags: splitCommaList(formValues.tags),
-      ingredients: splitLines(formValues.ingredients),
-      instructions: splitLines(formValues.instructions),
-      rating: 0,
-      reviewCount: 0,
-    };
+    const nextRecipe = buildCreateRecipePayload(formValues);
 
     try {
       const createdRecipe = await createRecipe(nextRecipe).unwrap();
 
-      resetForm(initialFormValues);
+      resetForm(initialRecipeFormValues);
       // После создания открываем детальную страницу, чтобы пользователь сразу видел сохраненный рецепт.
       navigate(`/recipes/${createdRecipe.id}`);
     } catch (error) {
