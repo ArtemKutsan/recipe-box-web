@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { authFieldRules, useRegisterMutation } from '@/entities/auth';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { authFieldRules, selectIsAuthenticated, useRegisterMutation } from '@/entities/auth';
 import { RouterPath } from '@/shared/config/routerPaths';
 import { Button, FormField } from '@/shared/ui';
 
@@ -15,9 +16,15 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const [registerUser, { isLoading }] = useRegisterMutation();
   const [formError, setFormError] = useState('');
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: initialFormValues,
   });
+
+  if (isAuthenticated) {
+    // Авторизованному пользователю не нужна повторная регистрация.
+    return <Navigate to={RouterPath.profile} replace />;
+  }
 
   const onSubmit = async (formValues) => {
     setFormError('');

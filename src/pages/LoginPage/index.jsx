@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { authFieldRules, useLoginMutation } from '@/entities/auth';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { authFieldRules, selectIsAuthenticated, useLoginMutation } from '@/entities/auth';
 import { RouterPath } from '@/shared/config/routerPaths';
 import { Button, FormField } from '@/shared/ui';
 
@@ -16,9 +17,15 @@ const LoginPage = () => {
   const [login, { isLoading }] = useLoginMutation();
   const [formError, setFormError] = useState('');
   const redirectPath = location.state?.from?.pathname ?? RouterPath.profile;
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: initialFormValues,
   });
+
+  if (isAuthenticated) {
+    // Авторизованному пользователю не нужна форма логина.
+    return <Navigate to={RouterPath.profile} replace />;
+  }
 
   const onSubmit = async (formValues) => {
     setFormError('');
