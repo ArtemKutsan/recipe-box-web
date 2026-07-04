@@ -75,6 +75,4 @@ export const buildCreateRecipePayload = (formValues) => ({
   tags: splitCommaList(formValues.tags),
   ingredients: splitLines(formValues.ingredients),
   instructions: splitLines(formValues.instructions),
-  rating: 0,
-  reviewCount: 0,
 });
