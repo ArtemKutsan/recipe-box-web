@@ -28,6 +28,15 @@ const RecipeForm = ({
 
         <FormField label="Image URL" {...register('image')} />
 
+        <FormField
+          as="textarea"
+          label="Description"
+          placeholder="Short recipe description"
+          className="min-h-24"
+          containerClassName="md:col-span-2"
+          {...register('description')}
+        />
+
         <div>
           <FormField
             as="select"

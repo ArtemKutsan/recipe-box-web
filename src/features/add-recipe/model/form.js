@@ -1,5 +1,6 @@
 export const initialRecipeFormValues = {
   name: '',
+  description: '',
   image: '',
   cuisine: '',
   mealType: '',
@@ -64,6 +65,7 @@ export const recipeFormRules = {
 
 export const buildCreateRecipePayload = (formValues) => ({
   title: formValues.name.trim(),
+  description: formValues.description.trim(),
   thumbnailUrl: formValues.image.trim(),
   cuisine: formValues.cuisine.trim(),
   mealType: [formValues.mealType],
