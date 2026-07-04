@@ -4,6 +4,7 @@ import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useCreateRecipeMutation } from '@/entities/recipe';
 import { buildCreateRecipePayload, initialRecipeFormValues, RecipeForm } from '@/features/add-recipe';
+import { buildRecipePath } from '@/shared/config/routerPaths';
 
 const AddRecipePage = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const AddRecipePage = () => {
 
       resetForm(initialRecipeFormValues);
       // После создания открываем детальную страницу, чтобы пользователь сразу видел сохраненный рецепт.
-      navigate(`/recipes/${createdRecipe.id}`);
+      navigate(buildRecipePath(createdRecipe.id));
     } catch (error) {
       console.error('Failed to create recipe:', error);
     }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { RouterPath } from '@/shared/config/routerPaths';
+import { buildRecipePath } from '@/shared/config/routerPaths';
 import { InfoLabel } from '@/shared/ui';
 import TimerIcon from '@/assets/icons/timer.svg?react';
 import FireIcon from '@/assets/icons/fire-line.svg?react';
@@ -13,7 +13,7 @@ const RecipeListItem = ({ recipe }) => {
 
   return (
     <Link
-      to={RouterPath.recipe_detail.replace(':id', recipe.id)}
+      to={buildRecipePath(recipe.id)}
       className="block overflow-hidden rounded-2xl border bg-card"
     >
       <article className="grid gap-4 md:grid-cols-[200px_minmax(0,1fr)_auto]">

@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
+import { buildUserProfilePath } from '@/shared/config/routerPaths';
 import { Badge, BulletList, InfoLabel, NumberedList } from '@/shared/ui';
 import TimerIcon from '@/assets/icons/timer.svg?react';
 import FireIcon from '@/assets/icons/fire-line.svg?react';
@@ -68,7 +69,7 @@ const RecipeDetailsPage = () => {
               </p>
               {author && (
                 <Link
-                  to={`/users/${author.id}`}
+                  to={buildUserProfilePath(author.id)}
                   className="inline-flex items-center gap-3 self-start rounded-2xl border px-4 py-3 transition-colors hover:bg-lite"
                 >
                   {author.avatarUrl ? (

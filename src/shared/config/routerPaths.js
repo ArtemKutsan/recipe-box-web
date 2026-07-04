@@ -29,3 +29,7 @@ export const RouterPath = {
   [AppRoute.RECIPE_DETAIL]: '/recipes/:id',
   [AppRoute.NOT_FOUND]: '*',
 };
+
+// Helper-ы для динамических UI-маршрутов, чтобы страницы не собирали URL вручную.
+export const buildRecipePath = (recipeId) => RouterPath.recipe_detail.replace(':id', recipeId);
+export const buildUserProfilePath = (userId) => RouterPath.user_profile.replace(':id', userId);
