@@ -21,6 +21,18 @@ const initialFormValues = {
   instructions: '',
 };
 
+const splitLines = (value) =>
+  value
+    .split('\n')
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+const splitCommaList = (value) =>
+  value
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+
 const AddRecipePage = () => {
   const navigate = useNavigate();
   const [createRecipe, { isLoading, isSuccess, isError, error }] = useCreateRecipeMutation();
@@ -39,7 +51,7 @@ const AddRecipePage = () => {
   const isDictionariesLoading = isMealTypesLoading || isCuisinesLoading;
   const dictionariesError = mealTypesError ?? cuisinesError;
   // Инициализация React Hook Form с начальными значениями формы
-  const { register, handleSubmit, reset: resetForm } = useForm({
+  const { register, handleSubmit, reset: resetForm, formState: { errors } } = useForm({
     defaultValues: initialFormValues,
   });
 
@@ -66,18 +78,9 @@ const AddRecipePage = () => {
       prepTimeMinutes: Number(formValues.prepTimeMinutes),
       cookTimeMinutes: Number(formValues.cookTimeMinutes),
       caloriesPerServing: Number(formValues.caloriesPerServing),
-      tags: formValues.tags
-        .split(',')
-        .map((item) => item.trim())
-        .filter(Boolean),
-      ingredients: formValues.ingredients
-        .split('\n')
-        .map((item) => item.trim())
-        .filter(Boolean),
-      instructions: formValues.instructions
-        .split('\n')
-        .map((item) => item.trim())
-        .filter(Boolean),
+      tags: splitCommaList(formValues.tags),
+      ingredients: splitLines(formValues.ingredients),
+      instructions: splitLines(formValues.instructions),
       rating: 0,
       reviewCount: 0,
     };
@@ -102,6 +105,7 @@ const AddRecipePage = () => {
 
       <RecipeForm
         register={register}
+        errors={errors}
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         message={formMessage}
