@@ -26,7 +26,10 @@ const RecipeForm = ({
           {renderError('name')}
         </div>
 
-        <FormField label="Image URL" {...register('image')} />
+        <div>
+          <FormField label="Image URL" {...register('image', recipeFormRules.image)} />
+          {renderError('image')}
+        </div>
 
         <FormField
           as="textarea"

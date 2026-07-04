@@ -28,10 +28,26 @@ const splitCommaList = (value) =>
 
 const hasListItems = (value) => splitLines(value).length > 0;
 
+const isOptionalUrl = (value) => {
+  if (!value.trim()) {
+    return true;
+  }
+
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    return 'Image URL must be a valid URL';
+  }
+};
+
 export const recipeFormRules = {
   name: {
     required: 'Recipe name is required',
     minLength: { value: 3, message: 'Recipe name must be at least 3 characters' },
+  },
+  image: {
+    validate: isOptionalUrl,
   },
   cuisine: {
     required: 'Cuisine is required',
