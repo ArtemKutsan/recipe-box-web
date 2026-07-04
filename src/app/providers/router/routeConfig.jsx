@@ -35,6 +35,7 @@ export const routeConfig = {
   [AppRoute.ADD_RECIPE]: {
     path: RouterPath.add_recipe,
     element: <AddRecipePage />,
+    protected: true,
   },
   [AppRoute.MEAL_PLANNER]: {
     path: RouterPath.meal_planner,
@@ -43,6 +44,7 @@ export const routeConfig = {
   [AppRoute.PROFILE]: {
     path: RouterPath.profile,
     element: <ProfilePage />,
+    protected: true,
   },
   [AppRoute.USER_PROFILE]: {
     path: RouterPath.user_profile,
