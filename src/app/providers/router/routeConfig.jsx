@@ -2,6 +2,7 @@ import MainPage from '@/pages/MainPage';
 import RecipesPage from '@/pages/RecipesPage';
 import CategoriesPage from '@/pages/CategoriesPage';
 import LoginPage from '@/pages/LoginPage';
+import RegisterPage from '@/pages/RegisterPage';
 import AddRecipePage from '@/pages/AddRecipePage';
 import MealPlannerPage from '@/pages/MealPlannerPage';
 import ProfilePage from '@/pages/ProfilePage';
@@ -26,6 +27,10 @@ export const routeConfig = {
   [AppRoute.LOGIN]: {
     path: RouterPath.login,
     element: <LoginPage />,
+  },
+  [AppRoute.REGISTER]: {
+    path: RouterPath.register,
+    element: <RegisterPage />,
   },
   [AppRoute.ADD_RECIPE]: {
     path: RouterPath.add_recipe,
