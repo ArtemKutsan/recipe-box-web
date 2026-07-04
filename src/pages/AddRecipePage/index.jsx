@@ -1,4 +1,6 @@
 import { useForm } from 'react-hook-form';
+import { useGetCuisinesQuery } from '@/entities/cuisine';
+import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useCreateRecipeMutation } from '@/entities/recipe';
 import { RecipeForm } from '@/features/add-recipe';
 
@@ -20,20 +22,43 @@ const initialFormValues = {
 
 const AddRecipePage = () => {
   const [createRecipe, { isLoading, isSuccess, isError, error }] = useCreateRecipeMutation();
+  const {
+    data: mealTypes = [],
+    isLoading: isMealTypesLoading,
+    isError: isMealTypesError,
+    error: mealTypesError,
+  } = useGetMealTypesQuery();
+  const {
+    data: cuisines = [],
+    isLoading: isCuisinesLoading,
+    isError: isCuisinesError,
+    error: cuisinesError,
+  } = useGetCuisinesQuery();
+  const isDictionariesLoading = isMealTypesLoading || isCuisinesLoading;
+  const dictionariesError = mealTypesError ?? cuisinesError;
   // Инициализация React Hook Form с начальными значениями формы
   const { register, handleSubmit, reset: resetForm } = useForm({
     defaultValues: initialFormValues,
   });
+
+  const formMessage = isLoading
+    ? 'Creating recipe...'
+    : isDictionariesLoading
+      ? 'Loading recipe dictionaries...'
+      : isMealTypesError || isCuisinesError
+        ? dictionariesError?.data?.message ?? dictionariesError?.message ?? 'Failed to load recipe dictionaries'
+        : isError
+          ? error?.data?.message ?? error?.message ?? 'Failed to create recipe'
+          : isSuccess
+            ? 'Recipe created.'
+            : '';
 
   const onSubmit = async (formValues) => {
     const nextRecipe = {
       title: formValues.name.trim(),
       thumbnailUrl: formValues.image.trim(),
       cuisine: formValues.cuisine.trim(),
-      mealType: formValues.mealType
-        .split(',')
-        .map((item) => item.trim())
-        .filter(Boolean),
+      mealType: [formValues.mealType],
       difficulty: formValues.difficulty,
       servings: Number(formValues.servings),
       prepTimeMinutes: Number(formValues.prepTimeMinutes),
@@ -76,16 +101,10 @@ const AddRecipePage = () => {
         register={register}
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
-        message={
-          isLoading
-            ? 'Creating recipe...'
-            : isError
-              ? error?.data?.message ?? error?.message ?? 'Failed to create recipe'
-              : isSuccess
-                ? 'Recipe created.'
-                : ''
-        }
-        isSubmitting={isLoading}
+        message={formMessage}
+        isSubmitting={isLoading || isDictionariesLoading || isMealTypesError || isCuisinesError}
+        mealTypes={mealTypes}
+        cuisines={cuisines}
       />
     </section>
   );

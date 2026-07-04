@@ -1,15 +1,29 @@
 import { Button, FormField } from '@/shared/ui';
 
-const RecipeForm = ({ register, handleSubmit, onSubmit, message, isSubmitting }) => (
+const RecipeForm = ({ register, handleSubmit, onSubmit, message, isSubmitting, mealTypes = [], cuisines = [] }) => (
   <form className="rounded-3xl border bg-card p-6" onSubmit={handleSubmit(onSubmit)}>
     <div className="grid gap-4 md:grid-cols-2">
       <FormField label="Name" required {...register('name', { required: true })} />
 
       <FormField label="Image URL" {...register('image')} />
 
-      <FormField label="Cuisine" {...register('cuisine')} />
+      <FormField as="select" label="Cuisine" required {...register('cuisine', { required: true })}>
+        <option value="">Select cuisine</option>
+        {cuisines.map((cuisine) => (
+          <option key={cuisine.slug} value={cuisine.slug}>
+            {cuisine.title}
+          </option>
+        ))}
+      </FormField>
 
-      <FormField label="Meal Type" placeholder="Dinner, Lunch" {...register('mealType')} />
+      <FormField as="select" label="Meal Type" required {...register('mealType', { required: true })}>
+        <option value="">Select meal type</option>
+        {mealTypes.map((mealType) => (
+          <option key={mealType.slug} value={mealType.slug}>
+            {mealType.title}
+          </option>
+        ))}
+      </FormField>
 
       <FormField as="select" label="Difficulty" {...register('difficulty')}>
         <option>Easy</option>
