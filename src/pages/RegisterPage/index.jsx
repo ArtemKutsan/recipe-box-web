@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useRegisterMutation } from '@/entities/auth';
+import { authFieldRules, useRegisterMutation } from '@/entities/auth';
 import { RouterPath } from '@/shared/config/routerPaths';
 import { Button, FormField } from '@/shared/ui';
 
@@ -15,7 +15,7 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const [registerUser, { isLoading }] = useRegisterMutation();
   const [formError, setFormError] = useState('');
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: initialFormValues,
   });
 
@@ -49,22 +49,25 @@ const RegisterPage = () => {
           type="text"
           autoComplete="name"
           disabled={isLoading}
-          {...register('name', { required: true })}
+          {...register('name', authFieldRules.name)}
         />
+        {errors.name ? <p className="text-sm text-destructive">{errors.name.message}</p> : null}
         <FormField
           label="Email"
           type="email"
           autoComplete="email"
           disabled={isLoading}
-          {...register('email', { required: true })}
+          {...register('email', authFieldRules.email)}
         />
+        {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
         <FormField
           label="Password"
           type="password"
           autoComplete="new-password"
           disabled={isLoading}
-          {...register('password', { required: true })}
+          {...register('password', authFieldRules.password)}
         />
+        {errors.password ? <p className="text-sm text-destructive">{errors.password.message}</p> : null}
 
         {formError ? <p className="text-sm text-destructive">{formError}</p> : null}
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '@/entities/auth';
+import { authFieldRules, useLoginMutation } from '@/entities/auth';
 import { RouterPath } from '@/shared/config/routerPaths';
 import { Button, FormField } from '@/shared/ui';
 
@@ -14,7 +14,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const [formError, setFormError] = useState('');
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: initialFormValues,
   });
 
@@ -47,15 +47,17 @@ const LoginPage = () => {
           type="email"
           autoComplete="email"
           disabled={isLoading}
-          {...register('email', { required: true })}
+          {...register('email', authFieldRules.email)}
         />
+        {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
         <FormField
           label="Password"
           type="password"
           autoComplete="current-password"
           disabled={isLoading}
-          {...register('password', { required: true })}
+          {...register('password', authFieldRules.password)}
         />
+        {errors.password ? <p className="text-sm text-destructive">{errors.password.message}</p> : null}
 
         {formError ? <p className="text-sm text-destructive">{formError}</p> : null}
 
