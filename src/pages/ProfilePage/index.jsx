@@ -1,14 +1,31 @@
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectAuthUser } from '@/entities/auth';
 import { RecipeList } from '@/entities/recipe/ui';
 import { useUser, useUserRecipes } from '@/entities/user';
-import { DEV_USER_ID } from '@/shared/config/devUser';
 
 const ProfilePage = () => {
   const { id } = useParams();
-  const userId = id ?? DEV_USER_ID;
-  const { user, status, error } = useUser(userId);
-  const { recipes, total, status: recipesStatus, error: recipesError } = useUserRecipes(userId);
+  const authUser = useSelector(selectAuthUser);
   const isCurrentUserProfile = !id;
+  const userId = id ?? authUser?.id;
+  const {
+    user: publicUser,
+    status: publicUserStatus,
+    error: publicUserError,
+  } = useUser(userId, {
+    skip: isCurrentUserProfile || !userId,
+  });
+  const user = isCurrentUserProfile ? authUser : publicUser;
+  const status = isCurrentUserProfile ? 'succeeded' : publicUserStatus;
+  const error = isCurrentUserProfile ? null : publicUserError;
+  const { recipes, total, status: recipesStatus, error: recipesError } = useUserRecipes(userId, {
+    skip: !userId,
+  });
+
+  if (isCurrentUserProfile && !authUser) {
+    return <p>Please log in to view your profile.</p>;
+  }
 
   if (status === 'idle' || status === 'loading') return <p>Loading...</p>;
   if (error) return <p>{error}</p>;

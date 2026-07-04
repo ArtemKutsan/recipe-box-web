@@ -1,9 +1,9 @@
 import { useGetUserRecipesQuery } from '../api/usersQuery';
 
 // Хук сущности для получения рецептов публичного профиля пользователя через наш API.
-export const useUserRecipes = (userId) => {
+export const useUserRecipes = (userId, options = {}) => {
   const query = useGetUserRecipesQuery(userId, {
-    skip: !userId,
+    skip: options.skip || !userId,
   });
 
   return {

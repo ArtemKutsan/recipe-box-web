@@ -1,9 +1,9 @@
 import { useGetUserByIdQuery } from '../api/usersQuery';
 
 // Хук сущности для получения публичного профиля пользователя через наш API.
-export const useUser = (userId) => {
+export const useUser = (userId, options = {}) => {
   const query = useGetUserByIdQuery(userId, {
-    skip: !userId,
+    skip: options.skip || !userId,
   });
 
   return {
