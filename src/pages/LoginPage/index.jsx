@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { authFieldRules, useLoginMutation } from '@/entities/auth';
 import { RouterPath } from '@/shared/config/routerPaths';
 import { Button, FormField } from '@/shared/ui';
@@ -12,8 +12,10 @@ const initialFormValues = {
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [login, { isLoading }] = useLoginMutation();
   const [formError, setFormError] = useState('');
+  const redirectPath = location.state?.from?.pathname ?? RouterPath.profile;
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: initialFormValues,
   });
@@ -28,7 +30,8 @@ const LoginPage = () => {
         password: formValues.password,
       }).unwrap();
 
-      navigate(RouterPath.profile);
+      // Если пользователь попал сюда с protected route, возвращаем его на исходную страницу.
+      navigate(redirectPath, { replace: true });
     } catch (error) {
       setFormError(error?.data?.message ?? error?.message ?? 'Failed to log in');
     }
