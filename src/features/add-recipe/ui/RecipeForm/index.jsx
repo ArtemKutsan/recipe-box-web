@@ -1,4 +1,5 @@
 import { Button, FormField } from '@/shared/ui';
+import { cn } from '@/shared/lib/cn';
 import { recipeFormRules } from '../../model/form';
 
 const RecipeForm = ({
@@ -7,12 +8,17 @@ const RecipeForm = ({
   handleSubmit,
   onSubmit,
   message,
+  messageTone = 'default',
   isSubmitting,
   mealTypes = [],
   cuisines = [],
 }) => {
   const renderError = (fieldName) =>
     errors[fieldName] ? <p className="text-sm text-destructive">{errors[fieldName].message}</p> : null;
+  const messageClassName = cn(
+    'text-sm',
+    messageTone === 'error' ? 'text-destructive' : 'text-foreground',
+  );
 
   return (
     <form className="rounded-3xl border bg-card p-6" onSubmit={handleSubmit(onSubmit)}>
@@ -147,7 +153,7 @@ const RecipeForm = ({
       </div>
 
       <div className="mt-6 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
-        <p className="text-sm text-secondary">{message}</p>
+        <p className={messageClassName}>{message}</p>
         <Button type="submit" variant="secondary" disabled={isSubmitting}>
           Add recipe
         </Button>

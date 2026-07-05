@@ -42,6 +42,7 @@ const AddRecipePage = () => {
       : isMealTypesError || isCuisinesError
         ? dictionariesError?.data?.message ?? dictionariesError?.message ?? 'Failed to load recipe dictionaries'
         : errors.root?.server?.message ?? '';
+  const formMessageTone = isMealTypesError || isCuisinesError || errors.root?.server ? 'error' : 'default';
 
   const onSubmit = async (formValues) => {
     clearErrors('root.server');
@@ -75,6 +76,7 @@ const AddRecipePage = () => {
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         message={formMessage}
+        messageTone={formMessageTone}
         isSubmitting={isLoading || isDictionariesLoading || isMealTypesError || isCuisinesError}
         mealTypes={mealTypes}
         cuisines={cuisines}
