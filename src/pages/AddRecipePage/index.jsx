@@ -8,7 +8,7 @@ import { buildRecipePath } from '@/shared/config/routerPaths';
 
 const AddRecipePage = () => {
   const navigate = useNavigate();
-  const [createRecipe, { isLoading, isSuccess, isError, error }] = useCreateRecipeMutation();
+  const [createRecipe, { isLoading }] = useCreateRecipeMutation();
   const {
     data: mealTypes = [],
     isLoading: isMealTypesLoading,
@@ -24,7 +24,14 @@ const AddRecipePage = () => {
   const isDictionariesLoading = isMealTypesLoading || isCuisinesLoading;
   const dictionariesError = mealTypesError ?? cuisinesError;
   // Инициализация React Hook Form с начальными значениями формы
-  const { register, handleSubmit, reset: resetForm, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset: resetForm,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
     defaultValues: initialRecipeFormValues,
   });
 
@@ -34,13 +41,10 @@ const AddRecipePage = () => {
       ? 'Loading recipe dictionaries...'
       : isMealTypesError || isCuisinesError
         ? dictionariesError?.data?.message ?? dictionariesError?.message ?? 'Failed to load recipe dictionaries'
-        : isError
-          ? error?.data?.message ?? error?.message ?? 'Failed to create recipe'
-          : isSuccess
-            ? 'Recipe created.'
-            : '';
+        : errors.root?.server?.message ?? '';
 
   const onSubmit = async (formValues) => {
+    clearErrors('root.server');
     const nextRecipe = buildCreateRecipePayload(formValues);
 
     try {
@@ -50,7 +54,11 @@ const AddRecipePage = () => {
       // После создания открываем детальную страницу, чтобы пользователь сразу видел сохраненный рецепт.
       navigate(buildRecipePath(createdRecipe.id));
     } catch (error) {
-      console.error('Failed to create recipe:', error);
+      // Общая backend-ошибка хранится в React Hook Form, как часть состояния отправки формы.
+      setError('root.server', {
+        type: 'server',
+        message: error?.data?.message ?? error?.message ?? 'Failed to create recipe',
+      });
     }
   };
 
