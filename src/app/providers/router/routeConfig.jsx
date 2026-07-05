@@ -40,6 +40,7 @@ export const routeConfig = {
   [AppRoute.MEAL_PLANNER]: {
     path: RouterPath.meal_planner,
     element: <MealPlannerPage />,
+    protected: true,
   },
   [AppRoute.PROFILE]: {
     path: RouterPath.profile,
