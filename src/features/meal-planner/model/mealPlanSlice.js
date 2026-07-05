@@ -31,6 +31,22 @@ const mealPlanSlice = createSlice({
   initialState,
   reducers: {
     /*
+    Заменяет локальный план данными из backend.
+
+    payload:
+    {
+      Monday: {
+        Breakfast: recipeId | null,
+        ...
+      },
+      ...
+    }
+    */
+    setMealPlan(state, action) {
+      // Backend возвращает slots в том же формате, который календарь уже умеет читать.
+      state.plan = action.payload;
+    },
+    /*
     Добавляет рецепт в выбранный слот.
 
     payload:
@@ -77,7 +93,7 @@ const mealPlanSlice = createSlice({
 });
 
 // Actions используются UI-компонентами meal planner для изменения выбранного слота
-export const { addMeal, removeMeal } = mealPlanSlice.actions;
+export const { addMeal, removeMeal, setMealPlan } = mealPlanSlice.actions;
 
 // Reducer подключается к корневому Redux store под ключом mealPlan
 export const mealPlanReducer = mealPlanSlice.reducer;
