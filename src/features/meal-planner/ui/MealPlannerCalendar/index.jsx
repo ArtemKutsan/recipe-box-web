@@ -28,7 +28,7 @@ const MealPlannerCalendar = ({ days, rows, onAddMeal }) => {
         <div className="space-y-4">
           {rows.map(({ label, Icon, items }) => (
             <div key={label} className="grid gap-4" style={columnTemplate}>
-              <div className="flex items-center justify-center rounded-2xl border p-4">
+              <div className="flex items-center justify-center rounded-2xl p-4">
                 <div className="flex flex-col items-center gap-2 text-center">
                   <Icon className="size-6" aria-hidden="true" />
                   <span className="text-sm font-medium">{label}</span>
