@@ -1,13 +1,9 @@
-import { useDispatch } from 'react-redux';
-import { removeMeal } from '@/features/meal-planner/model/mealPlanSlice';
 import LikeIcon from '@/assets/icons/like.svg?react';
 import TrashIcon from '@/assets/icons/trash.svg?react';
 
-const MealPlannerCard = ({ item, day, mealPeriod, onReplaceMeal }) => {
-  const dispatch = useDispatch();
-
+const MealPlannerCard = ({ item, day, mealPeriod, onReplaceMeal, onRemoveMeal }) => {
   const handleRemoveMeal = () => {
-    dispatch(removeMeal({ day, mealPeriod }));
+    void onRemoveMeal({ day, mealPeriod, recipeId: null }).catch(() => {});
   };
 
   const handleReplaceMeal = () => {

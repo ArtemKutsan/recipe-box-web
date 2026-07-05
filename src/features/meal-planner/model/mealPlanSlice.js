@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { mockMealPlan } from './mockMealPlan';
+import { emptyMealPlan } from './emptyMealPlan';
 
 /*
 Структура состояния meal plan:
 {
-  plan: {
+  data: {
     Monday: {
       Breakfast: recipeId | null,
       Lunch: recipeId | null,
@@ -20,12 +20,12 @@ import { mockMealPlan } from './mockMealPlan';
 Значение null означает, что слот выбранного периода питания пока пуст.
 */
 
-// Временно заполняем начальное состояние моковым планом в формате реального состояния
+// До загрузки backend-плана календарь стартует с пустыми слотами.
 const initialState = {
-  plan: mockMealPlan,
+  data: emptyMealPlan,
 };
 
-// Slice управляет добавлением и удалением рецептов в отдельных слотах календаря
+// Slice хранит только синхронизированную копию backend meal plan.
 const mealPlanSlice = createSlice({
   name: 'mealPlan',
   initialState,
@@ -44,56 +44,13 @@ const mealPlanSlice = createSlice({
     */
     setMealPlan(state, action) {
       // Backend возвращает slots в том же формате, который календарь уже умеет читать.
-      state.plan = action.payload;
-    },
-    /*
-    Добавляет рецепт в выбранный слот.
-
-    payload:
-    {
-      day: "Monday",
-      mealPeriod: "Breakfast",
-      recipeId: 12
-    }
-    */
-    addMeal(state, action) {
-      const { day, mealPeriod, recipeId } = action.payload;
-
-      // Получаем план конкретного дня по его названию
-      const dayPlan = state.plan[day];
-
-      // Не изменяем state, если день или период питания не существуют
-      if (!dayPlan || !(mealPeriod in dayPlan)) return;
-
-      // Redux Toolkit использует Immer, поэтому допустимо изменять draft-state напрямую
-      dayPlan[mealPeriod] = recipeId;
-    },
-    /*
-    Очищает выбранный слот календаря.
-
-    payload:
-    {
-      day: "Monday",
-      mealPeriod: "Breakfast"
-    }
-    */
-    removeMeal(state, action) {
-      const { day, mealPeriod } = action.payload;
-
-      // Получаем план конкретного дня по его названию
-      const dayPlan = state.plan[day];
-
-      // Не изменяем state, если день или период питания не существуют
-      if (!dayPlan || !(mealPeriod in dayPlan)) return;
-
-      // Возвращаем слот в пустое состояние
-      dayPlan[mealPeriod] = null;
+      state.data = action.payload;
     },
   },
 });
 
-// Actions используются UI-компонентами meal planner для изменения выбранного слота
-export const { addMeal, removeMeal, setMealPlan } = mealPlanSlice.actions;
+// Action используется UI-компонентами meal planner для синхронизации плана с backend.
+export const { setMealPlan } = mealPlanSlice.actions;
 
 // Reducer подключается к корневому Redux store под ключом mealPlan
 export const mealPlanReducer = mealPlanSlice.reducer;

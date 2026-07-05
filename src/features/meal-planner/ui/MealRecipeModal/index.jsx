@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 import { filterRecipesByMealType } from '@/entities/recipe/lib';
-import { addMeal } from '@/features/meal-planner/model/mealPlanSlice';
 import { Modal } from '@/shared/ui';
 
 /*
@@ -15,8 +13,7 @@ selectedSlot:
 
 Компонент отвечает за фильтрацию и отображение подходящих рецептов.
 */
-const MealRecipeModal = ({ selectedSlot, recipes, onClose }) => {
-  const dispatch = useDispatch();
+const MealRecipeModal = ({ selectedSlot, recipes, onClose, onSelectRecipe }) => {
 
   // Пересчитываем список только при изменении рецептов или выбранного слота
   const filteredRecipes = useMemo(
@@ -30,16 +27,18 @@ const MealRecipeModal = ({ selectedSlot, recipes, onClose }) => {
     : 'Add meal';
 
   // Записываем ID рецепта в выбранный слот Redux store и закрываем модалку
-  const handleSelectRecipe = (recipeId) => {
+  const handleSelectRecipe = async (recipeId) => {
     if (!selectedSlot) return;
 
-    dispatch(
-      addMeal({
+    try {
+      await onSelectRecipe({
         ...selectedSlot,
         recipeId,
-      }),
-    );
-    onClose();
+      });
+      onClose();
+    } catch {
+      // Ошибку уже показал родитель, модалка остается открытой для повторной попытки.
+    }
   };
 
   return (
