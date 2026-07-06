@@ -10,6 +10,7 @@ export function toRecipeListResponse(recipe) {
     mealType: Array.isArray(recipe.mealType) ? recipe.mealType : Array.isArray(recipe.mealTypeIds) ? recipe.mealTypeIds : [],
     tags: Array.isArray(recipe.tags) ? recipe.tags : [],
     cuisine: recipe.cuisine ?? null,
+    visibility: recipe.visibility ?? 'public',
     caloriesPerServing: recipe.caloriesPerServing ?? null,
     prepTimeMinutes: recipe.prepTimeMinutes ?? null,
     cookTimeMinutes: recipe.cookTimeMinutes ?? null,

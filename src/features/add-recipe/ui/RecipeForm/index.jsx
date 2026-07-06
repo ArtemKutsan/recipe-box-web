@@ -80,6 +80,13 @@ const RecipeForm = ({
           {renderError('mealType')}
         </div>
 
+        <div>
+          <FormField as="select" label="Visibility" {...register('visibility')}>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+          </FormField>
+        </div>
+
         <FormField as="select" label="Difficulty" {...register('difficulty')}>
           <option>Easy</option>
           <option>Medium</option>
