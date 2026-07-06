@@ -2,6 +2,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRecipes } from '@/entities/recipe';
+import { selectAuthUser } from '@/entities/auth';
+import { useUserRecipes } from '@/entities/user';
 import {
   useGetCurrentMealPlanQuery,
   useUpdateCurrentMealPlanSlotMutation,
@@ -19,11 +21,24 @@ import { emptyMealPlan } from '@/features/meal-planner/model/emptyMealPlan';
 
 const MealPlannerPage = () => {
   const dispatch = useDispatch();
+  const authUser = useSelector(selectAuthUser);
   // Храним координаты пустого слота, для которого пользователь открыл выбор рецепта
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [recipeSource, setRecipeSource] = useState('all');
   const [updateError, setUpdateError] = useState(null);
   // Получаем рецепты, статус загрузки и ошибку с помощью кастомного хука useRecipes
-  const { recipes, status, error } = useRecipes();
+  const {
+    recipes: allRecipes,
+    status: allRecipesStatus,
+    error: allRecipesError,
+  } = useRecipes();
+  const {
+    recipes: myRecipes,
+    status: myRecipesStatus,
+    error: myRecipesError,
+  } = useUserRecipes(authUser?.id, {
+    skip: !authUser?.id,
+  });
   const {
     data: mealPlanResponse,
     isLoading: isMealPlanLoading,
@@ -36,6 +51,13 @@ const MealPlannerPage = () => {
   const storedMealPlan = useSelector(selectMealPlan);
   // Получаем дни для календаря и мемоизируем результат, чтобы не пересчитывать при каждом рендере
   const days = useMemo(() => getDays(), []);
+  const canUseMyRecipes = Boolean(authUser?.id);
+  // TODO: заменить строковое состояние на отдельный визуальный переключатель с явно оформленным контролом.
+  const effectiveRecipeSource = canUseMyRecipes ? recipeSource : 'all';
+
+  const activeRecipes = effectiveRecipeSource === 'my' ? myRecipes : allRecipes;
+  const activeRecipesStatus = effectiveRecipeSource === 'my' ? myRecipesStatus : allRecipesStatus;
+  const activeRecipesError = effectiveRecipeSource === 'my' ? myRecipesError : allRecipesError;
 
   useEffect(() => {
     // Backend возвращает mealPlan целиком, а для календаря нам нужны только slots.
@@ -49,17 +71,18 @@ const MealPlannerPage = () => {
         days,
         mealPeriods,
         mealPlan: storedMealPlan,
-        recipes,
+        recipes: activeRecipes,
       }),
-    [days, recipes, storedMealPlan],
+    [days, activeRecipes, storedMealPlan],
   );
 
-  if (status === 'idle' || status === 'loading' || isMealPlanLoading) {
+  if (activeRecipesStatus === 'idle' || activeRecipesStatus === 'loading' || isMealPlanLoading) {
     return <p>Loading...</p>;
   }
 
-  if (error || isMealPlanError) {
-    const message = error ?? mealPlanError?.data?.message ?? mealPlanError?.message ?? 'Failed to load meal plan.';
+  if (activeRecipesError || isMealPlanError) {
+    const message =
+      activeRecipesError ?? mealPlanError?.data?.message ?? mealPlanError?.message ?? 'Failed to load meal plan.';
 
     return <p>{message}</p>;
   }
@@ -101,7 +124,10 @@ const MealPlannerPage = () => {
       {/* После закрытия очищаем выбранный слот, поэтому модалка перестаёт рендериться */}
       <MealRecipeModal
         selectedSlot={selectedSlot}
-        recipes={recipes}
+        recipes={activeRecipes}
+        recipeSource={effectiveRecipeSource}
+        canUseMyRecipes={canUseMyRecipes}
+        onChangeRecipeSource={setRecipeSource}
         onSelectRecipe={handleUpdateMealPlanSlot}
         onClose={() => setSelectedSlot(null)}
       />

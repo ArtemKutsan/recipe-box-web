@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { filterRecipesByMealType } from '@/entities/recipe/lib';
-import { Modal } from '@/shared/ui';
+import { Button, Modal } from '@/shared/ui';
+import { cn } from '@/shared/lib/cn';
 
 /*
 Feature-компонент модалки выбора рецепта для конкретного слота календаря.
@@ -13,7 +14,15 @@ selectedSlot:
 
 Компонент отвечает за фильтрацию и отображение подходящих рецептов.
 */
-const MealRecipeModal = ({ selectedSlot, recipes, onClose, onSelectRecipe }) => {
+const MealRecipeModal = ({
+  selectedSlot,
+  recipes,
+  recipeSource,
+  canUseMyRecipes,
+  onChangeRecipeSource,
+  onClose,
+  onSelectRecipe,
+}) => {
 
   // Пересчитываем список только при изменении рецептов или выбранного слота
   const filteredRecipes = useMemo(
@@ -26,6 +35,13 @@ const MealRecipeModal = ({ selectedSlot, recipes, onClose, onSelectRecipe }) => 
     ? `Add meal: ${selectedSlot.mealPeriod}, ${selectedSlot.day}`
     : 'Add meal';
 
+  const sourceButtonClassName = (isActive) =>
+    cn(
+      'rounded-full px-4 py-2 text-sm font-medium transition-colors',
+      isActive ? 'bg-secondary text-secondary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground',
+    );
+
+  // TODO: заменить две кнопки на единый переключатель источника рецептов, когда оформим общий паттерн для таких экранов.
   // Записываем ID рецепта в выбранный слот Redux store и закрываем модалку
   const handleSelectRecipe = async (recipeId) => {
     if (!selectedSlot) return;
@@ -44,6 +60,27 @@ const MealRecipeModal = ({ selectedSlot, recipes, onClose, onSelectRecipe }) => 
   return (
     // Наличие selectedSlot одновременно означает, что пользователь выбрал слот и модалку нужно открыть
     <Modal isOpen={Boolean(selectedSlot)} title={title} onClose={onClose} className="bg-background">
+      <div className="mb-4 flex flex-wrap gap-2">
+        <Button
+          type="button"
+          variant="ghost"
+          className={sourceButtonClassName(recipeSource === 'all')}
+          onClick={() => onChangeRecipeSource('all')}
+        >
+          All recipes
+        </Button>
+        {canUseMyRecipes ? (
+          <Button
+            type="button"
+            variant="ghost"
+            className={sourceButtonClassName(recipeSource === 'my')}
+            onClick={() => onChangeRecipeSource('my')}
+          >
+            My recipes
+          </Button>
+        ) : null}
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         {filteredRecipes.map((recipe) => (
           <button
