@@ -112,7 +112,7 @@ const RecipeDetailsPage = () => {
               <InfoLabel icon={UtensilsIcon} label="Meal Type" value={mealTypes.join(', ')} />
             </div>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <Badge key={tag}>{tag}</Badge>
               ))}
