@@ -3,7 +3,7 @@ import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { buildRecipesQuery } from '@/entities/recipe/lib';
 import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
-import { Button } from '@/shared/ui';
+import { Pagination } from '@/shared/ui';
 import useDebounce from '@/shared/hooks/useDebounce';
 
 const RECIPES_PER_PAGE = 10;
@@ -30,14 +30,12 @@ const RecipesPage = () => {
 
   const {
     recipes,
-    total,
     totalPages,
     isLoading,
     isError,
     error,
   } = useRecipesQuery(query);
 
-  const hasNextPage = page < totalPages || recipes.length === RECIPES_PER_PAGE && page === totalPages;
   const isEmpty = !isLoading && !isError && recipes.length === 0;
 
   const updateSearch = (value) => {
@@ -86,26 +84,7 @@ const RecipesPage = () => {
         <RecipeList recipes={recipes} viewMode={viewMode} />
       )}
 
-      <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={() => setPage((currentPage) => Math.max(1, currentPage - 1))}
-          disabled={page === 1}
-        >
-          Previous
-        </Button>
-        <span className="text-sm text-muted-foreground">
-          Page {page}
-          {total ? ` of ${totalPages}` : ''}
-        </span>
-        <Button
-          variant="ghost"
-          onClick={() => setPage((currentPage) => currentPage + 1)}
-          disabled={!hasNextPage}
-        >
-          Next
-        </Button>
-      </div>
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </section>
   );
 };
