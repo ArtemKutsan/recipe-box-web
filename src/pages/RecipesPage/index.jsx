@@ -13,6 +13,7 @@ const RecipesPage = () => {
   const [sortBy, setSortBy] = useState('');
   const [order, setOrder] = useState('asc');
   const [page, setPage] = useState(1);
+  const [viewMode, setViewMode] = useState('grid');
   const debouncedSearch = useDebounce(search, 300);
 
   const query = useMemo(
@@ -68,9 +69,11 @@ const RecipesPage = () => {
         search={search}
         sortBy={sortBy}
         order={order}
+        viewMode={viewMode}
         onSearchChange={updateSearch}
         onSortByChange={updateSortBy}
         onOrderChange={updateOrder}
+        onViewModeChange={setViewMode}
       />
 
       {isError ? (
@@ -80,7 +83,7 @@ const RecipesPage = () => {
       ) : isEmpty ? (
         <p>No recipes found.</p>
       ) : (
-        <RecipeList recipes={recipes} />
+        <RecipeList recipes={recipes} viewMode={viewMode} />
       )}
 
       <div className="flex items-center justify-between">

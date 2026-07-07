@@ -1,15 +1,22 @@
 import RecipeListItem from '../RecipeListItem';
+import { cn } from '@/shared/lib/cn';
 
-const RecipeList = ({ recipes = [] }) => {
+const RecipeList = ({ recipes = [], viewMode = 'list' }) => {
   if (recipes.length === 0) {
     return <p>No recipes yet</p>;
   }
 
   return (
-    <ul className="space-y-4">
+    <ul
+      className={cn(
+        viewMode === 'grid'
+          ? 'grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+          : 'space-y-4',
+      )}
+    >
       {recipes.map((recipe) => (
         <li key={recipe.id ?? recipe.name}>
-          <RecipeListItem recipe={recipe} />
+          <RecipeListItem recipe={recipe} viewMode={viewMode} />
         </li>
       ))}
     </ul>

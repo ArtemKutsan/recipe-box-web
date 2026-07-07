@@ -7,9 +7,49 @@ import UtensilsIcon from '@/assets/icons/utensils.svg?react';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import LikeIcon from '@/assets/icons/like.svg?react';
 
-const RecipeListItem = ({ recipe }) => {
+const RecipeListItem = ({ recipe, viewMode = 'list' }) => {
   const totalTime = (recipe?.prepTimeMinutes ?? 0) + (recipe?.cookTimeMinutes ?? 0);
   const cuisineLabel = recipe?.cuisine ?? 'Cuisine';
+
+  if (viewMode === 'grid') {
+    return (
+      <Link
+        to={buildRecipePath(recipe.id)}
+        className="block h-full overflow-hidden rounded-2xl border bg-card"
+      >
+        <article className="flex h-full flex-col">
+          {recipe?.image ? (
+            <img
+              src={recipe.image}
+              alt={recipe.name ?? 'Recipe'}
+              className="aspect-[4/3] w-full bg-muted object-cover"
+            />
+          ) : (
+            <div className="flex aspect-[4/3] w-full items-center justify-center bg-muted text-sm text-muted-foreground">
+              No image
+            </div>
+          )}
+
+          <div className="flex flex-1 flex-col gap-4 p-4">
+            <div className="min-w-0 space-y-2">
+              <h3 className="line-clamp-2 text-base font-semibold">
+                {recipe?.name ?? 'RecipeListItem'}
+              </h3>
+              <p className="line-clamp-2 text-sm text-muted-foreground">
+                {recipe?.description ??
+                  `A simple and delicious ${recipe?.cuisine?.toLowerCase() || 'cuisine'} classic with fresh ingredients.`}
+              </p>
+            </div>
+
+            <div className="mt-auto flex flex-wrap gap-3 text-sm">
+              <InfoLabel icon={TimerIcon} value={`${totalTime || 0} min`} />
+              <InfoLabel icon={ChefHatIcon} value={cuisineLabel} />
+            </div>
+          </div>
+        </article>
+      </Link>
+    );
+  }
 
   return (
     <Link
