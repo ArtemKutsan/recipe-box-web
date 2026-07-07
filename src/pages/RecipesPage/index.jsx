@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { buildRecipesQuery } from '@/entities/recipe/lib';
+import { useGetMealTypesQuery } from '@/entities/meal-type';
+import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
 import { Pagination } from '@/shared/ui';
 import useDebounce from '@/shared/hooks/useDebounce';
@@ -10,22 +12,28 @@ const RECIPES_PER_PAGE = 10;
 
 const RecipesPage = () => {
   const [search, setSearch] = useState('');
+  const [mealType, setMealType] = useState('');
+  const [cuisine, setCuisine] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [order, setOrder] = useState('asc');
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState('grid');
   const debouncedSearch = useDebounce(search, 300);
+  const { data: mealTypes = [] } = useGetMealTypesQuery();
+  const { data: cuisines = [] } = useGetCuisinesQuery();
 
   const query = useMemo(
     () =>
       buildRecipesQuery({
         search: debouncedSearch,
+        mealType,
+        cuisine,
         sortBy,
         order,
         page,
         pageSize: RECIPES_PER_PAGE,
       }),
-    [debouncedSearch, order, page, sortBy],
+    [cuisine, debouncedSearch, mealType, order, page, sortBy],
   );
 
   const {
@@ -56,6 +64,22 @@ const RecipesPage = () => {
     setPage(1);
   };
 
+  const updateMealType = (value) => {
+    setMealType(value);
+    setPage(1);
+  };
+
+  const updateCuisine = (value) => {
+    setCuisine(value);
+    setPage(1);
+  };
+
+  const clearFilters = () => {
+    setMealType('');
+    setCuisine('');
+    setPage(1);
+  };
+
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
@@ -65,13 +89,20 @@ const RecipesPage = () => {
 
       <RecipeDiscoveryControls
         search={search}
+        mealType={mealType}
+        cuisine={cuisine}
         sortBy={sortBy}
         order={order}
         viewMode={viewMode}
+        mealTypes={mealTypes}
+        cuisines={cuisines}
         onSearchChange={updateSearch}
+        onMealTypeChange={updateMealType}
+        onCuisineChange={updateCuisine}
         onSortByChange={updateSortBy}
         onOrderChange={updateOrder}
         onViewModeChange={setViewMode}
+        onClearFilters={clearFilters}
       />
 
       {isError ? (

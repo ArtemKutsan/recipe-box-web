@@ -1,6 +1,7 @@
 export const buildRecipesQuery = ({
   search = '',
   mealType = '',
+  cuisine = '',
   tag = '',
   sortBy = '',
   order = 'asc',
@@ -8,7 +9,8 @@ export const buildRecipesQuery = ({
   pageSize = 0,
 }) => ({
   search: search.trim().toLowerCase(),
-  mealType,
+  mealType: mealType.trim().toLowerCase(),
+  cuisine: cuisine.trim().toLowerCase(),
   tag,
   sortBy,
   order,
