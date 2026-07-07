@@ -7,7 +7,11 @@ export function toRecipeListResponse(recipe) {
     id,
     name: title,
     description: recipe.description ?? '',
-    mealType: Array.isArray(recipe.mealType) ? recipe.mealType : Array.isArray(recipe.mealTypeIds) ? recipe.mealTypeIds : [],
+    mealType: Array.isArray(recipe.mealType)
+      ? recipe.mealType
+      : Array.isArray(recipe.mealTypeIds)
+        ? recipe.mealTypeIds
+        : [],
     tags: Array.isArray(recipe.tags) ? recipe.tags : [],
     cuisine: recipe.cuisine ?? null,
     visibility: recipe.visibility ?? 'public',
@@ -15,7 +19,7 @@ export function toRecipeListResponse(recipe) {
     prepTimeMinutes: recipe.prepTimeMinutes ?? null,
     cookTimeMinutes: recipe.cookTimeMinutes ?? null,
     servings: recipe.servings ?? null,
-    difficulty: recipe.difficulty ?? 'medium',
+    difficulty: recipe.difficulty ?? null,
     rating: recipe.rating ?? null,
     image: recipe.thumbnailUrl ?? recipe.image ?? null,
     userId: recipe.author?.id ?? recipe.authorId ?? recipe.userId ?? null,
