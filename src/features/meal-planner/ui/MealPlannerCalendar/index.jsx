@@ -26,7 +26,7 @@ const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
         </div>
 
         <div className="space-y-3">
-          {rows.map(({ label, Icon, items }) => (
+          {rows.map(({ label, items }) => (
             <div key={label} className="grid gap-3" style={columnTemplate}>
               {/* <div className="flex items-center justify-center rounded-2xl p-3">
                 <div className="flex flex-col items-center gap-2 text-center">
