@@ -10,7 +10,7 @@ const RecipeList = ({ recipes = [], viewMode = 'list' }) => {
     <ul
       className={cn(
         viewMode === 'grid'
-          ? 'grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+          ? 'grid gap-3 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
           : 'space-y-4',
       )}
     >

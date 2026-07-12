@@ -27,13 +27,13 @@ const MealPlannerCard = ({ item, day, mealPeriod, onReplaceMeal, onRemoveMeal })
         alt={item.title}
         className="absolute inset-0 h-full w-full object-cover"
       />
-      <div className="absolute inset-x-0 bottom-0 flex h-20 flex-col gap-2 justify-between bg-card/95 p-4 transition-all duration-200 group-hover:h-full group-hover:bg-card">
+      <div className="absolute inset-x-0 bottom-0 flex h-16 flex-col gap-2 justify-between bg-card/95 p-3 transition-all duration-200 group-hover:h-full group-hover:bg-card">
         <span className="truncate text-sm font-medium leading-5 group-hover:whitespace-normal">
           {item.title}
         </span>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-center justify-between gap-2 p-4 group-hover:bg-card">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-center justify-between gap-2 p-3 group-hover:bg-card">
         <span className="text-xs text-muted-foreground group-hover:hidden">
           {item.caloriesPerServing} kcal
         </span>

@@ -2,15 +2,15 @@ import MealPlannerCard from '../MealPlannerCard';
 import MealPlannerSlot from '../MealPlannerSlot';
 
 const columnTemplate = {
-  gridTemplateColumns: '100px repeat(7, minmax(0, 1fr))',
+  gridTemplateColumns: 'repeat(7, minmax(116px, 1fr))',
 };
 
 const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
   return (
-    <div className="overflow-x-auto pb-4">
-      <div className="min-w-280 space-y-4">
-        <div className="grid gap-4" style={columnTemplate}>
-          <div />
+    <div className="w-full max-w-5xl pb-6 overflow-x-auto">
+      <div className="space-y-3 min-w-[280px]">
+        <div className="grid gap-3" style={columnTemplate}>
+          {/* <div /> */}
           {days.map((day) => (
             <div
               key={day.label}
@@ -25,15 +25,15 @@ const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
           ))}
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {rows.map(({ label, Icon, items }) => (
-            <div key={label} className="grid gap-4" style={columnTemplate}>
-              <div className="flex items-center justify-center rounded-2xl p-4">
+            <div key={label} className="grid gap-3" style={columnTemplate}>
+              {/* <div className="flex items-center justify-center rounded-2xl p-3">
                 <div className="flex flex-col items-center gap-2 text-center">
                   <Icon className="size-6" aria-hidden="true" />
                   <span className="text-sm font-medium">{label}</span>
                 </div>
-              </div>
+              </div> */}
 
               {items.map((item, index) =>
                 item ? (
