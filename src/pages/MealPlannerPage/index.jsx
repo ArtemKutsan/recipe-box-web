@@ -50,6 +50,16 @@ const MealPlannerPage = () => {
   const canUseMyRecipes = Boolean(authUser?.id);
   // TODO: заменить строковое состояние на отдельный визуальный переключатель с явно оформленным контролом.
   const effectiveRecipeSource = canUseMyRecipes ? recipeSource : 'all';
+  const recipesForCalendar = useMemo(() => {
+    const recipesById = new Map();
+
+    [...allRecipes, ...myRecipes].forEach((recipe) => {
+      if (recipe?.id === null || recipe?.id === undefined) return;
+      recipesById.set(String(recipe.id), recipe);
+    });
+
+    return Array.from(recipesById.values());
+  }, [allRecipes, myRecipes]);
 
   const activeRecipes = effectiveRecipeSource === 'my' ? myRecipes : allRecipes;
   const activeRecipesStatus = effectiveRecipeSource === 'my' ? myRecipesStatus : allRecipesStatus;
@@ -67,9 +77,9 @@ const MealPlannerPage = () => {
         days,
         mealPeriods,
         mealPlan: storedMealPlan,
-        recipes: activeRecipes,
+        recipes: recipesForCalendar,
       }),
-    [days, activeRecipes, storedMealPlan],
+    [days, recipesForCalendar, storedMealPlan],
   );
 
   if (activeRecipesStatus === 'idle' || activeRecipesStatus === 'loading' || isMealPlanLoading) {
