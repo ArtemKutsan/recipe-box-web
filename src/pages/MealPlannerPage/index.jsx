@@ -27,11 +27,7 @@ const MealPlannerPage = () => {
   const [recipeSource, setRecipeSource] = useState('all');
   const [updateError, setUpdateError] = useState(null);
   // Получаем рецепты, статус загрузки и ошибку с помощью кастомного хука useRecipes
-  const {
-    recipes: allRecipes,
-    status: allRecipesStatus,
-    error: allRecipesError,
-  } = useRecipes();
+  const { recipes: allRecipes, status: allRecipesStatus, error: allRecipesError } = useRecipes();
   const {
     recipes: myRecipes,
     status: myRecipesStatus,
@@ -82,7 +78,10 @@ const MealPlannerPage = () => {
 
   if (activeRecipesError || isMealPlanError) {
     const message =
-      activeRecipesError ?? mealPlanError?.data?.message ?? mealPlanError?.message ?? 'Failed to load meal plan.';
+      activeRecipesError ??
+      mealPlanError?.data?.message ??
+      mealPlanError?.message ??
+      'Failed to load meal plan.';
 
     return <p>{message}</p>;
   }
@@ -106,7 +105,7 @@ const MealPlannerPage = () => {
   };
 
   return (
-    <section className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold">Meal Planner</h1>
         <p>Plan your meals for the week</p>
