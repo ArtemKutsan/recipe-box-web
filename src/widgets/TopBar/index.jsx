@@ -9,7 +9,7 @@ const TopBar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
-    <header className="sticky top-0 z-20 border-b bg-background/90 px-4 py-4 backdrop-blur md:px-6">
+    <header className="sticky top-0 z-30 border-b bg-background/90 px-4 py-4 backdrop-blur md:px-6">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-4">
         <label className="relative flex min-w-0 flex-1 items-center">
           <span
