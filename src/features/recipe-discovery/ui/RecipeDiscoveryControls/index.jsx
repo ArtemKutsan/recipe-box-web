@@ -24,7 +24,9 @@ const RecipeDiscoveryControls = ({
   const viewButtonClassName = (isActive) =>
     cn(
       'rounded-lg border px-3',
-      isActive ? 'border-secondary bg-secondary/10 text-secondary' : 'bg-card text-muted-foreground',
+      isActive
+        ? 'border-secondary bg-secondary/10 text-secondary'
+        : 'bg-card text-muted-foreground',
     );
 
   return (
@@ -37,7 +39,7 @@ const RecipeDiscoveryControls = ({
       />
 
       <div className="flex flex-col gap-3 rounded-2xl border bg-card p-3">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+        <div className="flex flex-col gap-3 md:flex-row lg:items-center">
           <select
             value={mealType}
             onChange={(event) => onMealTypeChange(event.target.value)}
@@ -63,13 +65,18 @@ const RecipeDiscoveryControls = ({
             ))}
           </select>
           <div className="flex items-center justify-end">
-            <Button type="button" variant="ghost" className="text-secondary/80" onClick={onClearFilters}>
+            <Button
+              type="button"
+              variant="ghost"
+              className="text-secondary/80"
+              onClick={onClearFilters}
+            >
               Clear filters
             </Button>
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-3 md:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap gap-3">
             <select
               value={sortBy}
