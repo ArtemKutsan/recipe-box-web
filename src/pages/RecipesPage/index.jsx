@@ -8,7 +8,7 @@ import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
 import { Pagination } from '@/shared/ui';
 import useDebounce from '@/shared/hooks/useDebounce';
 
-const RECIPES_PER_PAGE = 10;
+const RECIPES_PER_PAGE = 12;
 
 const RecipesPage = () => {
   const [search, setSearch] = useState('');
@@ -36,13 +36,7 @@ const RecipesPage = () => {
     [cuisine, debouncedSearch, mealType, order, page, sortBy],
   );
 
-  const {
-    recipes,
-    totalPages,
-    isLoading,
-    isError,
-    error,
-  } = useRecipesQuery(query);
+  const { recipes, totalPages, isLoading, isError, error } = useRecipesQuery(query);
 
   const isEmpty = !isLoading && !isError && recipes.length === 0;
 
