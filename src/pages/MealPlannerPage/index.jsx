@@ -132,6 +132,7 @@ const MealPlannerPage = () => {
       {/* selectedSlot управляет открытием модалки и определяет тип отображаемых рецептов */}
       {/* После закрытия очищаем выбранный слот, поэтому модалка перестаёт рендериться */}
       <MealRecipeModal
+        key={selectedSlot ? `${selectedSlot.day}-${selectedSlot.mealPeriod}` : 'meal-recipe-modal-closed'}
         selectedSlot={selectedSlot}
         recipes={activeRecipes}
         recipeSource={effectiveRecipeSource}
