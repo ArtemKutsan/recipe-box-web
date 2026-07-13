@@ -10,6 +10,11 @@ export const useRecipes = (queryParams = null, options = {}) => {
 
   return {
     recipes: query.recipes,
+    total: query.total,
+    cuisines: query.cuisines,
+    page: query.page,
+    pageSize: query.pageSize,
+    totalPages: query.totalPages,
     status: query.isLoading ? 'loading' : query.isError ? 'failed' : 'succeeded',
     error: query.error?.data?.message ?? query.error?.message ?? null,
   };

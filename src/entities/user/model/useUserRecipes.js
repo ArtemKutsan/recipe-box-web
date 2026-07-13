@@ -1,10 +1,27 @@
 import { useGetUserRecipesQuery } from '../api/usersQuery';
 
 // Хук сущности для получения рецептов публичного профиля пользователя через наш API.
-export const useUserRecipes = (userId, options = {}) => {
-  const query = useGetUserRecipesQuery(userId, {
-    skip: options.skip || !userId,
-  });
+const hasQueryFilters = (value) =>
+  Boolean(value) &&
+  typeof value === 'object' &&
+  ['search', 'mealType', 'cuisine', 'tag', 'sortBy', 'order', 'page', 'pageSize'].some(
+    (key) => key in value,
+  );
+
+export const useUserRecipes = (userId, queryParamsOrOptions = {}, maybeOptions = {}) => {
+  const hasFilters = hasQueryFilters(queryParamsOrOptions);
+  const queryParams = hasFilters ? queryParamsOrOptions : {};
+  const options = hasFilters ? maybeOptions : queryParamsOrOptions;
+
+  const query = useGetUserRecipesQuery(
+    {
+      userId,
+      ...queryParams,
+    },
+    {
+      skip: options.skip || !userId,
+    },
+  );
 
   return {
     recipes: query.data?.items ?? [],
