@@ -66,7 +66,7 @@ const Sidebar = () => {
 
         <button
           type="button"
-          className="absolute -right-4 top-5 hidden size-8 shrink-0 items-center justify-center rounded-full border bg-background text-lg font-semibold text-foreground transition-colors hover:bg-lite md:inline-flex"
+          className="absolute -right-4 top-5 hidden size-8 shrink-0 items-center justify-center rounded-full border bg-card text-lg font-semibold text-foreground transition-colors hover:bg-lite md:inline-flex"
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           aria-expanded={!isCollapsed}
           onClick={handleToggleCollapse}
