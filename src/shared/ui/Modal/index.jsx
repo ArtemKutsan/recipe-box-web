@@ -98,13 +98,15 @@ const Modal = ({ isOpen, title, children, className, onClose }) => {
           <h2 id={titleId} className="text-xl font-semibold">
             {title}
           </h2>
+          {/* Кнопка закрытия модального окна */}
+          {/* TODO: Заменить на иконку */}
           <button
             type="button"
             onClick={onClose}
             className="flex size-8 shrink-0 items-center justify-center rounded-lg text-xl text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             aria-label="Close modal"
           >
-            ×
+            &#215;
           </button>
         </header>
 
