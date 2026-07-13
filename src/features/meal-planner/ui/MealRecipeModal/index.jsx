@@ -68,11 +68,16 @@ const MealRecipeModal = ({
   const sourceButtonClassName = (isActive) =>
     cn(
       'rounded-full px-4 py-2 text-sm font-medium transition-colors',
-      isActive ? 'bg-secondary text-secondary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground',
+      isActive
+        ? 'bg-secondary text-secondary-foreground'
+        : 'bg-muted text-muted-foreground hover:text-foreground',
     );
 
   const mealTypeOptions = useMemo(
-    () => ['All', ...mealTypes.map((mealType) => mealType.title ?? mealType.slug ?? '')].filter(Boolean),
+    () =>
+      ['All', ...mealTypes.map((mealType) => mealType.title ?? mealType.slug ?? '')].filter(
+        Boolean,
+      ),
     [mealTypes],
   );
 
@@ -111,7 +116,12 @@ const MealRecipeModal = ({
 
   if (isMealTypesError) {
     return (
-      <Modal isOpen={Boolean(selectedSlot)} title={title} onClose={onClose} className="bg-background">
+      <Modal
+        isOpen={Boolean(selectedSlot)}
+        title={title}
+        onClose={onClose}
+        className="bg-background"
+      >
         <p className="text-sm text-destructive">
           {mealTypesError?.data?.message ?? mealTypesError?.message ?? 'Failed to load meal types.'}
         </p>
@@ -121,7 +131,12 @@ const MealRecipeModal = ({
 
   if (isMealTypesLoading || activeQuery.status === 'loading') {
     return (
-      <Modal isOpen={Boolean(selectedSlot)} title={title} onClose={onClose} className="bg-background">
+      <Modal
+        isOpen={Boolean(selectedSlot)}
+        title={title}
+        onClose={onClose}
+        className="bg-background"
+      >
         <p className="text-sm text-muted-foreground">Loading recipes...</p>
       </Modal>
     );
@@ -129,17 +144,25 @@ const MealRecipeModal = ({
 
   if (activeQuery.status === 'failed') {
     return (
-      <Modal isOpen={Boolean(selectedSlot)} title={title} onClose={onClose} className="bg-background">
-        <p className="text-sm text-destructive">
-          {activeQuery.error ?? 'Failed to load recipes.'}
-        </p>
+      <Modal
+        isOpen={Boolean(selectedSlot)}
+        title={title}
+        onClose={onClose}
+        className="bg-background"
+      >
+        <p className="text-sm text-destructive">{activeQuery.error ?? 'Failed to load recipes.'}</p>
       </Modal>
     );
   }
 
   return (
     // Наличие selectedSlot одновременно означает, что пользователь выбрал слот и модалку нужно открыть
-    <Modal isOpen={Boolean(selectedSlot)} title={title} onClose={onClose} className="bg-background">
+    <Modal
+      isOpen={Boolean(selectedSlot)}
+      title={title}
+      onClose={onClose}
+      className="bg-background shadow-2xl"
+    >
       <div className="mb-4 flex flex-col gap-3">
         <label className="flex items-center gap-3 rounded-2xl border bg-card px-4 py-3">
           <span className="text-sm text-muted-foreground">Search</span>
@@ -205,7 +228,9 @@ const MealRecipeModal = ({
               />
               <div className="min-w-0">
                 <h3 className="line-clamp-2 text-sm font-medium">{recipe.name}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{recipe.caloriesPerServing} kcal</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {recipe.caloriesPerServing} kcal
+                </p>
               </div>
             </button>
           ))}
