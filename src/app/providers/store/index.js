@@ -6,6 +6,7 @@ import { mealPlansApi } from '@/entities/meal-plan';
 import { recipesApi } from '@/entities/recipe/api/recipesQuery';
 import { usersApi } from '@/entities/user';
 import { mealPlanReducer } from '@/features/meal-planner';
+import { apiErrorMiddleware } from './apiErrorMiddleware';
 
 export const store = configureStore({
   reducer: {
@@ -26,5 +27,6 @@ export const store = configureStore({
       mealPlansApi.middleware,
       recipesApi.middleware,
       usersApi.middleware,
+      apiErrorMiddleware,
     ),
 });
