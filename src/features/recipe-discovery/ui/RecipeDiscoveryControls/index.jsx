@@ -5,7 +5,6 @@ import { Button } from '@/shared/ui';
 import { cn } from '@/shared/lib/cn';
 
 const RecipeDiscoveryControls = ({
-  search,
   mealType,
   cuisine,
   sortBy,
@@ -13,7 +12,6 @@ const RecipeDiscoveryControls = ({
   viewMode,
   mealTypes = [],
   cuisines = [],
-  onSearchChange,
   onMealTypeChange,
   onCuisineChange,
   onSortByChange,
@@ -31,13 +29,6 @@ const RecipeDiscoveryControls = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <input
-        value={search}
-        onChange={(event) => onSearchChange(event.target.value)}
-        placeholder="Search recipes..."
-        className="min-w-0 rounded-xl border bg-card px-4 py-2 text-sm outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/15"
-      />
-
       <div className="flex flex-col gap-3 rounded-2xl border bg-card p-3">
         <div className="flex flex-col gap-3 md:flex-row lg:items-center">
           <select

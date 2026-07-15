@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '@/entities/auth';
 import { RouterPath } from '@/shared/config/routerPaths';
@@ -7,6 +7,24 @@ import SearchIcon from '@/assets/icons/search.svg?react';
 
 const TopBar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchValue = searchParams.get('search') ?? '';
+
+  const handleSearchChange = (event) => {
+    const nextValue = event.target.value;
+
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams);
+
+      if (nextValue.trim()) {
+        nextParams.set('search', nextValue);
+      } else {
+        nextParams.delete('search');
+      }
+
+      return nextParams;
+    }, { replace: true });
+  };
 
   return (
     <header className="sticky top-0 z-30 border-b bg-background/90 px-4 py-4 backdrop-blur md:px-6">
@@ -21,6 +39,8 @@ const TopBar = () => {
           <input
             type="search"
             placeholder="Search recipes, cuisines, ingredients..."
+            value={searchValue}
+            onChange={handleSearchChange}
             className="h-10 w-full rounded-xl border bg-card px-10 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/15"
             aria-label="Search recipes"
           />

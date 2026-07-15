@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { buildRecipesQuery } from '@/entities/recipe/lib';
@@ -6,26 +7,29 @@ import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
 import { Pagination } from '@/shared/ui';
-import useDebounce from '@/shared/hooks/useDebounce';
 
 const RECIPES_PER_PAGE = 12;
 
 const RecipesPage = () => {
-  const [search, setSearch] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
   const [mealType, setMealType] = useState('');
   const [cuisine, setCuisine] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [order, setOrder] = useState('asc');
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState('grid');
-  const debouncedSearch = useDebounce(search, 300);
   const { data: mealTypes = [] } = useGetMealTypesQuery();
   const { data: cuisines = [] } = useGetCuisinesQuery();
+  const search = searchParams.get('search') ?? '';
+
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
   const query = useMemo(
     () =>
       buildRecipesQuery({
-        search: debouncedSearch,
+        search,
         mealType,
         cuisine,
         sortBy,
@@ -33,20 +37,12 @@ const RecipesPage = () => {
         page,
         pageSize: RECIPES_PER_PAGE,
       }),
-    [cuisine, debouncedSearch, mealType, order, page, sortBy],
+    [cuisine, mealType, order, page, search, sortBy],
   );
 
   const { recipes, totalPages, isLoading, isError, error } = useRecipesQuery(query);
 
   const isEmpty = !isLoading && !isError && recipes.length === 0;
-
-  const updateSearch = (value) => {
-    setSearch(value);
-
-    if (page !== 1) {
-      setPage(1);
-    }
-  };
 
   const updateSortBy = (value) => {
     setSortBy(value);
@@ -71,6 +67,11 @@ const RecipesPage = () => {
   const clearFilters = () => {
     setMealType('');
     setCuisine('');
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams);
+      nextParams.delete('search');
+      return nextParams;
+    }, { replace: true });
     setPage(1);
   };
 
@@ -82,7 +83,6 @@ const RecipesPage = () => {
       </header>
 
       <RecipeDiscoveryControls
-        search={search}
         mealType={mealType}
         cuisine={cuisine}
         sortBy={sortBy}
@@ -90,7 +90,6 @@ const RecipesPage = () => {
         viewMode={viewMode}
         mealTypes={mealTypes}
         cuisines={cuisines}
-        onSearchChange={updateSearch}
         onMealTypeChange={updateMealType}
         onCuisineChange={updateCuisine}
         onSortByChange={updateSortBy}

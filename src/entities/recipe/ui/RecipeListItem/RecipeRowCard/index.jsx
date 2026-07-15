@@ -29,10 +29,11 @@ const RecipeRowCard = ({ recipe }) => {
         <div className="flex min-w-0 flex-col justify-between gap-4 px-4 py-4 md:px-0">
           <div className="space-y-2">
             <h3 className="text-2xl font-semibold">{recipe?.name ?? 'RecipeListItem'}</h3>
-            <p className="max-w-2xl text-sm">
-              {recipe?.description ??
-                `A simple and delicious ${recipe?.cuisine?.toLowerCase() || 'cuisine'} classic with fresh ingredients.`}
-            </p>
+            {recipe?.description?.trim() ? (
+              <div className="max-w-2xl text-sm text-muted-foreground">
+                {recipe.description}
+              </div>
+            ) : null}
           </div>
 
           <div className="flex flex-wrap gap-6 text-sm">
