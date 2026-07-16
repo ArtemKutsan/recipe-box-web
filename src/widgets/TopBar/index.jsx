@@ -48,7 +48,7 @@ const TopBar = () => {
           >
             <SearchIcon className="size-4" />
           </span>
-          <span className="truncate pl-6">Search recipes, cuisines, ingredients...</span>
+          <span className="truncate pl-6">Search</span>
           <span className="pointer-events-none absolute right-2 hidden rounded-md bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground sm:inline-flex">
             Ctrl K
           </span>
