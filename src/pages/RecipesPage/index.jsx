@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
@@ -21,10 +21,6 @@ const RecipesPage = () => {
   const { data: mealTypes = [] } = useGetMealTypesQuery();
   const { data: cuisines = [] } = useGetCuisinesQuery();
   const search = searchParams.get('search') ?? '';
-
-  useEffect(() => {
-    setPage(1);
-  }, [search]);
 
   const query = useMemo(
     () =>
@@ -64,6 +60,21 @@ const RecipesPage = () => {
     setPage(1);
   };
 
+  const updateSearch = (value) => {
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams);
+
+      if (value.trim()) {
+        nextParams.set('search', value);
+      } else {
+        nextParams.delete('search');
+      }
+
+      return nextParams;
+    }, { replace: true });
+    setPage(1);
+  };
+
   const clearFilters = () => {
     setMealType('');
     setCuisine('');
@@ -83,6 +94,7 @@ const RecipesPage = () => {
       </header>
 
       <RecipeDiscoveryControls
+        search={search}
         mealType={mealType}
         cuisine={cuisine}
         sortBy={sortBy}
@@ -90,6 +102,7 @@ const RecipesPage = () => {
         viewMode={viewMode}
         mealTypes={mealTypes}
         cuisines={cuisines}
+        onSearchChange={updateSearch}
         onMealTypeChange={updateMealType}
         onCuisineChange={updateCuisine}
         onSortByChange={updateSortBy}

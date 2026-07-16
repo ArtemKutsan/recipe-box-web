@@ -1,10 +1,12 @@
 import { recipeOrderOptions, recipeSortOptions } from '../../config/options';
 import CategoriesIcon from '@/assets/icons/categories.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
+import SearchIcon from '@/assets/icons/search.svg?react';
 import { Button } from '@/shared/ui';
 import { cn } from '@/shared/lib/cn';
 
 const RecipeDiscoveryControls = ({
+  search,
   mealType,
   cuisine,
   sortBy,
@@ -12,6 +14,7 @@ const RecipeDiscoveryControls = ({
   viewMode,
   mealTypes = [],
   cuisines = [],
+  onSearchChange,
   onMealTypeChange,
   onCuisineChange,
   onSortByChange,
@@ -30,11 +33,28 @@ const RecipeDiscoveryControls = ({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 rounded-2xl border bg-card p-3">
-        <div className="flex flex-col gap-3 md:flex-row lg:items-center">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <label className="relative min-w-0 md:flex-[1.35]">
+            <span
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            >
+              <SearchIcon className="size-4" />
+            </span>
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => onSearchChange(event.target.value)}
+              placeholder="Search in recipes"
+              className="h-9 w-full rounded-lg border bg-background px-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-secondary focus:outline-none"
+              aria-label="Search in recipes"
+            />
+          </label>
+
           <select
             value={mealType}
             onChange={(event) => onMealTypeChange(event.target.value)}
-            className="min-w-0 flex-1 rounded-xl border bg-background px-4 py-2 text-sm outline-none focus:border-secondary"
+            className="min-w-0 rounded-lg border bg-background px-4 py-2 text-sm outline-none focus:border-secondary md:flex-1"
           >
             <option value="">All meal types</option>
             {mealTypes.map((item) => (
@@ -46,7 +66,7 @@ const RecipeDiscoveryControls = ({
           <select
             value={cuisine}
             onChange={(event) => onCuisineChange(event.target.value)}
-            className="min-w-0 flex-1 rounded-xl border bg-background px-4 py-2 text-sm outline-none focus:border-secondary"
+            className="min-w-0 rounded-lg border bg-background px-4 py-2 text-sm outline-none focus:border-secondary md:flex-1"
           >
             <option value="">All cuisines</option>
             {cuisines.map((item) => (
@@ -55,11 +75,11 @@ const RecipeDiscoveryControls = ({
               </option>
             ))}
           </select>
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-start md:shrink-0 md:justify-end">
             <Button
               type="button"
               variant="ghost"
-              className="text-secondary/80"
+              className="h-9 px-0 text-secondary/80 md:px-3"
               onClick={onClearFilters}
             >
               Clear filters
@@ -72,7 +92,7 @@ const RecipeDiscoveryControls = ({
             <select
               value={sortBy}
               onChange={(event) => onSortByChange(event.target.value)}
-              className="rounded-xl border bg-background px-4 py-2 text-sm outline-none focus:border-secondary"
+              className="rounded-lg border bg-background px-4 py-2 text-sm outline-none focus:border-secondary"
             >
               {recipeSortOptions.map((option) => (
                 <option key={option.value || 'default'} value={option.value}>
@@ -83,7 +103,7 @@ const RecipeDiscoveryControls = ({
             <select
               value={order}
               onChange={(event) => onOrderChange(event.target.value)}
-              className="rounded-xl border bg-background px-4 py-2 text-sm outline-none focus:border-secondary"
+              className="rounded-lg border bg-background px-4 py-2 text-sm outline-none focus:border-secondary"
             >
               {recipeOrderOptions.map((option) => (
                 <option key={option.value} value={option.value}>
