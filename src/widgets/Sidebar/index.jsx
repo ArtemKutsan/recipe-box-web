@@ -44,7 +44,7 @@ const Sidebar = () => {
   return (
     <aside
       className={cn(
-        'z-50 fixed flex min-h-screen shrink-0 flex-col border-r bg-card  px-4 py-5 transition-[width,padding] duration-200 max-md:min-h-0 max-md:w-full max-md:border-r-0 max-md:border-b max-md:px-4 lg:sticky lg:top-0 lg:h-screen',
+        'z-50 fixed hidden min-h-screen shrink-0 flex-col border-r bg-card px-4 py-5 transition-[width,padding] duration-200 md:flex max-md:min-h-0 max-md:w-full max-md:border-r-0 max-md:border-b max-md:px-4 lg:sticky lg:top-0 lg:h-screen',
         isCollapsed ? 'w-20 sticky top-0 h-screen' : 'w-54 shadow-2xl lg:shadow-none',
       )}
       aria-label="Primary"
