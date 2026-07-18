@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { authFieldRules, selectIsAuthenticated, useRegisterMutation } from '@/entities/auth';
 import { RouterPath } from '@/shared/config/routerPaths';
 import { Button, FormField } from '@/shared/ui';
@@ -81,6 +81,13 @@ const RegisterPage = () => {
         <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading ? 'Creating account...' : 'Register'}
         </Button>
+
+        <p className="text-center text-sm text-muted-foreground">
+          Already have an account?{' '}
+          <Link to={RouterPath.login} className="text-secondary hover:underline">
+            Login
+          </Link>
+        </p>
       </form>
     </section>
   );
