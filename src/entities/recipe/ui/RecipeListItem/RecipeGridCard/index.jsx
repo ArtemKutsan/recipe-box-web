@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { getDifficultyBadgeClassName } from '../../../lib/getDifficultyBadgeClassName';
 import { buildRecipePath } from '@/shared/config/routerPaths';
 import { Badge, InfoLabel } from '@/shared/ui';
 import TimerIcon from '@/assets/icons/timer.svg?react';
@@ -40,9 +41,13 @@ const RecipeGridCard = ({ recipe }) => {
         </div>
 
         <div className="mt-auto flex w-full items-center justify-between gap-2">
-          <InfoLabel icon={TimerIcon} value={`${totalTime || 0} min`} />
-          <div className="flex items-center gap-2">
-            {difficultyLabel ? <Badge>{difficultyLabel}</Badge> : null}
+            <InfoLabel icon={TimerIcon} value={`${totalTime || 0} min`} />
+            <div className="flex items-center gap-2">
+            {difficultyLabel ? (
+              <Badge className={getDifficultyBadgeClassName(difficultyLabel)}>
+                {difficultyLabel}
+              </Badge>
+            ) : null}
             <span className="rounded-full p-1 text-muted-foreground transition-colors hover:text-secondary">
               <LikeIcon aria-hidden="true" className="size-4 sm:size-5" />
             </span>

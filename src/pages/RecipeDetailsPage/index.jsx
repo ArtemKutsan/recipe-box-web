@@ -7,7 +7,7 @@ import ServingsIcon from '@/assets/icons/servings.svg?react';
 import UtensilsIcon from '@/assets/icons/utensils.svg?react';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
-import { useRecipe } from '@/entities/recipe';
+import { getDifficultyBadgeClassName, useRecipe } from '@/entities/recipe';
 
 const RecipeDetailsPage = () => {
   const { id } = useParams();
@@ -51,7 +51,9 @@ const RecipeDetailsPage = () => {
 
           <div className="flex flex-col gap-8 px-4 py-6 sm:px-8 sm:py-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
-              <Badge>{recipe.difficulty}</Badge>
+              <Badge className={getDifficultyBadgeClassName(recipe.difficulty)}>
+                {recipe.difficulty}
+              </Badge>
               <span className="inline-flex items-baseline gap-2 text-sm">
                 <span className="text-lg text-amber-400">★</span>
                 <span className="font-medium">{recipe.rating ?? '—'}</span>
