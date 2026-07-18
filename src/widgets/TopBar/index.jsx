@@ -33,7 +33,7 @@ const TopBar = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 border-b bg-background/90 px-4 py-3 backdrop-blur md:px-6 md:py-4">
+    <header className="sticky top-0 z-30 border-b bg-background/90 px-4 backdrop-blur md:px-6 py-4">
       <div className="mx-auto hidden w-full max-w-7xl items-center gap-4 md:flex">
         <button
           type="button"
@@ -69,8 +69,8 @@ const TopBar = () => {
           aria-label="Home"
           className="flex min-w-0 items-center gap-2 text-foreground"
         >
-          <ChefHatIcon aria-hidden="true" className="size-7 shrink-0 text-secondary" />
-          <span className="truncate text-base font-bold">RecipeBox</span>
+          <ChefHatIcon aria-hidden="true" className="size-8 shrink-0 text-secondary" />
+          <span className="truncate text-lg font-bold">RecipeBox</span>
         </NavLink>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -95,7 +95,9 @@ const TopBar = () => {
               size="icon"
               aria-label="Add recipe"
             >
-              <span aria-hidden="true" className="text-xl leading-none">+</span>
+              <span aria-hidden="true" className="text-xl leading-none">
+                +
+              </span>
             </Button>
           ) : null}
         </div>
