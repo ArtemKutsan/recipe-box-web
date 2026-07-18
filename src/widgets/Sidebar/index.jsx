@@ -8,37 +8,28 @@ import { cn } from '@/shared/lib/cn';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 
 const navLinkBase =
-  'flex items-center gap-4 rounded-2xl px-3 py-2 min-h-12 min-w-12 text-sm font-semibold transition-colors';
+  'relative flex min-h-12 min-w-12 items-center gap-4 overflow-hidden rounded-2xl px-3 py-2 text-sm font-semibold transition-colors';
 const navLinkActive = 'bg-secondary/5 text-secondary';
 const navLinkIdle = 'text-foreground/90 hover:bg-lite hover:text-accent-foreground';
+const collapsibleLabelBase =
+  'min-w-0 max-w-48 shrink-0 overflow-hidden transition-[max-width,opacity] duration-200';
 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectAuthUser);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [showLabels, setShowLabels] = useState(true);
   const displayName = user?.name ?? 'Account';
   const avatarLetter = displayName.slice(0, 1).toUpperCase();
   const visibleNavItems = navItems.filter((item) => !item.authOnly || isAuthenticated);
+  const collapsibleLabelState = isCollapsed ? 'md:max-w-0 md:opacity-0' : 'md:opacity-100';
 
   const handleLogout = () => {
     dispatch(clearCredentials());
   };
 
   const handleToggleCollapse = () => {
-    if (isCollapsed) {
-      setIsCollapsed(false);
-
-      window.setTimeout(() => {
-        setShowLabels(true);
-      }, 200);
-
-      return;
-    }
-
-    setShowLabels(false);
-    setIsCollapsed(true);
+    setIsCollapsed((previous) => !previous);
   };
 
   return (
@@ -49,126 +40,132 @@ const Sidebar = () => {
       )}
       aria-label="Primary"
     >
-      <div className={cn('mb-4 flex items-center gap-2', isCollapsed && 'md:justify-center')}>
-        <NavLink
-          to={RouterPath.main}
-          aria-label="Home"
-          className={cn(
-            'flex min-w-0 items-center gap-2',
-            isCollapsed ? 'md:justify-center' : 'md:ml-2',
-          )}
-        >
-          <ChefHatIcon aria-hidden="true" className="size-8 shrink-0 text-secondary" />
-          <span className={cn('truncate text-lg font-bold', !showLabels && 'md:hidden')}>
-            RecipeBox
-          </span>
-        </NavLink>
+      {/* TODO: Переделать на икоки? */}
+      <button
+        type="button"
+        className="absolute -right-4 top-5 hidden size-8 shrink-0 items-center justify-center rounded-full border bg-card text-lg font-semibold text-foreground transition-colors hover:bg-lite md:inline-flex"
+        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-expanded={!isCollapsed}
+        onClick={handleToggleCollapse}
+      >
+        {isCollapsed ? '›' : '‹'}
+      </button>
 
-        <button
-          type="button"
-          className="absolute -right-4 top-5 hidden size-8 shrink-0 items-center justify-center rounded-full border bg-card text-lg font-semibold text-foreground transition-colors hover:bg-lite md:inline-flex"
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          aria-expanded={!isCollapsed}
-          onClick={handleToggleCollapse}
-        >
-          {isCollapsed ? '›' : '‹'}
-        </button>
-      </div>
+      <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden">
+        <div className="mb-4 flex items-center gap-2">
+          <NavLink
+            to={RouterPath.main}
+            aria-label="Home"
+            className="relative flex min-w-0 items-center gap-2 md:ml-2"
+          >
+            <ChefHatIcon aria-hidden="true" className="size-8 shrink-0 text-secondary" />
+            <span
+              className={cn(
+                collapsibleLabelBase,
+                collapsibleLabelState,
+                'whitespace-nowrap text-lg font-bold',
+              )}
+            >
+              RecipeBox
+            </span>
+          </NavLink>
+        </div>
 
-      <nav className="flex-1 pt-4">
-        <ul className="list-none space-y-2">
-          {visibleNavItems.map((item) => (
-            <li key={item.to}>
+        <nav className="flex-1 pt-4">
+          <ul className="list-none space-y-2">
+            {visibleNavItems.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    cn(navLinkBase, isActive ? navLinkActive : navLinkIdle)
+                  }
+                  title={isCollapsed ? item.label : undefined}
+                >
+                  {item.Icon ? (
+                    <item.Icon className="size-6 shrink-0" aria-hidden="true" />
+                  ) : (
+                    <span
+                      className="size-2 shrink-0 rounded-full bg-current opacity-75"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span
+                    className={cn(collapsibleLabelBase, collapsibleLabelState, 'whitespace-nowrap')}
+                  >
+                    {item.label}
+                  </span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="border-t pt-4">
+          {isAuthenticated ? (
+            <div className="flex flex-col gap-3">
+              <div className="relative flex items-center gap-3">
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={displayName}
+                    className="size-12 shrink-0 rounded-full object-cover"
+                  />
+                ) : (
+                  <span className="flex size-12 shrink-0 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
+                    {avatarLetter}
+                  </span>
+                )}
+                <div className={cn(collapsibleLabelBase, collapsibleLabelState)}>
+                  <p className="truncate text-sm font-semibold">{displayName}</p>
+                  <p className="truncate text-xs text-muted-foreground">Signed in</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className={cn(
+                  'relative overflow-hidden px-4 py-2 text-left text-sm font-medium text-secondary/80 transition-colors hover:text-secondary',
+                  isCollapsed && 'md:px-0 md:text-center',
+                )}
+                aria-label="Logout"
+              >
+                <span className="shrink-0 whitespace-nowrap">{isCollapsed ? 'Out' : 'Logout'}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
               <NavLink
-                to={item.to}
+                to={RouterPath.login}
                 className={({ isActive }) =>
                   cn(
                     navLinkBase,
-                    isCollapsed && 'md:justify-center md:gap-0 md:px-0',
+                    'justify-center',
+                    isCollapsed && 'md:px-0',
                     isActive ? navLinkActive : navLinkIdle,
                   )
                 }
-                title={!showLabels ? item.label : undefined}
+                title={isCollapsed ? 'Login' : undefined}
               >
-                {item.Icon ? (
-                  <item.Icon className="size-6" aria-hidden="true" />
-                ) : (
-                  <span className="size-2 rounded-full bg-current opacity-75" aria-hidden="true" />
-                )}
-                <span className={cn(!showLabels && 'md:hidden')}>{item.label}</span>
+                <span className="shrink-0 whitespace-nowrap">{isCollapsed ? 'In' : 'Login'}</span>
               </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <div className="border-t pt-4">
-        {isAuthenticated ? (
-          <div className="flex flex-col gap-3">
-            <div
-              className={cn(
-                'flex items-center gap-3 px-3',
-                isCollapsed && 'md:justify-center md:px-0',
-              )}
-            >
-              {user?.avatarUrl ? (
-                <img
-                  src={user.avatarUrl}
-                  alt={displayName}
-                  className="size-10 rounded-full object-cover"
-                />
-              ) : (
-                <span className="flex size-10 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
-                  {avatarLetter}
-                </span>
-              )}
-              <div className={cn('min-w-0', !showLabels && 'md:hidden')}>
-                <p className="truncate text-sm font-semibold">{displayName}</p>
-                <p className="text-xs text-muted-foreground">Signed in</p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleLogout}
-              className={cn(
-                'px-4 py-2 text-left text-sm font-medium text-secondary/80 transition-colors hover:text-secondary',
-                isCollapsed && 'md:px-0 md:text-center',
-              )}
-              aria-label="Logout"
-            >
-              <span className={cn(!showLabels && 'md:hidden')}>Logout</span>
-              <span className={cn('hidden', !showLabels && 'md:inline')}>Out</span>
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            <NavLink
-              to={RouterPath.login}
-              className={({ isActive }) =>
-                cn(
-                  navLinkBase,
-                  'justify-center',
+              <NavLink
+                to={RouterPath.register}
+                className={cn(
+                  'relative overflow-hidden whitespace-nowrap px-4 py-2 text-center text-sm font-medium text-secondary/80 transition-colors hover:text-secondary',
                   isCollapsed && 'md:px-0',
-                  isActive ? navLinkActive : navLinkIdle,
-                )
-              }
-              title={!showLabels ? 'Login' : undefined}
-            >
-              <span className={cn(!showLabels && 'md:hidden')}>Login</span>
-              <span className={cn('hidden', !showLabels && 'md:inline')}>In</span>
-            </NavLink>
-            <NavLink
-              to={RouterPath.register}
-              className={cn(
-                'px-4 py-2 text-center text-sm font-medium text-secondary/80 transition-colors hover:text-secondary',
-                !showLabels && 'md:hidden',
-              )}
-            >
-              Create account
-            </NavLink>
-          </div>
-        )}
+                )}
+              >
+                <span
+                  className={cn(collapsibleLabelBase, collapsibleLabelState, 'whitespace-nowrap')}
+                >
+                  Create account
+                </span>
+              </NavLink>
+            </div>
+          )}
+        </div>
       </div>
     </aside>
   );
