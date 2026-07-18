@@ -142,19 +142,32 @@ const Sidebar = () => {
             {isAuthenticated ? (
               <div className="flex flex-col gap-3">
                 <div className="relative flex items-center gap-3">
-                  {user?.avatarUrl ? (
-                    <img
-                      src={user.avatarUrl}
-                      alt={displayName}
-                      className="size-12 shrink-0 rounded-full object-cover"
-                    />
-                  ) : (
-                    <span className="flex size-12 shrink-0 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
-                      {avatarLetter}
-                    </span>
-                  )}
+                  <NavLink
+                    to={RouterPath.profile}
+                    aria-label="Open profile"
+                    className="shrink-0"
+                    onClick={handleCloseMobileMenu}
+                  >
+                    {user?.avatarUrl ? (
+                      <img
+                        src={user.avatarUrl}
+                        alt={displayName}
+                        className="size-12 rounded-full object-cover"
+                      />
+                    ) : (
+                      <span className="flex size-12 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
+                        {avatarLetter}
+                      </span>
+                    )}
+                  </NavLink>
                   <div className={cn(collapsibleLabelBase, collapsibleLabelState)}>
-                    <p className="truncate text-sm font-semibold">{displayName}</p>
+                    <NavLink
+                      to={RouterPath.profile}
+                      className="block truncate text-sm font-semibold hover:text-secondary"
+                      onClick={handleCloseMobileMenu}
+                    >
+                      {displayName}
+                    </NavLink>
                     <button
                       type="button"
                       onClick={handleLogout}
@@ -166,7 +179,7 @@ const Sidebar = () => {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-2">
+              <div>
                 <NavLink
                   to={RouterPath.login}
                   className={({ isActive }) =>
@@ -177,25 +190,16 @@ const Sidebar = () => {
                       isActive ? navLinkActive : navLinkIdle,
                     )
                   }
-                  title={isCollapsed ? 'Login' : undefined}
-                  onClick={handleCloseMobileMenu}
-                >
-                  <span className="shrink-0 whitespace-nowrap">{isCollapsed ? 'In' : 'Login'}</span>
-                </NavLink>
-                <NavLink
-                  to={RouterPath.register}
-                  className={cn(
-                    'relative overflow-hidden whitespace-nowrap px-4 py-2 text-center text-sm font-medium text-secondary/80 transition-colors hover:text-secondary',
-                    isCollapsed && 'md:px-0',
-                  )}
-                  onClick={handleCloseMobileMenu}
-                >
-                  <span
-                    className={cn(collapsibleLabelBase, collapsibleLabelState, 'whitespace-nowrap')}
-                  >
-                    Create account
-                  </span>
-                </NavLink>
+                title={isCollapsed ? 'Login' : undefined}
+                onClick={handleCloseMobileMenu}
+              >
+                <span className={cn('shrink-0 whitespace-nowrap', isCollapsed && 'md:hidden')}>
+                  Login
+                </span>
+                <span className={cn('hidden shrink-0 whitespace-nowrap', isCollapsed && 'md:inline')}>
+                  In
+                </span>
+              </NavLink>
               </div>
             )}
           </div>
