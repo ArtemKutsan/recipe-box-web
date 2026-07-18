@@ -60,7 +60,16 @@ const TopBar = () => {
             <span aria-hidden="true">+</span>
             <span className="hidden sm:inline">Add Recipe</span>
           </Button>
-        ) : null}
+        ) : (
+          <div className="flex shrink-0 items-center gap-2">
+            <Button as={NavLink} to={RouterPath.login}>
+              Login
+            </Button>
+            <Button as={NavLink} to={RouterPath.register} variant="outline">
+              Register
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="mx-auto flex w-full items-center justify-between gap-3 md:hidden">
