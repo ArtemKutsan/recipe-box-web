@@ -68,7 +68,8 @@ const GlobalSearch = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       title="Search recipes"
       onClose={onClose}
-      className="max-w-4xl bg-background shadow-2xl"
+      className="max-w-4xl bg-background shadow-2xl max-md:h-[100dvh] max-md:max-h-none max-md:max-w-none max-md:rounded-none"
+      overlayClassName="max-md:p-0"
     >
       <div className="flex flex-col gap-4">
         <label className="flex items-center gap-3 rounded-2xl border bg-card px-4 py-3">
