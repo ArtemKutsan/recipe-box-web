@@ -18,6 +18,7 @@
  * - title (string) — заголовок окна.
  * - children (ReactNode) — содержимое модалки.
  * - className (string) — дополнительные стили.
+ * - overlayClassName (string) — дополнительные стили затемнённого слоя вокруг окна.
  * - onClose (function) — вызывается при любом действии закрытия.
  *
  * Важные детали реализации:
@@ -39,7 +40,7 @@ import { useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/shared/lib/cn';
 
-const Modal = ({ isOpen, title, children, className, onClose }) => {
+const Modal = ({ isOpen, title, children, className, overlayClassName, onClose }) => {
   // Генерируем уникальный ID для заголовка, используемый в aria-labelledby
   const titleId = useId();
 
@@ -76,7 +77,10 @@ const Modal = ({ isOpen, title, children, className, onClose }) => {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-foreground/50 p-4"
+      className={cn(
+        'fixed inset-0 z-9999 flex items-center justify-center bg-foreground/50 p-4',
+        overlayClassName,
+      )}
       onMouseDown={(event) => {
         // target совпадает с currentTarget только при клике непосредственно по backdrop
         if (event.target === event.currentTarget) {
