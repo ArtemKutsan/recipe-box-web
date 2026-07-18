@@ -93,7 +93,7 @@ const RecipeDetailsPage = () => {
               )}
             </div>
 
-            <div className="grid gap-6 border-y py-6 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid gap-6 border-y py-6 grid-cols-2 md:grid-cols-3">
               <InfoLabel
                 icon={TimerIcon}
                 label="Prep Time"
