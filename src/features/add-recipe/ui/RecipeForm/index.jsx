@@ -14,7 +14,9 @@ const RecipeForm = ({
   cuisines = [],
 }) => {
   const renderError = (fieldName) =>
-    errors[fieldName] ? <p className="text-sm text-destructive">{errors[fieldName].message}</p> : null;
+    errors[fieldName] ? (
+      <p className="text-sm text-destructive">{errors[fieldName].message}</p>
+    ) : null;
   const messageClassName = cn(
     'text-sm',
     messageTone === 'error' ? 'text-destructive' : 'text-foreground',
@@ -24,11 +26,7 @@ const RecipeForm = ({
     <form className="rounded-3xl border bg-card p-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <FormField
-            label="Name"
-            required
-            {...register('name', recipeFormRules.name)}
-          />
+          <FormField label="Name" required {...register('name', recipeFormRules.name)} />
           {renderError('name')}
         </div>
 
@@ -46,87 +44,89 @@ const RecipeForm = ({
           {...register('description')}
         />
 
-        <div>
-          <FormField
-            as="select"
-            label="Cuisine"
-            required
-            {...register('cuisine', recipeFormRules.cuisine)}
-          >
-            <option value="">Select cuisine</option>
-            {cuisines.map((cuisine) => (
-              <option key={cuisine.slug} value={cuisine.slug}>
-                {cuisine.title}
-              </option>
-            ))}
+        <div className="md:col-span-2 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <FormField
+              as="select"
+              label="Cuisine"
+              required
+              {...register('cuisine', recipeFormRules.cuisine)}
+            >
+              <option value="">Select cuisine</option>
+              {cuisines.map((cuisine) => (
+                <option key={cuisine.slug} value={cuisine.slug}>
+                  {cuisine.title}
+                </option>
+              ))}
+            </FormField>
+            {renderError('cuisine')}
+          </div>
+
+          <div>
+            <FormField
+              as="select"
+              label="Meal Type"
+              required
+              {...register('mealType', recipeFormRules.mealType)}
+            >
+              <option value="">Select meal type</option>
+              {mealTypes.map((mealType) => (
+                <option key={mealType.slug} value={mealType.slug}>
+                  {mealType.title}
+                </option>
+              ))}
+            </FormField>
+            {renderError('mealType')}
+          </div>
+
+          <div>
+            <FormField as="select" label="Visibility" {...register('visibility')}>
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </FormField>
+          </div>
+
+          <FormField as="select" label="Difficulty" {...register('difficulty')}>
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
           </FormField>
-          {renderError('cuisine')}
-        </div>
 
-        <div>
-          <FormField
-            as="select"
-            label="Meal Type"
-            required
-            {...register('mealType', recipeFormRules.mealType)}
-          >
-            <option value="">Select meal type</option>
-            {mealTypes.map((mealType) => (
-              <option key={mealType.slug} value={mealType.slug}>
-                {mealType.title}
-              </option>
-            ))}
-          </FormField>
-          {renderError('mealType')}
-        </div>
+          <div>
+            <FormField
+              label="Servings"
+              type="number"
+              {...register('servings', recipeFormRules.servings)}
+            />
+            {renderError('servings')}
+          </div>
 
-        <div>
-          <FormField as="select" label="Visibility" {...register('visibility')}>
-            <option value="public">Public</option>
-            <option value="private">Private</option>
-          </FormField>
-        </div>
+          <div>
+            <FormField
+              label="Prep Time"
+              type="number"
+              {...register('prepTimeMinutes', recipeFormRules.prepTimeMinutes)}
+            />
+            {renderError('prepTimeMinutes')}
+          </div>
 
-        <FormField as="select" label="Difficulty" {...register('difficulty')}>
-          <option>Easy</option>
-          <option>Medium</option>
-          <option>Hard</option>
-        </FormField>
+          <div>
+            <FormField
+              label="Cook Time"
+              type="number"
+              {...register('cookTimeMinutes', recipeFormRules.cookTimeMinutes)}
+            />
+            {renderError('cookTimeMinutes')}
+          </div>
 
-        <div>
-          <FormField
-            label="Servings"
-            type="number"
-            {...register('servings', recipeFormRules.servings)}
-          />
-          {renderError('servings')}
-        </div>
-
-        <div>
-          <FormField
-            label="Prep Time"
-            type="number"
-            {...register('prepTimeMinutes', recipeFormRules.prepTimeMinutes)}
-          />
-          {renderError('prepTimeMinutes')}
-        </div>
-
-        <div>
-          <FormField
-            label="Cook Time"
-            type="number"
-            {...register('cookTimeMinutes', recipeFormRules.cookTimeMinutes)}
-          />
-          {renderError('cookTimeMinutes')}
-        </div>
-
-        <div>
-          <FormField
-            label="Calories"
-            type="number"
-            {...register('caloriesPerServing', recipeFormRules.caloriesPerServing)}
-          />
-          {renderError('caloriesPerServing')}
+          <div>
+            <FormField
+              label="Calories"
+              type="number"
+              {...register('caloriesPerServing', recipeFormRules.caloriesPerServing)}
+            />
+            {renderError('caloriesPerServing')}
+          </div>
         </div>
 
         <FormField
