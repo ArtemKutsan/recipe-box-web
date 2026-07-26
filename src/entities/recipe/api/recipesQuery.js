@@ -82,7 +82,24 @@ export const recipesApi = createApi({
       transformResponse: (response) => toRecipeDetailResponse(response.recipe),
       invalidatesTags: [{ type: 'Recipes', id: 'LIST' }],
     }),
+    updateRecipe: build.mutation({
+      query: ({ recipeId, recipe }) => ({
+        url: `/recipes/${recipeId}`,
+        method: 'PATCH',
+        body: recipe,
+      }),
+      transformResponse: (response) => toRecipeDetailResponse(response.recipe),
+      invalidatesTags: (_result, _error, { recipeId }) => [
+        { type: 'Recipes', id: 'LIST' },
+        { type: 'Recipes', id: recipeId },
+      ],
+    }),
   }),
 });
 
-export const { useGetRecipesQuery, useGetRecipeByIdQuery, useCreateRecipeMutation } = recipesApi;
+export const {
+  useGetRecipesQuery,
+  useGetRecipeByIdQuery,
+  useCreateRecipeMutation,
+  useUpdateRecipeMutation,
+} = recipesApi;

@@ -7,6 +7,7 @@ import AddRecipePage from '@/pages/AddRecipePage';
 import MealPlannerPage from '@/pages/MealPlannerPage';
 import ProfilePage from '@/pages/ProfilePage';
 import RecipeDetailsPage from '@/pages/RecipeDetailsPage';
+import EditRecipePage from '@/pages/EditRecipePage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { AppRoute, RouterPath } from '@/shared/config/routerPaths';
 
@@ -54,6 +55,11 @@ export const routeConfig = {
   [AppRoute.RECIPE_DETAIL]: {
     path: RouterPath.recipe_detail,
     element: <RecipeDetailsPage />,
+  },
+  [AppRoute.EDIT_RECIPE]: {
+    path: RouterPath.edit_recipe,
+    element: <EditRecipePage />,
+    protected: true,
   },
   [AppRoute.NOT_FOUND]: {
     path: RouterPath.not_found,

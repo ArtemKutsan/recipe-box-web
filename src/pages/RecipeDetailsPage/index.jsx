@@ -1,6 +1,8 @@
 import { Link, useParams } from 'react-router-dom';
-import { buildUserProfilePath } from '@/shared/config/routerPaths';
-import { Badge, BulletList, InfoLabel, NumberedList } from '@/shared/ui';
+import { useSelector } from 'react-redux';
+import { selectAuthUser } from '@/entities/auth';
+import { buildEditRecipePath, buildUserProfilePath } from '@/shared/config/routerPaths';
+import { Badge, BulletList, Button, InfoLabel, NumberedList } from '@/shared/ui';
 import TimerIcon from '@/assets/icons/timer.svg?react';
 import FireIcon from '@/assets/icons/fire-line.svg?react';
 import ServingsIcon from '@/assets/icons/servings.svg?react';
@@ -12,6 +14,7 @@ import { UserAvatar } from '@/entities/user';
 
 const RecipeDetailsPage = () => {
   const { id } = useParams();
+  const authUser = useSelector(selectAuthUser);
   const { recipe, status, error } = useRecipe(id);
 
   if (status === 'idle' || status === 'loading') {
@@ -32,6 +35,7 @@ const RecipeDetailsPage = () => {
   const instructions = recipe.instructions ?? [];
   const author = recipe.author;
   const authorName = author?.name ?? 'RecipeBox user';
+  const canEdit = authUser?.id != null && String(authUser.id) === String(author?.id);
 
   return (
     <section className="mx-auto">
@@ -54,10 +58,17 @@ const RecipeDetailsPage = () => {
               <Badge className={getDifficultyBadgeClassName(recipe.difficulty)}>
                 {recipe.difficulty}
               </Badge>
-              <span className="inline-flex items-baseline gap-2 text-sm">
-                <span className="text-lg text-amber-400">★</span>
-                <span className="font-medium">{recipe.rating ?? '—'}</span>
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="inline-flex items-baseline gap-2 text-sm">
+                  <span className="text-lg text-amber-400">★</span>
+                  <span className="font-medium">{recipe.rating ?? '—'}</span>
+                </span>
+                {canEdit ? (
+                  <Button as={Link} to={buildEditRecipePath(recipe.id)} variant="outline" size="sm">
+                    Edit
+                  </Button>
+                ) : null}
+              </div>
             </div>
 
             <div className="space-y-4">
