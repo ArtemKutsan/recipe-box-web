@@ -12,6 +12,7 @@ const RecipeForm = ({
   isSubmitting,
   mealTypes = [],
   cuisines = [],
+  submitLabel = 'Add recipe',
 }) => {
   const renderError = (fieldName) =>
     errors[fieldName] ? (
@@ -96,9 +97,9 @@ const RecipeForm = ({
           </div>
 
           <FormField as="select" label="Difficulty" {...register('difficulty')}>
-            <option>Easy</option>
-            <option>Medium</option>
-            <option>Hard</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
           </FormField>
 
           <div>
@@ -171,7 +172,7 @@ const RecipeForm = ({
       <div className="mt-6 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
         <p className={messageClassName}>{message}</p>
         <Button type="submit" variant="secondary" disabled={isSubmitting}>
-          Add recipe
+          {submitLabel}
         </Button>
       </div>
     </form>

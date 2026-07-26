@@ -6,7 +6,7 @@ export const initialRecipeFormValues = {
   cuisine: '',
   mealType: '',
   visibility: 'public',
-  difficulty: 'Easy',
+  difficulty: 'easy',
   servings: 4,
   prepTimeMinutes: 20,
   cookTimeMinutes: 15,
@@ -81,7 +81,37 @@ export const recipeFormRules = {
   },
 };
 
-export const buildCreateRecipePayload = (formValues) => ({
+const findDictionarySlug = (items, value) => {
+  const normalizedValue = String(value ?? '').trim().toLowerCase();
+  const item = items.find(
+    ({ slug, title }) =>
+      slug?.toLowerCase() === normalizedValue || title?.toLowerCase() === normalizedValue,
+  );
+
+  return item?.slug ?? '';
+};
+
+// Приводим данные рецепта из API к значениям, которые ожидают поля формы.
+export const buildRecipeFormValues = (recipe, mealTypes = [], cuisines = []) => ({
+  name: recipe.name ?? '',
+  description: recipe.description ?? '',
+  authorNote: recipe.authorNote ?? '',
+  image: recipe.image ?? '',
+  cuisine: findDictionarySlug(cuisines, recipe.cuisine),
+  mealType: findDictionarySlug(mealTypes, recipe.mealType?.[0]),
+  visibility: recipe.visibility ?? 'public',
+  difficulty: recipe.difficulty ?? 'easy',
+  servings: recipe.servings ?? 1,
+  prepTimeMinutes: recipe.prepTimeMinutes ?? 0,
+  cookTimeMinutes: recipe.cookTimeMinutes ?? 0,
+  caloriesPerServing: recipe.caloriesPerServing ?? 0,
+  tags: (recipe.tags ?? []).join(', '),
+  ingredients: (recipe.ingredients ?? []).join('\n'),
+  instructions: (recipe.instructions ?? []).join('\n'),
+});
+
+// Один payload используется и для создания, и для полного сохранения формы редактирования.
+export const buildRecipePayload = (formValues) => ({
   title: formValues.name.trim(),
   description: formValues.description.trim(),
   authorNote: formValues.authorNote.trim(),

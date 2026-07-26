@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useCreateRecipeMutation } from '@/entities/recipe';
-import { buildCreateRecipePayload, initialRecipeFormValues, RecipeForm } from '@/features/add-recipe';
+import { buildRecipePayload, initialRecipeFormValues, RecipeForm } from '@/features/recipe-form';
 import { buildRecipePath } from '@/shared/config/routerPaths';
 
 const AddRecipePage = () => {
@@ -46,7 +46,7 @@ const AddRecipePage = () => {
 
   const onSubmit = async (formValues) => {
     clearErrors('root.server');
-    const nextRecipe = buildCreateRecipePayload(formValues);
+    const nextRecipe = buildRecipePayload(formValues);
 
     try {
       const createdRecipe = await createRecipe(nextRecipe).unwrap();
