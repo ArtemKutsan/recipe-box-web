@@ -8,6 +8,7 @@ import UtensilsIcon from '@/assets/icons/utensils.svg?react';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
 import { getDifficultyBadgeClassName, useRecipe } from '@/entities/recipe';
+import { UserAvatar } from '@/entities/user';
 
 const RecipeDetailsPage = () => {
   const { id } = useParams();
@@ -31,7 +32,6 @@ const RecipeDetailsPage = () => {
   const instructions = recipe.instructions ?? [];
   const author = recipe.author;
   const authorName = author?.name ?? 'RecipeBox user';
-  const authorLetter = authorName.slice(0, 1).toUpperCase();
 
   return (
     <section className="mx-auto">
@@ -74,17 +74,7 @@ const RecipeDetailsPage = () => {
                   to={buildUserProfilePath(author.id)}
                   className="inline-flex items-center gap-3 self-start rounded-2xl border px-4 py-3 transition-colors hover:bg-lite"
                 >
-                  {author.avatarUrl ? (
-                    <img
-                      src={author.avatarUrl}
-                      alt={authorName}
-                      className="size-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    <span className="flex size-10 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
-                      {authorLetter}
-                    </span>
-                  )}
+                  <UserAvatar src={author.avatarUrl} alt={authorName} className="size-10" />
                   <span className="flex flex-col">
                     <span className="text-sm font-semibold">{authorName}</span>
                     <span className="text-xs text-muted-foreground">User #{author.id}</span>

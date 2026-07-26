@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectAuthUser } from '@/entities/auth';
 import { RecipeList } from '@/entities/recipe/ui';
-import { useUser, useUserRecipes } from '@/entities/user';
+import { UserAvatar, useUser, useUserRecipes } from '@/entities/user';
 
 const ProfilePage = () => {
   const { id } = useParams();
@@ -32,7 +32,6 @@ const ProfilePage = () => {
   if (!user) return <p>User not found.</p>;
 
   const displayName = user.name ?? 'RecipeBox user';
-  const avatarLetter = displayName.slice(0, 1).toUpperCase();
   const profileBio = user.bio || 'This cook has not added a profile bio yet.';
   const profileDetails = [
     { label: 'Age', value: user.age ?? '—' },
@@ -48,13 +47,7 @@ const ProfilePage = () => {
       </header>
 
       <div className="flex items-center gap-6 rounded-2xl border p-6">
-        {user.avatarUrl ? (
-          <img src={user.avatarUrl} alt={displayName} className="size-24 rounded-full object-cover" />
-        ) : (
-          <div className="flex size-24 items-center justify-center rounded-full border bg-muted text-2xl font-semibold">
-            {avatarLetter}
-          </div>
-        )}
+        <UserAvatar src={user.avatarUrl} alt={displayName} className="size-24" />
 
         <div className="flex min-w-0 flex-col gap-3">
           <div className="flex flex-col gap-1">

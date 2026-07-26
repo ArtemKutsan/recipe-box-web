@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCredentials, selectAuthUser, selectIsAuthenticated } from '@/entities/auth';
+import { UserAvatar } from '@/entities/user';
 import { RouterPath } from '@/shared/config/routerPaths';
 import { navItems } from '@/widgets/Sidebar/navItems';
 import { cn } from '@/shared/lib/cn';
@@ -22,7 +23,6 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const displayName = user?.name ?? 'Account';
-  const avatarLetter = displayName.slice(0, 1).toUpperCase();
   const visibleNavItems = navItems.filter((item) => !item.authOnly || isAuthenticated);
   const collapsibleLabelState = isCollapsed ? 'md:max-w-0 md:opacity-0' : 'md:opacity-100';
 
@@ -148,17 +148,7 @@ const Sidebar = () => {
                     className="shrink-0"
                     onClick={handleCloseMobileMenu}
                   >
-                    {user?.avatarUrl ? (
-                      <img
-                        src={user.avatarUrl}
-                        alt={displayName}
-                        className="size-12 rounded-full object-cover"
-                      />
-                    ) : (
-                      <span className="flex size-12 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
-                        {avatarLetter}
-                      </span>
-                    )}
+                    <UserAvatar src={user?.avatarUrl} alt={displayName} className="size-12" />
                   </NavLink>
                   <div className={cn(collapsibleLabelBase, collapsibleLabelState)}>
                     <NavLink
