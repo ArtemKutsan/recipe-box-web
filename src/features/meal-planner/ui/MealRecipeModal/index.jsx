@@ -89,7 +89,7 @@ const MealRecipeModal = ({
     onChangeRecipeSource(nextSource);
   };
 
-  // Записываем ID рецепта в выбранный слот Redux store и закрываем модалку
+  // Отправляем PATCH выбранного слота и закрываем модалку только после успешного ответа.
   const handleSelectRecipe = async (recipeId) => {
     if (!selectedSlot) return;
 

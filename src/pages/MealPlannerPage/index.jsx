@@ -1,6 +1,6 @@
 // src/pages/MealPlannerPage/index.jsx
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useRecipes } from '@/entities/recipe';
 import { selectAuthUser } from '@/entities/auth';
 import { useUserRecipes } from '@/entities/user';
@@ -10,17 +10,14 @@ import {
 } from '@/entities/meal-plan';
 import {
   buildMealPlan,
+  emptyMealPlan,
   getDays,
   mealPeriods,
   MealPlannerCalendar,
   MealRecipeModal,
-  selectMealPlan,
-  setMealPlan,
 } from '@/features/meal-planner';
-import { emptyMealPlan } from '@/features/meal-planner/model/emptyMealPlan';
 
 const MealPlannerPage = () => {
-  const dispatch = useDispatch();
   const authUser = useSelector(selectAuthUser);
   // Храним координаты пустого слота, для которого пользователь открыл выбор рецепта
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -41,10 +38,9 @@ const MealPlannerPage = () => {
     isError: isMealPlanError,
     error: mealPlanError,
   } = useGetCurrentMealPlanQuery();
-  const [updateMealPlanSlot, { isLoading: isUpdatingMealPlanSlot }] =
-    useUpdateCurrentMealPlanSlotMutation();
-  // Получаем недельный план с ID рецептов из Redux store
-  const storedMealPlan = useSelector(selectMealPlan);
+  const [updateMealPlanSlot] = useUpdateCurrentMealPlanSlotMutation();
+  // RTK Query cache хранит недельный план; до первого ответа используем пустые слоты.
+  const storedMealPlan = mealPlanResponse?.slots ?? emptyMealPlan;
   // Получаем дни для календаря и мемоизируем результат, чтобы не пересчитывать при каждом рендере
   const days = useMemo(() => getDays(), []);
   const canUseMyRecipes = Boolean(authUser?.id);
@@ -64,11 +60,6 @@ const MealPlannerPage = () => {
   const activeRecipes = effectiveRecipeSource === 'my' ? myRecipes : allRecipes;
   const activeRecipesStatus = effectiveRecipeSource === 'my' ? myRecipesStatus : allRecipesStatus;
   const activeRecipesError = effectiveRecipeSource === 'my' ? myRecipesError : allRecipesError;
-
-  useEffect(() => {
-    // Backend возвращает mealPlan целиком, а для календаря нам нужны только slots.
-    dispatch(setMealPlan(mealPlanResponse?.slots ?? emptyMealPlan));
-  }, [dispatch, mealPlanResponse]);
 
   // Соединяем ID из meal plan с полными объектами рецептов для отображения календаря
   const mealPlan = useMemo(
@@ -105,7 +96,6 @@ const MealPlannerPage = () => {
       }).unwrap();
 
       setUpdateError(null);
-      dispatch(setMealPlan(updatedMealPlan?.slots ?? emptyMealPlan));
       return updatedMealPlan;
     } catch (err) {
       const message = err?.data?.message ?? err?.message ?? 'Failed to update meal plan.';
@@ -120,7 +110,6 @@ const MealPlannerPage = () => {
         <h1 className="text-2xl font-semibold">Meal Planner</h1>
         <p>Plan your meals for the week</p>
       </header>
-      {isUpdatingMealPlanSlot ? <p>Saving...</p> : null}
       {updateError ? <p className="text-sm text-destructive">{updateError}</p> : null}
       {/* Пустой слот передаёт сюда day и mealPeriod через onAddMeal */}
       <MealPlannerCalendar
