@@ -81,6 +81,14 @@ const RecipeDetailsPage = () => {
                   </span>
                 </Link>
               )}
+              {recipe.authorNote ? (
+                <div className="border-l-2 border-secondary pl-4">
+                  <p className="text-sm font-semibold">Author&apos;s note</p>
+                  <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
+                    {recipe.authorNote}
+                  </p>
+                </div>
+              ) : null}
             </div>
 
             <div className="grid gap-6 border-y py-6 grid-cols-2 md:grid-cols-3">

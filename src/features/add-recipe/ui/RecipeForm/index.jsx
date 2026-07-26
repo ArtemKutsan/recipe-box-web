@@ -44,6 +44,15 @@ const RecipeForm = ({
           {...register('description')}
         />
 
+        <FormField
+          as="textarea"
+          label="Author Note"
+          placeholder="Share the story or personal context behind this recipe"
+          className="min-h-28"
+          containerClassName="md:col-span-2"
+          {...register('authorNote')}
+        />
+
         <div className="md:col-span-2 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <FormField
