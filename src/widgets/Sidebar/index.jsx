@@ -67,7 +67,7 @@ const Sidebar = () => {
         className={cn(
           'fixed inset-y-0 left-0 z-50 flex min-h-screen w-full shrink-0 flex-col border-r bg-card px-4 pt-5 pb-6 transition-[transform,width,padding] duration-200 md:flex md:w-54 md:translate-x-0 lg:sticky lg:top-0 lg:h-screen',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full',
-          isCollapsed ? 'md:w-20 md:sticky' : 'md:shadow-2xl lg:shadow-none',
+          isCollapsed ? 'md:w-20 md:sticky md:h-screen' : 'md:shadow-2xl lg:shadow-none',
         )}
         aria-label="Primary"
       >
@@ -180,16 +180,18 @@ const Sidebar = () => {
                       isActive ? navLinkActive : navLinkIdle,
                     )
                   }
-                title={isCollapsed ? 'Login' : undefined}
-                onClick={handleCloseMobileMenu}
-              >
-                <span className={cn('shrink-0 whitespace-nowrap', isCollapsed && 'md:hidden')}>
-                  Login
-                </span>
-                <span className={cn('hidden shrink-0 whitespace-nowrap', isCollapsed && 'md:inline')}>
-                  In
-                </span>
-              </NavLink>
+                  title={isCollapsed ? 'Login' : undefined}
+                  onClick={handleCloseMobileMenu}
+                >
+                  <span className={cn('shrink-0 whitespace-nowrap', isCollapsed && 'md:hidden')}>
+                    Login
+                  </span>
+                  <span
+                    className={cn('hidden shrink-0 whitespace-nowrap', isCollapsed && 'md:inline')}
+                  >
+                    In
+                  </span>
+                </NavLink>
               </div>
             )}
           </div>
