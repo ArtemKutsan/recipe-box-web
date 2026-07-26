@@ -92,14 +92,6 @@ const RecipeDetailsPage = () => {
                   </span>
                 </Link>
               )}
-              {recipe.authorNote ? (
-                <div className="border-l-2 border-secondary pl-4">
-                  <p className="text-sm font-semibold">Author&apos;s note</p>
-                  <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
-                    {recipe.authorNote}
-                  </p>
-                </div>
-              ) : null}
             </div>
 
             <div className="grid gap-6 border-y py-6 grid-cols-2 md:grid-cols-3">
@@ -149,14 +141,39 @@ const RecipeDetailsPage = () => {
           </section>
         </div>
 
-        <div className="p-4 sm:p-8">
-          <div className="flex items-center gap-4 rounded-2xl p-4 bg-secondary/5 text-secondary">
-            <span className="flex size-10 items-center justify-center rounded-full bg-secondary/5 text-primary">
-              <ChefHatIcon className="size-5 text-secondary" aria-hidden="true" />
-            </span>
-            <p>Tip: Use the freshest ingredients for the best flavor!</p>
-          </div>
-        </div>
+        {recipe.authorNote ? (
+          <section
+            className="border-t bg-muted/30 px-4 py-8 sm:px-8 sm:py-10"
+            aria-labelledby="recipe-author-note-title"
+          >
+            <div className="mx-auto max-w-3xl">
+              <header className="flex items-center gap-4">
+                {author ? (
+                  <Link
+                    to={buildUserProfilePath(author.id)}
+                    className="shrink-0 rounded-full"
+                    aria-label={`Open ${authorName}'s profile`}
+                  >
+                    <UserAvatar src={author.avatarUrl} alt={authorName} className="size-12" />
+                  </Link>
+                ) : null}
+                <div>
+                  <p className="text-sm font-medium text-secondary">From the author</p>
+                  <h2 id="recipe-author-note-title" className="text-xl font-semibold">
+                    Behind this recipe
+                  </h2>
+                  {author ? (
+                    <p className="mt-1 text-sm text-muted-foreground">{authorName}</p>
+                  ) : null}
+                </div>
+              </header>
+
+              <div className="mt-6 whitespace-pre-line text-base leading-7 text-foreground">
+                {recipe.authorNote}
+              </div>
+            </div>
+          </section>
+        ) : null}
       </article>
     </section>
   );
