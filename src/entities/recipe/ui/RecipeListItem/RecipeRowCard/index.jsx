@@ -6,18 +6,18 @@ import TimerIcon from '@/assets/icons/timer.svg?react';
 import FireIcon from '@/assets/icons/fire-line.svg?react';
 import UtensilsIcon from '@/assets/icons/utensils.svg?react';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
-import LikeIcon from '@/assets/icons/like.svg?react';
 
-const RecipeRowCard = ({ recipe }) => {
+const RecipeRowCard = ({ recipe, favoriteAction = null }) => {
   const totalTime = (recipe?.prepTimeMinutes ?? 0) + (recipe?.cookTimeMinutes ?? 0);
   const cuisineLabel = recipe?.cuisine ?? 'Cuisine';
 
   return (
-    <Link
-      to={buildRecipePath(recipe.id)}
-      className="block overflow-hidden rounded-2xl border bg-card"
-    >
-      <article className="grid gap-4 md:grid-cols-[10rem_minmax(0,1fr)_auto] p-4">
+    <article className="relative grid gap-4 overflow-hidden rounded-2xl border bg-card p-4 md:grid-cols-[10rem_minmax(0,1fr)_auto]">
+      <Link
+        to={buildRecipePath(recipe.id)}
+        className="absolute inset-0 z-10"
+        aria-label={`Open ${recipe?.name ?? 'recipe'}`}
+      />
         {recipe?.image ? (
           <img
             src={recipe.image}
@@ -55,13 +55,10 @@ const RecipeRowCard = ({ recipe }) => {
           </div>
         </div>
 
-        <div className="flex items-start justify-end gap-4 md:flex-col md:items-end md:justify-start md:pl-0">
-          <span className="rounded-full p-2">
-            <LikeIcon aria-hidden="true" className="size-5" />
-          </span>
+        <div className="relative z-20 flex items-start justify-end gap-4 md:flex-col md:items-end md:justify-start md:pl-0">
+          {favoriteAction}
         </div>
-      </article>
-    </Link>
+    </article>
   );
 };
 
