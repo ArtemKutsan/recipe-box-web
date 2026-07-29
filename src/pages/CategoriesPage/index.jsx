@@ -7,6 +7,7 @@ import {
   MealTypeSelector,
   getMealTypeItems,
 } from '@/features/recipe-categorization';
+import { FavoriteButton } from '@/features/toggle-favorite';
 
 const mapCuisineItemsToCards = (cuisines) =>
   // Backend уже отдает не весь каталог рецептов, а готовые кухни для текущего фильтра.
@@ -157,7 +158,13 @@ const CategoriesPage = () => {
             {recipesLoading || recipesFetching ? (
               <p>Loading...</p>
             ) : recipes.length > 0 ? (
-              recipes.map((recipe) => <RecipeListItem key={recipe.id} recipe={recipe} />)
+              recipes.map((recipe) => (
+                <RecipeListItem
+                  key={recipe.id}
+                  recipe={recipe}
+                  favoriteAction={<FavoriteButton recipeId={recipe.id} />}
+                />
+              ))
             ) : (
               <p>No recipes found</p>
             )}

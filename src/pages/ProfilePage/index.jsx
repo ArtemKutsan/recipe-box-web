@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectAuthUser } from '@/entities/auth';
 import { RecipeList } from '@/entities/recipe/ui';
 import { UserAvatar, useUser, useUserRecipes } from '@/entities/user';
+import { FavoriteButton } from '@/features/toggle-favorite';
 
 const ProfilePage = () => {
   const { id } = useParams();
@@ -96,7 +97,10 @@ const ProfilePage = () => {
         ) : recipesError ? (
           <p className="text-sm text-muted-foreground">{recipesError}</p>
         ) : recipes.length > 0 ? (
-          <RecipeList recipes={recipes} />
+          <RecipeList
+            recipes={recipes}
+            renderFavoriteAction={(recipe) => <FavoriteButton recipeId={recipe.id} />}
+          />
         ) : (
           <div className="rounded-2xl border border-dashed bg-card p-6 text-sm text-muted-foreground">
             No recipes published yet.
