@@ -6,6 +6,7 @@ import { buildRecipesQuery } from '@/entities/recipe/lib';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
+import { FavoriteButton } from '@/features/toggle-favorite';
 import { Pagination } from '@/shared/ui';
 
 const RECIPES_PER_PAGE = 12;
@@ -118,7 +119,11 @@ const RecipesPage = () => {
       ) : isEmpty ? (
         <p>No recipes found.</p>
       ) : (
-        <RecipeList recipes={recipes} viewMode={viewMode} />
+        <RecipeList
+          recipes={recipes}
+          viewMode={viewMode}
+          renderFavoriteAction={(recipe) => <FavoriteButton recipeId={recipe.id} />}
+        />
       )}
 
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />

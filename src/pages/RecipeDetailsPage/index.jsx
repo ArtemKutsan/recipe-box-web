@@ -11,6 +11,7 @@ import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
 import { getDifficultyBadgeClassName, useRecipe } from '@/entities/recipe';
 import { UserAvatar } from '@/entities/user';
+import { FavoriteButton } from '@/features/toggle-favorite';
 
 const RecipeDetailsPage = () => {
   const { id } = useParams();
@@ -59,8 +60,9 @@ const RecipeDetailsPage = () => {
                 {recipe.difficulty}
               </Badge>
               <div className="flex items-center gap-3">
-                <span className="inline-flex items-baseline gap-2 text-sm">
-                  <span className="text-lg text-amber-400">★</span>
+                <FavoriteButton recipeId={recipe.id} />
+                <span className="inline-flex items-center gap-2 text-sm">
+                  <span className="text-2xl text-amber-400">★</span>
                   <span className="font-medium">{recipe.rating ?? '—'}</span>
                 </span>
                 {canEdit ? (
