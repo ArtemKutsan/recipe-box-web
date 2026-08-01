@@ -33,10 +33,10 @@ const RecipeGridCard = ({ recipe, favoriteAction = null }) => {
         </div>
 
         <div className="min-w-0 flex-1 flex flex-col justify-between">
-          <h3 className="line-clamp-3 text-xs font-semibold leading-4 text-foreground sm:text-sm">
+          <h3 className="line-clamp-2 md:line-clamp-3 md:text-sm font-semibold leading-5 md:leading-4 text-foreground">
             {recipe?.name ?? 'RecipeListItem'}
           </h3>
-          <p className="mt-1 text-xs text-muted-foreground sm:text-xs">
+          <p className="mt-1 text-sm md:text-xs text-muted-foreground sm:text-xs">
             {cuisineLabel}
             {mealTypeLabel ? ` • ${mealTypeLabel}` : ''}
           </p>

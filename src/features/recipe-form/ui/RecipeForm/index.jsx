@@ -24,7 +24,7 @@ const RecipeForm = ({
   );
 
   return (
-    <form className="rounded-3xl border bg-card p-6" onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 md:grid-cols-2">
         <div>
           <FormField label="Name" required {...register('name', recipeFormRules.name)} />
@@ -150,7 +150,7 @@ const RecipeForm = ({
           <FormField
             as="textarea"
             label="Ingredients"
-            placeholder="One ingredient per line"
+            placeholder="Ingredients, one per line"
             className="min-h-32"
             {...register('ingredients', recipeFormRules.ingredients)}
           />
@@ -161,7 +161,7 @@ const RecipeForm = ({
           <FormField
             as="textarea"
             label="Instructions"
-            placeholder="One instruction per line"
+            placeholder="Instructions, one step per line"
             className="min-h-40"
             {...register('instructions', recipeFormRules.instructions)}
           />

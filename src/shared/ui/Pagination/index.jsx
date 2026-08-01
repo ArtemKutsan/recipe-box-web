@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui';
 import { cn } from '@/shared/lib/cn';
+import Button from '../Button';
 
 const SIBLING_COUNT = 1;
 

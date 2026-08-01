@@ -159,7 +159,7 @@ const MealRecipeModal = ({
       className="bg-background shadow-2xl"
     >
       <div className="mb-4 flex flex-col gap-3">
-        <label className="flex items-center gap-3 rounded-xl border bg-card px-4 py-2">
+        <label className="flex min-h-10 items-center gap-3 rounded-xl border bg-card px-4">
           <span className="text-sm text-muted-foreground">Search</span>
           <input
             type="search"
@@ -171,7 +171,7 @@ const MealRecipeModal = ({
         </label>
 
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <label className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border bg-card px-3 py-2">
+          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-card px-3">
             <span className="shrink-0 text-sm text-muted-foreground">Meal type</span>
             <select
               value={selectedMealType}

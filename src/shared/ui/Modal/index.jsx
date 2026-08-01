@@ -39,6 +39,7 @@
 import { useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/shared/lib/cn';
+import Button from '../Button';
 
 const Modal = ({ isOpen, title, children, className, overlayClassName, onClose }) => {
   // Генерируем уникальный ID для заголовка, используемый в aria-labelledby
@@ -102,16 +103,15 @@ const Modal = ({ isOpen, title, children, className, overlayClassName, onClose }
           <h2 id={titleId} className="text-xl font-semibold">
             {title}
           </h2>
-          {/* Кнопка закрытия модального окна */}
-          {/* TODO: Заменить на иконку */}
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={onClose}
-            className="flex size-8 shrink-0 items-center justify-center rounded-lg text-xl text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            className="rounded-xl text-xl text-muted-foreground"
             aria-label="Close modal"
           >
             &#215;
-          </button>
+          </Button>
         </header>
 
         <div className="overflow-y-auto p-4">{children}</div>

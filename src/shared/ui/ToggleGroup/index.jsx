@@ -4,7 +4,7 @@ import Button from '../Button';
 const ToggleGroup = ({ options, value, onChange, ariaLabel, className }) => {
   return (
     <div
-      className={cn('flex w-fit max-w-full gap-1 rounded-xl border bg-card p-1', className)}
+      className={cn('flex w-fit max-w-full gap-1 rounded-xl bg-border p-1', className)}
       role="group"
       aria-label={ariaLabel}
     >
@@ -17,6 +17,7 @@ const ToggleGroup = ({ options, value, onChange, ariaLabel, className }) => {
             type="button"
             size="sm"
             variant={isActive ? 'secondary' : 'ghost'}
+            aria-label={option.ariaLabel}
             aria-pressed={isActive}
             disabled={option.disabled}
             onClick={() => {
