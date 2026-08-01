@@ -1,8 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
-import { toRecipeListResponse } from '@/entities/recipe/api/response';
+import { toRecipeListResponse } from '@/entities/recipe';
 
-const buildUserRecipesQuery = (userId, queryParams = {}) => {
+const buildUserRecipesQuery = (userId, queryParams = {}, isCurrentUser = false) => {
   const params = new URLSearchParams();
 
   if (queryParams.search) {
@@ -38,8 +38,9 @@ const buildUserRecipesQuery = (userId, queryParams = {}) => {
   }
 
   const queryString = params.toString();
+  const path = isCurrentUser ? '/users/me/recipes' : `/users/${userId}/recipes`;
 
-  return queryString ? `/users/${userId}/recipes?${queryString}` : `/users/${userId}/recipes`;
+  return queryString ? `${path}?${queryString}` : path;
 };
 
 export const usersApi = createApi({
@@ -51,7 +52,9 @@ export const usersApi = createApi({
       transformResponse: (response) => response.user ?? null,
     }),
     getUserRecipes: build.query({
-      query: ({ userId, ...queryParams }) => buildUserRecipesQuery(userId, queryParams),
+      // Для своего профиля используем защищённый маршрут, который возвращает и приватные рецепты.
+      query: ({ userId, isCurrentUser = false, ...queryParams }) =>
+        buildUserRecipesQuery(userId, queryParams, isCurrentUser),
       transformResponse: (response) => ({
         items: Array.isArray(response.items) ? response.items.map(toRecipeListResponse) : [],
         total: response.total ?? 0,

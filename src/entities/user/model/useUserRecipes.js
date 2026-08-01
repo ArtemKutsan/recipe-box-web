@@ -16,6 +16,7 @@ export const useUserRecipes = (userId, queryParamsOrOptions = {}, maybeOptions =
   const query = useGetUserRecipesQuery(
     {
       userId,
+      isCurrentUser: options.isCurrentUser ?? false,
       ...queryParams,
     },
     {

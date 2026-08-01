@@ -1,14 +1,25 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectAuthUser } from '@/entities/auth';
+import { useGetFavoriteRecipesQuery } from '@/entities/favorite';
 import { RecipeList } from '@/entities/recipe/ui';
 import { UserAvatar, useUser, useUserRecipes } from '@/entities/user';
 import { FavoriteButton } from '@/features/toggle-favorite';
+import { Button, Pagination } from '@/shared/ui';
+
+const PROFILE_RECIPES_PAGE_SIZE = 12;
+const AUTHORED_RECIPES = 'authored';
+const SAVED_RECIPES = 'saved';
 
 const ProfilePage = () => {
   const { id } = useParams();
+  const [activeRecipeCollection, setActiveRecipeCollection] = useState(AUTHORED_RECIPES);
+  const [authoredPage, setAuthoredPage] = useState(1);
+  const [savedPage, setSavedPage] = useState(1);
   const authUser = useSelector(selectAuthUser);
   const isCurrentUserProfile = !id;
+  const isSavedRecipesActive = isCurrentUserProfile && activeRecipeCollection === SAVED_RECIPES;
   const userId = id ?? authUser?.id;
   const {
     user: publicUser,
@@ -20,9 +31,37 @@ const ProfilePage = () => {
   const user = isCurrentUserProfile ? authUser : publicUser;
   const status = isCurrentUserProfile ? 'succeeded' : publicUserStatus;
   const error = isCurrentUserProfile ? null : publicUserError;
-  const { recipes, total, status: recipesStatus, error: recipesError } = useUserRecipes(userId, {
-    skip: !userId,
-  });
+  const {
+    recipes,
+    total,
+    totalPages,
+    status: recipesStatus,
+    error: recipesError,
+  } = useUserRecipes(
+    userId,
+    {
+      page: authoredPage,
+      pageSize: PROFILE_RECIPES_PAGE_SIZE,
+    },
+    {
+      skip: !userId,
+      isCurrentUser: isCurrentUserProfile,
+    },
+  );
+  const {
+    data: savedRecipesData,
+    isLoading: areSavedRecipesLoading,
+    isError: isSavedRecipesError,
+    error: savedRecipesError,
+  } = useGetFavoriteRecipesQuery(
+    {
+      page: savedPage,
+      pageSize: PROFILE_RECIPES_PAGE_SIZE,
+    },
+    {
+      skip: !isSavedRecipesActive,
+    },
+  );
 
   if (isCurrentUserProfile && !authUser) {
     return <p>Please log in to view your profile.</p>;
@@ -39,6 +78,39 @@ const ProfilePage = () => {
     { label: 'Gender', value: user.gender || '—' },
     { label: 'Phone', value: user.phone || '—' },
   ];
+  const displayedRecipes = isSavedRecipesActive ? (savedRecipesData?.items ?? []) : recipes;
+  const displayedTotal = isSavedRecipesActive ? (savedRecipesData?.total ?? 0) : total;
+  const displayedTotalPages = isSavedRecipesActive
+    ? (savedRecipesData?.totalPages ?? 0)
+    : totalPages;
+  const displayedPage = isSavedRecipesActive ? savedPage : authoredPage;
+  const displayedStatus = isSavedRecipesActive
+    ? areSavedRecipesLoading
+      ? 'loading'
+      : isSavedRecipesError
+        ? 'failed'
+        : 'succeeded'
+    : recipesStatus;
+  const displayedError = isSavedRecipesActive
+    ? (savedRecipesError?.data?.error?.message ?? savedRecipesError?.message ?? null)
+    : recipesError;
+
+  const changeRecipeCollection = (collection) => {
+    setActiveRecipeCollection(collection);
+
+    if (collection === SAVED_RECIPES) {
+      setSavedPage(1);
+    }
+  };
+
+  const changeDisplayedPage = (page) => {
+    if (isSavedRecipesActive) {
+      setSavedPage(page);
+      return;
+    }
+
+    setAuthoredPage(page);
+  };
 
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
@@ -83,29 +155,68 @@ const ProfilePage = () => {
       </section>
 
       <section className="flex flex-col gap-4">
-        <div className="flex items-end justify-between gap-4">
+        <div className="flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-end">
           <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-semibold tracking-tight">Recipes by {displayName}</h2>
+            <h2 className="text-xl font-semibold tracking-tight">
+              {isSavedRecipesActive
+                ? 'Saved Recipes'
+                : isCurrentUserProfile
+                  ? 'My Recipes'
+                  : `Recipes by ${displayName}`}
+            </h2>
             <p className="text-sm text-muted-foreground">
-              {total} {total === 1 ? 'recipe' : 'recipes'}
+              {displayedTotal} {displayedTotal === 1 ? 'recipe' : 'recipes'}
             </p>
           </div>
+
+          {isCurrentUserProfile ? (
+            <div
+              className="flex self-start rounded-xl border bg-card p-1 gap-1"
+              role="tablist"
+              aria-label="Profile recipe collections"
+            >
+              <Button
+                size="sm"
+                variant={activeRecipeCollection === AUTHORED_RECIPES ? 'secondary' : 'ghost'}
+                role="tab"
+                aria-selected={activeRecipeCollection === AUTHORED_RECIPES}
+                onClick={() => changeRecipeCollection(AUTHORED_RECIPES)}
+              >
+                My Recipes
+              </Button>
+              <Button
+                size="sm"
+                variant={activeRecipeCollection === SAVED_RECIPES ? 'secondary' : 'ghost'}
+                role="tab"
+                aria-selected={activeRecipeCollection === SAVED_RECIPES}
+                onClick={() => changeRecipeCollection(SAVED_RECIPES)}
+              >
+                Saved Recipes
+              </Button>
+            </div>
+          ) : null}
         </div>
 
-        {recipesStatus === 'idle' || recipesStatus === 'loading' ? (
+        {displayedStatus === 'idle' || displayedStatus === 'loading' ? (
           <p className="text-sm text-muted-foreground">Loading recipes...</p>
-        ) : recipesError ? (
-          <p className="text-sm text-muted-foreground">{recipesError}</p>
-        ) : recipes.length > 0 ? (
+        ) : displayedError ? (
+          <p className="text-sm text-muted-foreground">{displayedError}</p>
+        ) : displayedRecipes.length > 0 ? (
           <RecipeList
-            recipes={recipes}
+            recipes={displayedRecipes}
             renderFavoriteAction={(recipe) => <FavoriteButton recipeId={recipe.id} />}
           />
         ) : (
           <div className="rounded-2xl border border-dashed bg-card p-6 text-sm text-muted-foreground">
-            No recipes published yet.
+            {isSavedRecipesActive ? 'No saved recipes yet.' : 'No recipes published yet.'}
           </div>
         )}
+
+        <Pagination
+          page={displayedPage}
+          totalPages={displayedTotalPages}
+          onPageChange={changeDisplayedPage}
+        />
       </section>
     </section>
   );
