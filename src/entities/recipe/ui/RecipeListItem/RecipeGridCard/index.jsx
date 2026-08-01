@@ -36,7 +36,7 @@ const RecipeGridCard = ({ recipe, favoriteAction = null }) => {
           <h3 className="line-clamp-2 md:line-clamp-3 md:text-sm font-semibold leading-5 md:leading-4 text-foreground">
             {recipe?.name ?? 'RecipeListItem'}
           </h3>
-          <p className="mt-1 text-sm md:text-xs text-muted-foreground sm:text-xs">
+          <p className="mt-1 text-sm md:text-xs text-muted-foreground sm:text-xs md:leading-3">
             {cuisineLabel}
             {mealTypeLabel ? ` • ${mealTypeLabel}` : ''}
           </p>
