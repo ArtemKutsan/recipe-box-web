@@ -18,7 +18,7 @@ const RecipeGridCard = ({ recipe, favoriteAction = null }) => {
         aria-label={`Open ${recipe?.name ?? 'recipe'}`}
       />
       <div className="relative flex gap-3">
-        <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-muted sm:h-20 sm:w-20">
+        <div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-muted sm:h-20 sm:w-20">
           {recipe?.image ? (
             <img
               src={recipe.image}

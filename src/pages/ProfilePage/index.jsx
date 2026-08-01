@@ -6,11 +6,15 @@ import { useGetFavoriteRecipesQuery } from '@/entities/favorite';
 import { RecipeList } from '@/entities/recipe/ui';
 import { UserAvatar, useUser, useUserRecipes } from '@/entities/user';
 import { FavoriteButton } from '@/features/toggle-favorite';
-import { Button, Pagination } from '@/shared/ui';
+import { Pagination, ToggleGroup } from '@/shared/ui';
 
 const PROFILE_RECIPES_PAGE_SIZE = 12;
 const AUTHORED_RECIPES = 'authored';
 const SAVED_RECIPES = 'saved';
+const PROFILE_RECIPE_COLLECTIONS = [
+  { value: AUTHORED_RECIPES, label: 'My Recipes' },
+  { value: SAVED_RECIPES, label: 'Saved Recipes' },
+];
 
 const ProfilePage = () => {
   const { id } = useParams();
@@ -170,30 +174,13 @@ const ProfilePage = () => {
           </div>
 
           {isCurrentUserProfile ? (
-            <div
-              className="flex self-start rounded-xl border bg-card p-1 gap-1"
-              role="tablist"
-              aria-label="Profile recipe collections"
-            >
-              <Button
-                size="sm"
-                variant={activeRecipeCollection === AUTHORED_RECIPES ? 'secondary' : 'ghost'}
-                role="tab"
-                aria-selected={activeRecipeCollection === AUTHORED_RECIPES}
-                onClick={() => changeRecipeCollection(AUTHORED_RECIPES)}
-              >
-                My Recipes
-              </Button>
-              <Button
-                size="sm"
-                variant={activeRecipeCollection === SAVED_RECIPES ? 'secondary' : 'ghost'}
-                role="tab"
-                aria-selected={activeRecipeCollection === SAVED_RECIPES}
-                onClick={() => changeRecipeCollection(SAVED_RECIPES)}
-              >
-                Saved Recipes
-              </Button>
-            </div>
+            <ToggleGroup
+              options={PROFILE_RECIPE_COLLECTIONS}
+              value={activeRecipeCollection}
+              onChange={changeRecipeCollection}
+              ariaLabel="Profile recipe collections"
+              className="self-start"
+            />
           ) : null}
         </div>
 

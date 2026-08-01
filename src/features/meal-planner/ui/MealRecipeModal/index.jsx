@@ -4,8 +4,7 @@ import { selectAuthUser } from '@/entities/auth';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useRecipes } from '@/entities/recipe';
 import { useUserRecipes } from '@/entities/user';
-import { Button, Modal, Pagination } from '@/shared/ui';
-import { cn } from '@/shared/lib/cn';
+import { Modal, Pagination, ToggleGroup } from '@/shared/ui';
 
 /*
 Feature-компонент модалки выбора рецепта для конкретного слота календаря.
@@ -20,6 +19,10 @@ selectedSlot:
 по активному источнику данных.
 */
 const RECIPES_PER_PAGE = 8;
+const RECIPE_SOURCE_OPTIONS = [
+  { value: 'all', label: 'All recipes' },
+  { value: 'my', label: 'My recipes' },
+];
 
 const MealRecipeModal = ({
   selectedSlot,
@@ -64,14 +67,6 @@ const MealRecipeModal = ({
   const title = selectedSlot
     ? `Add meal: ${selectedSlot.mealPeriod}, ${selectedSlot.day}`
     : 'Add meal';
-
-  const sourceButtonClassName = (isActive) =>
-    cn(
-      'rounded-full px-4 py-2 text-sm font-medium transition-colors',
-      isActive
-        ? 'bg-secondary text-secondary-foreground'
-        : 'bg-muted text-muted-foreground hover:text-foreground',
-    );
 
   const mealTypeOptions = useMemo(
     () =>
@@ -164,7 +159,7 @@ const MealRecipeModal = ({
       className="bg-background shadow-2xl"
     >
       <div className="mb-4 flex flex-col gap-3">
-        <label className="flex items-center gap-3 rounded-2xl border bg-card px-4 py-3">
+        <label className="flex items-center gap-3 rounded-xl border bg-card px-4 py-2">
           <span className="text-sm text-muted-foreground">Search</span>
           <input
             type="search"
@@ -175,56 +170,45 @@ const MealRecipeModal = ({
           />
         </label>
 
-        <label className="flex items-center gap-3 rounded-2xl border bg-card px-4 py-3">
-          <span className="text-sm text-muted-foreground">Meal type</span>
-          <select
-            value={selectedMealType}
-            onChange={handleMealTypeChange}
-            className="min-w-0 flex-1 bg-transparent text-sm outline-none"
-          >
-            {mealTypeOptions.map((mealType) => (
-              <option key={mealType} value={mealType}>
-                {mealType}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <div className="flex flex-wrap gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            className={sourceButtonClassName(recipeSource === 'all')}
-            onClick={() => handleChangeRecipeSource('all')}
-          >
-            All recipes
-          </Button>
-          {canUseMyRecipes ? (
-            <Button
-              type="button"
-              variant="ghost"
-              className={sourceButtonClassName(recipeSource === 'my')}
-              onClick={() => handleChangeRecipeSource('my')}
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <label className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border bg-card px-3 py-2">
+            <span className="shrink-0 text-sm text-muted-foreground">Meal type</span>
+            <select
+              value={selectedMealType}
+              onChange={handleMealTypeChange}
+              className="min-w-0 flex-1 bg-transparent text-sm outline-none"
             >
-              My recipes
-            </Button>
-          ) : null}
+              {mealTypeOptions.map((mealType) => (
+                <option key={mealType} value={mealType}>
+                  {mealType}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <ToggleGroup
+            options={canUseMyRecipes ? RECIPE_SOURCE_OPTIONS : RECIPE_SOURCE_OPTIONS.slice(0, 1)}
+            value={recipeSource}
+            onChange={handleChangeRecipeSource}
+            ariaLabel="Recipe source"
+            className="shrink-0"
+          />
         </div>
       </div>
 
       <div className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           {activeQuery.recipes.map((recipe) => (
             <button
               type="button"
               key={recipe.id}
               onClick={() => handleSelectRecipe(recipe.id)}
-              className="flex cursor-pointer items-center gap-4 rounded-2xl border bg-card p-4 text-left"
+              className="flex cursor-pointer items-center gap-4 rounded-2xl border bg-card p-3 text-left"
             >
               <img
                 src={recipe.image}
                 alt={recipe.name}
-                className="size-20 shrink-0 rounded-xl object-cover"
+                className="size-16 shrink-0 rounded-lg object-cover"
               />
               <div className="min-w-0">
                 <h3 className="line-clamp-2 text-sm font-medium">{recipe.name}</h3>
