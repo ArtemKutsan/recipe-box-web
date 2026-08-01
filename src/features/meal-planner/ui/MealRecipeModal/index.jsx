@@ -206,18 +206,16 @@ const MealRecipeModal = ({
               type="button"
               key={recipe.id}
               onClick={() => handleSelectRecipe(recipe.id)}
-              className="flex cursor-pointer items-center gap-4 rounded-2xl border bg-card p-3 text-left"
+              className="flex cursor-pointer items-center gap-3 rounded-2xl border bg-card p-3 text-left"
             >
               <img
                 src={recipe.image}
                 alt={recipe.name}
                 className="size-16 shrink-0 rounded-lg object-cover"
               />
-              <div className="min-w-0">
-                <h3 className="line-clamp-2 text-sm font-medium">{recipe.name}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {recipe.caloriesPerServing} kcal
-                </p>
+              <div className="flex min-w-0 flex-1 self-stretch flex-col justify-between">
+                <h3 className="line-clamp-3 text-sm font-medium leading-4">{recipe.name}</h3>
+                <p className="text-xs text-muted-foreground">{recipe.caloriesPerServing} kcal</p>
               </div>
             </button>
           ))}
