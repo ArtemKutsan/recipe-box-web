@@ -99,8 +99,8 @@ const Modal = ({ isOpen, title, children, className, overlayClassName, onClose }
           className,
         )}
       >
-        <header className="flex items-start justify-between gap-4 border-b p-4 bg-card">
-          <h2 id={titleId} className="text-xl font-semibold">
+        <header className="flex justify-between gap-4 border-b p-4 bg-card">
+          <h2 id={titleId} className="text-xl font-semibold self-center">
             {title}
           </h2>
           <Button

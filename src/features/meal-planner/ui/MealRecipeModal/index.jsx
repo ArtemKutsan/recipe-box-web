@@ -4,6 +4,7 @@ import { selectAuthUser } from '@/entities/auth';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useRecipes } from '@/entities/recipe';
 import { useUserRecipes } from '@/entities/user';
+import SearchIcon from '@/assets/icons/search.svg?react';
 import { Modal, Pagination, ToggleGroup } from '@/shared/ui';
 
 /*
@@ -160,7 +161,9 @@ const MealRecipeModal = ({
     >
       <div className="mb-4 flex flex-col gap-3">
         <label className="flex min-h-10 items-center gap-3 rounded-xl border bg-card px-4">
-          <span className="text-sm text-muted-foreground">Search</span>
+          <span className="shrink-0 text-muted-foreground" aria-hidden="true">
+            <SearchIcon className="size-4" />
+          </span>
           <input
             type="search"
             value={searchQuery}
