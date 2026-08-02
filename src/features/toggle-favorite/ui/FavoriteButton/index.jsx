@@ -28,7 +28,7 @@ const FavoriteButton = ({ recipeId, className }) => {
     event.stopPropagation();
 
     if (!isAuthenticated) {
-      navigate(RouterPath.login);
+      navigate(RouterPath.auth);
       return;
     }
 

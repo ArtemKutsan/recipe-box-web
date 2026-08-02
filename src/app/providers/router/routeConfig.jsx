@@ -1,8 +1,7 @@
 import MainPage from '@/pages/MainPage';
 import RecipesPage from '@/pages/RecipesPage';
 import CategoriesPage from '@/pages/CategoriesPage';
-import LoginPage from '@/pages/LoginPage';
-import RegisterPage from '@/pages/RegisterPage';
+import AuthPage from '@/pages/AuthPage';
 import AddRecipePage from '@/pages/AddRecipePage';
 import MealPlannerPage from '@/pages/MealPlannerPage';
 import ProfilePage from '@/pages/ProfilePage';
@@ -10,6 +9,11 @@ import RecipeDetailsPage from '@/pages/RecipeDetailsPage';
 import EditRecipePage from '@/pages/EditRecipePage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { AppRoute, RouterPath } from '@/shared/config/routerPaths';
+
+export const RouteLayout = {
+  MAIN: 'main',
+  AUTH: 'auth',
+};
 
 // Конфигурация маршрутов находится в app, потому что связывает пути с компонентами страниц
 export const routeConfig = {
@@ -25,13 +29,10 @@ export const routeConfig = {
     path: RouterPath.categories,
     element: <CategoriesPage />,
   },
-  [AppRoute.LOGIN]: {
-    path: RouterPath.login,
-    element: <LoginPage />,
-  },
-  [AppRoute.REGISTER]: {
-    path: RouterPath.register,
-    element: <RegisterPage />,
+  [AppRoute.AUTH]: {
+    path: RouterPath.auth,
+    element: <AuthPage />,
+    layout: RouteLayout.AUTH,
   },
   [AppRoute.ADD_RECIPE]: {
     path: RouterPath.add_recipe,

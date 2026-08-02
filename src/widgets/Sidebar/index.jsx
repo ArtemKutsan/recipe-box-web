@@ -171,7 +171,7 @@ const Sidebar = () => {
             ) : (
               <div>
                 <NavLink
-                  to={RouterPath.login}
+                  to={RouterPath.auth}
                   className={({ isActive }) =>
                     cn(
                       navLinkBase,

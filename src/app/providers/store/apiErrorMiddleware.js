@@ -14,8 +14,8 @@ export const apiErrorMiddleware = (store) => (next) => (action) => {
       store.dispatch(clearCredentials());
 
       // TODO: отдельный navigation service/adapter чтобы убрать прямой window из middleware?
-      if (window.location.pathname !== RouterPath.login) {
-        window.location.replace(RouterPath.login);
+      if (window.location.pathname !== RouterPath.auth) {
+        window.location.replace(RouterPath.auth);
       }
     }
   }

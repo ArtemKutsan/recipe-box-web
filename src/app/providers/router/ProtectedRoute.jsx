@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (!isAuthenticated) {
     // Если пользователь открыл защищенную страницу напрямую, отправляем его на логин.
-    return <Navigate to={RouterPath.login} state={{ from: location }} replace />;
+    return <Navigate to={RouterPath.auth} state={{ from: location }} replace />;
   }
 
   return children;

@@ -5,8 +5,7 @@ export const AppRoute = {
   MAIN: 'main',
   RECIPES: 'recipes',
   CATEGORIES: 'categories',
-  LOGIN: 'login',
-  REGISTER: 'register',
+  AUTH: 'auth',
   ADD_RECIPE: 'add_recipe',
   MEAL_PLANNER: 'meal_planner',
   PROFILE: 'profile',
@@ -21,8 +20,7 @@ export const RouterPath = {
   [AppRoute.MAIN]: '/',
   [AppRoute.RECIPES]: '/recipes',
   [AppRoute.CATEGORIES]: '/categories',
-  [AppRoute.LOGIN]: '/login',
-  [AppRoute.REGISTER]: '/register',
+  [AppRoute.AUTH]: '/auth',
   [AppRoute.ADD_RECIPE]: '/add-recipe',
   [AppRoute.MEAL_PLANNER]: '/meal-planner',
   [AppRoute.PROFILE]: '/profile',
@@ -31,6 +29,14 @@ export const RouterPath = {
   [AppRoute.EDIT_RECIPE]: '/recipes/:id/edit',
   [AppRoute.NOT_FOUND]: '*',
 };
+
+export const AuthMode = {
+  LOGIN: 'login',
+  REGISTER: 'register',
+};
+
+export const buildAuthPath = (mode = AuthMode.LOGIN) =>
+  mode === AuthMode.REGISTER ? `${RouterPath.auth}?mode=${AuthMode.REGISTER}` : RouterPath.auth;
 
 // Helper-ы для динамических UI-маршрутов, чтобы страницы не собирали URL вручную.
 export const buildRecipePath = (recipeId) => RouterPath.recipe_detail.replace(':id', recipeId);

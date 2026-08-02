@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '@/entities/auth';
-import { RouterPath } from '@/shared/config/routerPaths';
+import { AuthMode, buildAuthPath, RouterPath } from '@/shared/config/routerPaths';
 import { Button } from '@/shared/ui';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
@@ -62,10 +62,10 @@ const TopBar = () => {
           </Button>
         ) : (
           <div className="flex shrink-0 items-center gap-2">
-            <Button as={NavLink} to={RouterPath.login}>
+            <Button as={NavLink} to={buildAuthPath()}>
               Login
             </Button>
-            <Button as={NavLink} to={RouterPath.register} variant="outline">
+            <Button as={NavLink} to={buildAuthPath(AuthMode.REGISTER)} variant="outline">
               Register
             </Button>
           </div>
