@@ -12,10 +12,10 @@ const buttonVariants = {
 
 const buttonSizes = {
   default:
-    "min-h-10 min-w-10 px-4 py-2 text-base has-[>svg]:px-2.5 [&_svg:not([class*='size-'])]:size-4",
-  xs: "min-h-6 min-w-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1 [&_svg:not([class*='size-'])]:size-3",
-  sm: "min-h-8 min-w-8 gap-1.5 rounded-lg px-3 py-1.5 text-sm has-[>svg]:px-2 [&_svg:not([class*='size-'])]:size-3",
-  lg: "min-h-12 min-w-12 gap-3 px-6 py-2.5 rounded-2xl text-lg has-[>svg]:px-3.5 [&_svg:not([class*='size-'])]:size-4",
+    "min-h-10 min-w-10 px-4 py-1.5 text-base has-[>svg]:px-2.5 [&_svg:not([class*='size-'])]:size-4",
+  xs: "min-h-6 min-w-6 gap-1 rounded-md px-2 py-0.5 text-xs has-[>svg]:px-1 [&_svg:not([class*='size-'])]:size-3",
+  sm: "min-h-8 min-w-8 gap-1.5 rounded-lg px-3 py-1 text-sm has-[>svg]:px-2 [&_svg:not([class*='size-'])]:size-3",
+  lg: "min-h-12 min-w-12 gap-3 px-6 py-2 rounded-2xl text-lg has-[>svg]:px-3.5 [&_svg:not([class*='size-'])]:size-4",
   icon: 'size-10 rounded-full',
 };
 
