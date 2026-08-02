@@ -3,13 +3,24 @@ import { cn } from '@/shared/lib/cn';
 
 const fieldControlClassName =
   'flex min-h-10 items-center gap-3 rounded-xl border bg-card px-3';
-const fieldInputClassName = 'min-w-0 flex-1 bg-transparent py-2 text-sm outline-none';
+const fieldInputClassName =
+  'min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground';
 
 const FormField = forwardRef(function FormField(
-  { as: Component = 'input', label, className, containerClassName, labelClassName, id, ...props },
+  {
+    as: Component = 'input',
+    label,
+    placeholder,
+    className,
+    containerClassName,
+    labelClassName,
+    id,
+    ...props
+  },
   ref,
 ) {
   const isTextarea = Component === 'textarea';
+  const isSelect = Component === 'select';
 
   return (
     <label
@@ -21,7 +32,7 @@ const FormField = forwardRef(function FormField(
     >
       <span
         className={cn(
-          isTextarea ? 'sr-only' : 'shrink-0 text-sm text-muted-foreground',
+          isSelect ? 'shrink-0 text-sm text-muted-foreground' : 'sr-only',
           labelClassName,
         )}
       >
@@ -30,6 +41,7 @@ const FormField = forwardRef(function FormField(
       <Component
         ref={ref}
         id={id}
+        placeholder={isSelect ? undefined : (placeholder ?? label)}
         className={cn(fieldInputClassName, isTextarea && 'resize-y px-3', className)}
         {...props}
       />
