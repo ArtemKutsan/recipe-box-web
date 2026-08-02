@@ -17,8 +17,8 @@
 }
 
 :root {
-  --h: 0;
-  --c: 0;
+  --h: 130;
+  --c: 0.0175;
 
   --color-50: oklch(0.985 calc(var(--c) * 0.16) calc(var(--h) - 10));
   --color-100: oklch(0.97 calc(var(--c) * 0.24) calc(var(--h) - 10));
