@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '@/entities/auth';
@@ -8,18 +8,21 @@ import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
 import GlobalSearch from '@/widgets/GlobalSearch';
 
+/*
+TopBar показывает верхнюю панель для компьютера и телефона.
+Если пользователь вошёл, показываем Add Recipe, иначе Login и Register.
+isSearchOpen хранит состояние окна поиска. Открыть его можно кнопкой или Ctrl/Cmd+K,
+а GlobalSearch вызывает onClose, когда окно нужно закрыть.
+*/
 const TopBar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const location = useLocation();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
-    setIsSearchOpen(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
+    // Глобальное сочетание Ctrl+K, а на macOS Cmd+K, открывает поиск с любой страницы.
     const handleShortcut = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        // Отменяем стандартное действие браузера, чтобы оно не конфликтовало с поиском приложения.
         event.preventDefault();
         setIsSearchOpen(true);
       }
@@ -28,6 +31,7 @@ const TopBar = () => {
     window.addEventListener('keydown', handleShortcut);
 
     return () => {
+      // Удаляем тот же обработчик при размонтировании TopBar, чтобы не копить подписки.
       window.removeEventListener('keydown', handleShortcut);
     };
   }, []);

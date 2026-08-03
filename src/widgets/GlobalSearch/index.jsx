@@ -1,10 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRecipes } from '@/entities/recipe';
 import { buildRecipePath, RouterPath } from '@/shared/config/routerPaths';
 import { Button, Modal, Pagination } from '@/shared/ui';
 import useDebounce from '@/shared/hooks/useDebounce';
 
+/*
+TopBar передаёт сюда isOpen и onClose для открытия и закрытия модалки.
+Текст поиска и номер страницы храним внутри компонента.
+Через 250 мс после ввода useRecipes отправляет запрос и получает рецепты.
+При новом поиске или закрытии возвращаем пагинацию на первую страницу.
+Нажатие на рецепт открывает его страницу, а View all recipes открывает общий список.
+*/
 const RESULT_PAGE_SIZE = 8;
 const MIN_SEARCH_LENGTH = 2;
 
@@ -14,18 +21,6 @@ const GlobalSearch = ({ isOpen, onClose }) => {
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(searchValue.trim(), 250);
   const canSearch = isOpen && debouncedSearch.length >= MIN_SEARCH_LENGTH;
-
-  useEffect(() => {
-    if (!isOpen) {
-      setPage(1);
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (isOpen) {
-      setPage(1);
-    }
-  }, [debouncedSearch, isOpen]);
 
   const queryParams = useMemo(
     () => ({
@@ -40,6 +35,11 @@ const GlobalSearch = ({ isOpen, onClose }) => {
     skip: !canSearch,
   });
 
+  const handleClose = () => {
+    setPage(1);
+    onClose();
+  };
+
   const openRecipesPage = () => {
     const searchParams = new URLSearchParams();
 
@@ -47,15 +47,11 @@ const GlobalSearch = ({ isOpen, onClose }) => {
       searchParams.set('search', debouncedSearch);
     }
 
-    onClose();
+    handleClose();
     navigate({
       pathname: RouterPath.recipes,
       search: searchParams.size > 0 ? `?${searchParams.toString()}` : '',
     });
-  };
-
-  const closeOnNavigate = () => {
-    onClose();
   };
 
   const handleSearchChange = (event) => {
@@ -67,7 +63,7 @@ const GlobalSearch = ({ isOpen, onClose }) => {
     <Modal
       isOpen={isOpen}
       title="Search recipes"
-      onClose={onClose}
+      onClose={handleClose}
       className="max-w-4xl bg-background shadow-2xl max-md:h-[100dvh] max-md:max-h-none max-md:max-w-none max-md:rounded-none"
       overlayClassName="max-md:p-0"
     >
@@ -116,7 +112,7 @@ const GlobalSearch = ({ isOpen, onClose }) => {
                 <Link
                   key={recipe.id}
                   to={buildRecipePath(recipe.id)}
-                  onClick={closeOnNavigate}
+                  onClick={handleClose}
                   className="flex items-center gap-4 rounded-2xl border bg-card p-4 text-left transition-colors hover:border-secondary/40 hover:bg-accent/40"
                 >
                   {recipe.image ? (
