@@ -3,6 +3,13 @@ import { authFieldRules, useRegisterMutation } from '@/entities/auth';
 import { Button, FormField } from '@/shared/ui';
 import SocialAuthActions from '../SocialAuthActions';
 
+/*
+React Hook Form хранит значения полей и проверяет их по правилам из auth entity.
+После отправки useRegisterMutation передаёт на backend name, email и password.
+Ошибки показываем прямо в форме. Если регистрация прошла успешно, вызываем onSuccess,
+а Authentication уже переводит пользователя на нужную страницу.
+Подтверждение пароля пока оставлено ниже как TODO.
+*/
 const initialFormValues = {
   name: '',
   email: '',
@@ -23,7 +30,6 @@ const RegisterForm = ({ onSuccess }) => {
 
   const onSubmit = async (formValues) => {
     try {
-      // repeatPassword нужен только для проверки формы и не отправляется на backend.
       await registerUser({
         name: formValues.name.trim(),
         email: formValues.email.trim(),
@@ -83,7 +89,8 @@ const RegisterForm = ({ onSuccess }) => {
         ) : null}
       </div>
 
-      {/* <div className="flex flex-col gap-2">
+      {/* TODO: вернуть подтверждение пароля и frontend-проверку совпадения значений.
+      <div className="flex flex-col gap-2">
         <FormField
           label="Repeat password"
           type="password"
