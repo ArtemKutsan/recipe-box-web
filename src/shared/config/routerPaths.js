@@ -1,6 +1,8 @@
-// src/shared/config/routerPaths.js
-
-// Определение маршрутов приложения с помощью констант и конфигурационного объекта
+/*
+AppRoute хранит внутренние ключи маршрутов, а не адреса страниц.
+Эти ключи используем дальше в RouterPath и routeConfig, чтобы не писать
+одни и те же строковые названия в разных местах.
+*/
 export const AppRoute = {
   MAIN: 'main',
   RECIPES: 'recipes',
@@ -15,7 +17,11 @@ export const AppRoute = {
   NOT_FOUND: 'not_found',
 };
 
-// Объект, который связывает каждую константу маршрута с его соответствующим маршрутом
+/*
+RouterPath хранит настоящие адреса страниц.
+В адресах с :id пока находится шаблон: например, /recipes/:id.
+Перед переходом helper-функции ниже заменяют :id на id нужного рецепта или пользователя.
+*/
 export const RouterPath = {
   [AppRoute.MAIN]: '/',
   [AppRoute.RECIPES]: '/recipes',
@@ -30,16 +36,21 @@ export const RouterPath = {
   [AppRoute.NOT_FOUND]: '*',
 };
 
+// Режим формы авторизации хранится в query-параметре страницы /auth.
 export const AuthMode = {
   LOGIN: 'login',
   REGISTER: 'register',
 };
 
+// Login открывает /auth, а Register открывает /auth?mode=register.
 export const buildAuthPath = (mode = AuthMode.LOGIN) =>
   mode === AuthMode.REGISTER ? `${RouterPath.auth}?mode=${AuthMode.REGISTER}` : RouterPath.auth;
 
-// Helper-ы для динамических UI-маршрутов, чтобы страницы не собирали URL вручную.
+/*
+Здесь собираем адреса страниц с конкретными id, чтобы компоненты не делали replace сами.
+Например, buildRecipePath(12) вернёт /recipes/12,
+а buildEditRecipePath(12) вернёт /recipes/12/edit.
+*/
 export const buildRecipePath = (recipeId) => RouterPath.recipe_detail.replace(':id', recipeId);
-export const buildEditRecipePath = (recipeId) =>
-  RouterPath.edit_recipe.replace(':id', recipeId);
+export const buildEditRecipePath = (recipeId) => RouterPath.edit_recipe.replace(':id', recipeId);
 export const buildUserProfilePath = (userId) => RouterPath.user_profile.replace(':id', userId);

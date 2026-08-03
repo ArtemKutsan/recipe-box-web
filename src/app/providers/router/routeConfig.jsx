@@ -2,6 +2,7 @@ import MainPage from '@/pages/MainPage';
 import RecipesPage from '@/pages/RecipesPage';
 import CategoriesPage from '@/pages/CategoriesPage';
 import AuthPage from '@/pages/AuthPage';
+import AuthLayout from '@/app/layouts/AuthLayout';
 import AddRecipePage from '@/pages/AddRecipePage';
 import MealPlannerPage from '@/pages/MealPlannerPage';
 import ProfilePage from '@/pages/ProfilePage';
@@ -10,12 +11,13 @@ import EditRecipePage from '@/pages/EditRecipePage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { AppRoute, RouterPath } from '@/shared/config/routerPaths';
 
-export const RouteLayout = {
-  MAIN: 'main',
-  AUTH: 'auth',
-};
-
-// Конфигурация маршрутов находится в app, потому что связывает пути с компонентами страниц
+/*
+Здесь собраны маршруты приложения.
+path — адрес страницы, element — сама страница.
+protected: true означает, что открыть страницу можно только после входа.
+layout нужен для страниц с отдельным оформлением, например /auth.
+Если layout не указан, AppRouter использует MainLayout.
+*/
 export const routeConfig = {
   [AppRoute.MAIN]: {
     path: RouterPath.main,
@@ -32,7 +34,7 @@ export const routeConfig = {
   [AppRoute.AUTH]: {
     path: RouterPath.auth,
     element: <AuthPage />,
-    layout: RouteLayout.AUTH,
+    layout: AuthLayout,
   },
   [AppRoute.ADD_RECIPE]: {
     path: RouterPath.add_recipe,
