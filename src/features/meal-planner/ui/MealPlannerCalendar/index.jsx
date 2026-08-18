@@ -7,8 +7,8 @@ const columnTemplate = {
 
 const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
   return (
-    <div className="w-full max-w-5xl pb-6 overflow-x-auto">
-      <div className="space-y-3 min-w-[280px]">
+    <div className="w-full max-w-5xl overflow-x-auto pb-6">
+      <div className="min-w-[280px] space-y-3">
         <div className="grid gap-3" style={columnTemplate}>
           {/* <div /> */}
           {days.map((day) => (
@@ -16,8 +16,8 @@ const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
               key={day.label}
               className={
                 day.active
-                  ? 'flex min-h-12 items-center justify-center rounded-2xl border border-secondary/10 bg-secondary/5 px-4 py-2 text-sm font-medium text-secondary'
-                  : 'flex min-h-12 items-center justify-center px-4 py-2 text-sm font-medium'
+                  ? 'border-secosndary/10 bg-secondary/5 text-secondary flex min-h-12 items-center justify-center rounded-2xl border px-4 py-2 text-sm font-medium'
+                  : 'min-h-12 flex items-center justify-center px-4 py-2 text-sm font-medium'
               }
             >
               {day.label}
