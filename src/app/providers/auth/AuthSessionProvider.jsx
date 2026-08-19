@@ -1,17 +1,12 @@
-import { useSelector } from 'react-redux';
-import { selectAuthToken, selectAuthUser, useGetCurrentUserQuery } from '@/entities/auth';
+import { useGetCurrentUserQuery } from '@/entities/auth';
 import { PageLoader } from '@/shared/ui/PageLoader';
 
 const AuthSessionProvider = ({ children }) => {
-  const token = useSelector(selectAuthToken);
-  const user = useSelector(selectAuthUser);
-  const shouldRestoreSession = Boolean(token) && !user;
-  const { isLoading, isFetching } = useGetCurrentUserQuery(undefined, {
-    skip: !shouldRestoreSession,
-  });
+  // При старте проверяем cookie. Если её нет, backend вернёт 401 и приложение останется гостевым.
+  const { isLoading, isUninitialized } = useGetCurrentUserQuery();
 
-  if (shouldRestoreSession && (isLoading || isFetching)) {
-    // Пока восстанавливаем пользователя по сохраненному токену, не показываем auth-only UI с пустым user.
+  if (isUninitialized || isLoading) {
+    // Пока backend проверяет сессию, не показываем страницы с неправильным auth-состоянием.
     return <PageLoader />;
   }
 

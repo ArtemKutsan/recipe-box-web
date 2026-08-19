@@ -46,8 +46,11 @@ export const authApi = createApi({
           // /auth/me восстанавливает пользователя по cookie или переходному JWT.
           const { data } = await queryFulfilled;
           dispatch(setCurrentUser(data));
-        } catch {
-          // Ошибки обрабатывает общий middleware на уровне store.
+        } catch (error) {
+          // Если cookie и старый JWT недействительны, оставляем приложение в состоянии гостя.
+          if (error?.error?.status === 401) {
+            dispatch(clearCredentials());
+          }
         }
       },
     }),

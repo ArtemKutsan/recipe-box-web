@@ -2,7 +2,7 @@ import { isRejectedWithValue } from '@reduxjs/toolkit';
 import { clearCredentials } from '@/entities/auth';
 import { RouterPath } from '@/shared/config/routerPaths';
 
-const authEndpoints = new Set(['login', 'register']);
+const authEndpoints = new Set(['login', 'register', 'getCurrentUser', 'logout']);
 
 export const apiErrorMiddleware = (store) => (next) => (action) => {
   if (isRejectedWithValue(action)) {
