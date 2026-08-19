@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearCredentials, selectAuthUser, selectIsAuthenticated } from '@/entities/auth';
+import { useSelector } from 'react-redux';
+import { selectAuthUser, selectIsAuthenticated, useLogoutMutation } from '@/entities/auth';
 import { UserAvatar } from '@/entities/user';
 import { RouterPath } from '@/shared/config/routerPaths';
 import { navItems } from '@/widgets/Sidebar/navItems';
@@ -17,18 +17,23 @@ const collapsibleLabelBase =
   'min-w-0 max-w-48 shrink-0 overflow-hidden transition-[max-width,opacity] duration-200';
 
 const Sidebar = () => {
-  const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectAuthUser);
+  const [logout] = useLogoutMutation();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const displayName = user?.name ?? 'Account';
   const visibleNavItems = navItems.filter((item) => !item.authOnly || isAuthenticated);
   const collapsibleLabelState = isCollapsed ? 'md:max-w-0 md:opacity-0' : 'md:opacity-100';
 
-  const handleLogout = () => {
-    dispatch(clearCredentials());
-    setIsMobileOpen(false);
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+    } catch {
+      return;
+    } finally {
+      setIsMobileOpen(false);
+    }
   };
 
   const handleToggleCollapse = () => {

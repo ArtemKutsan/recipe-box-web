@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
-import { setCredentials, setCurrentUser } from '../model/authSlice';
+import { clearCredentials, setCredentials, setCurrentUser } from '../model/authSlice';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -14,7 +14,7 @@ export const authApi = createApi({
       }),
       async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
         try {
-          // После успешного логина сохраняем пользователя и JWT в auth state.
+          // После логина сохраняем переходный JWT и пользователя в auth state.
           const { data } = await queryFulfilled;
           dispatch(setCredentials(data));
         } catch {
@@ -30,7 +30,7 @@ export const authApi = createApi({
       }),
       async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
         try {
-          // Регистрация сразу авторизует пользователя, потому backend возвращает token.
+          // Регистрация сразу авторизует пользователя и ставит session cookie.
           const { data } = await queryFulfilled;
           dispatch(setCredentials(data));
         } catch {
@@ -43,7 +43,7 @@ export const authApi = createApi({
       transformResponse: (response) => response.user ?? null,
       async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
         try {
-          // /auth/me восстанавливает пользователя по уже сохраненному токену.
+          // /auth/me восстанавливает пользователя по cookie или переходному JWT.
           const { data } = await queryFulfilled;
           dispatch(setCurrentUser(data));
         } catch {
@@ -51,7 +51,26 @@ export const authApi = createApi({
         }
       },
     }),
+    logout: build.mutation({
+      query: () => ({
+        url: '/auth/logout',
+        method: 'POST',
+      }),
+      async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(clearCredentials());
+        } catch {
+          // При ошибке сети состояние авторизации не очищаем.
+        }
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useGetCurrentUserQuery } = authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGetCurrentUserQuery,
+  useLogoutMutation,
+} = authApi;
