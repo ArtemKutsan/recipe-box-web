@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
-import { clearCredentials, setCredentials, setCurrentUser } from '../model/authSlice';
+import { clearCredentials, setCurrentUser } from '../model/authSlice';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -14,9 +14,9 @@ export const authApi = createApi({
       }),
       async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
         try {
-          // После логина сохраняем переходный JWT и пользователя в auth state.
+          // После логина сохраняем пользователя; session cookie уже хранит браузер.
           const { data } = await queryFulfilled;
-          dispatch(setCredentials(data));
+          dispatch(setCurrentUser(data.user));
         } catch {
           // Ошибку логина оставляем в RTK Query state, чтобы UI сам решил, как ее показать.
         }
@@ -32,7 +32,7 @@ export const authApi = createApi({
         try {
           // Регистрация сразу авторизует пользователя и ставит session cookie.
           const { data } = await queryFulfilled;
-          dispatch(setCredentials(data));
+          dispatch(setCurrentUser(data.user));
         } catch {
           // Ошибку регистрации оставляем в RTK Query state, чтобы UI сам решил, как ее показать.
         }
@@ -43,7 +43,7 @@ export const authApi = createApi({
       transformResponse: (response) => response.user ?? null,
       async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
         try {
-          // /auth/me восстанавливает пользователя по cookie или переходному JWT.
+          // /auth/me восстанавливает пользователя по session cookie.
           const { data } = await queryFulfilled;
           dispatch(setCurrentUser(data));
         } catch (error) {

@@ -6,5 +6,5 @@ export {
   useRegisterMutation,
 } from './api/authQuery';
 export { authFieldRules } from './config/validation';
-export { authReducer, clearCredentials, setCredentials, setCurrentUser } from './model/authSlice';
-export { selectAuthToken, selectAuthUser, selectIsAuthenticated } from './model/selectors';
+export { authReducer, clearCredentials, setCurrentUser } from './model/authSlice';
+export { selectAuthUser, selectIsAuthenticated } from './model/selectors';
