@@ -12,15 +12,6 @@ export const authApi = createApi({
         method: 'POST',
         body: payload,
       }),
-      async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
-        try {
-          // После логина сохраняем пользователя; session cookie уже хранит браузер.
-          const { data } = await queryFulfilled;
-          dispatch(setCurrentUser(data.user));
-        } catch {
-          // Ошибку логина оставляем в RTK Query state, чтобы UI сам решил, как ее показать.
-        }
-      },
     }),
     register: build.mutation({
       query: (payload) => ({
@@ -28,15 +19,6 @@ export const authApi = createApi({
         method: 'POST',
         body: payload,
       }),
-      async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
-        try {
-          // Регистрация сразу авторизует пользователя и ставит session cookie.
-          const { data } = await queryFulfilled;
-          dispatch(setCurrentUser(data.user));
-        } catch {
-          // Ошибку регистрации оставляем в RTK Query state, чтобы UI сам решил, как ее показать.
-        }
-      },
     }),
     getCurrentUser: build.query({
       query: () => '/auth/me',
@@ -74,6 +56,7 @@ export const authApi = createApi({
 export const {
   useLoginMutation,
   useRegisterMutation,
+  useLazyGetCurrentUserQuery,
   useGetCurrentUserQuery,
   useLogoutMutation,
 } = authApi;

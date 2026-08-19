@@ -1,5 +1,9 @@
 import { useForm } from 'react-hook-form';
-import { authFieldRules, useRegisterMutation } from '@/entities/auth';
+import {
+  authFieldRules,
+  useLazyGetCurrentUserQuery,
+  useRegisterMutation,
+} from '@/entities/auth';
 import { Button, FormField } from '@/shared/ui';
 import SocialAuthActions from '../SocialAuthActions';
 
@@ -19,6 +23,7 @@ const initialFormValues = {
 
 const RegisterForm = ({ onSuccess }) => {
   const [registerUser, { isLoading }] = useRegisterMutation();
+  const [getCurrentUser, { isLoading: isLoadingCurrentUser }] = useLazyGetCurrentUserQuery();
   const {
     register,
     handleSubmit,
@@ -35,6 +40,9 @@ const RegisterForm = ({ onSuccess }) => {
         email: formValues.email.trim(),
         password: formValues.password,
       }).unwrap();
+
+      // Проверяем cookie отдельным запросом. Только его успешный ответ подтверждает вход.
+      await getCurrentUser().unwrap();
 
       onSuccess();
     } catch (error) {
@@ -59,7 +67,7 @@ const RegisterForm = ({ onSuccess }) => {
           label="Name"
           type="text"
           autoComplete="name"
-          disabled={isLoading}
+          disabled={isLoading || isLoadingCurrentUser}
           {...register('name', authFieldRules.name)}
         />
         {errors.name ? <p className="text-sm text-destructive">{errors.name.message}</p> : null}
@@ -70,7 +78,7 @@ const RegisterForm = ({ onSuccess }) => {
           label="Email"
           type="email"
           autoComplete="email"
-          disabled={isLoading}
+          disabled={isLoading || isLoadingCurrentUser}
           {...register('email', authFieldRules.email)}
         />
         {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
@@ -81,7 +89,7 @@ const RegisterForm = ({ onSuccess }) => {
           label="Password"
           type="password"
           autoComplete="new-password"
-          disabled={isLoading}
+          disabled={isLoading || isLoadingCurrentUser}
           {...register('password', authFieldRules.password)}
         />
         {errors.password ? (
@@ -110,8 +118,12 @@ const RegisterForm = ({ onSuccess }) => {
         <p className="text-center text-sm text-destructive">{errors.root.server.message}</p>
       ) : null}
 
-      <Button type="submit" disabled={isLoading} className="w-full md:w-fit self-center">
-        {isLoading ? 'Creating account...' : 'Register'}
+      <Button
+        type="submit"
+        disabled={isLoading || isLoadingCurrentUser}
+        className="w-full md:w-fit self-center"
+      >
+        {isLoading || isLoadingCurrentUser ? 'Creating account...' : 'Register'}
       </Button>
     </form>
   );

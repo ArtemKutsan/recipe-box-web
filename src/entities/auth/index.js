@@ -1,5 +1,6 @@
 export {
   authApi,
+  useLazyGetCurrentUserQuery,
   useGetCurrentUserQuery,
   useLoginMutation,
   useLogoutMutation,

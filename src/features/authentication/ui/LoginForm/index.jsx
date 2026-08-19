@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { authFieldRules, useLoginMutation } from '@/entities/auth';
+import { authFieldRules, useLazyGetCurrentUserQuery, useLoginMutation } from '@/entities/auth';
 import { Button, FormField } from '@/shared/ui';
 import SocialAuthActions from '../SocialAuthActions';
 
@@ -10,6 +10,7 @@ const initialFormValues = {
 
 const LoginForm = ({ onSuccess }) => {
   const [login, { isLoading }] = useLoginMutation();
+  const [getCurrentUser, { isLoading: isLoadingCurrentUser }] = useLazyGetCurrentUserQuery();
   const {
     register,
     handleSubmit,
@@ -26,6 +27,9 @@ const LoginForm = ({ onSuccess }) => {
         email: formValues.email.trim(),
         password: formValues.password,
       }).unwrap();
+
+      // Проверяем cookie отдельным запросом. Только его успешный ответ подтверждает вход.
+      await getCurrentUser().unwrap();
 
       onSuccess();
     } catch (error) {
@@ -52,7 +56,7 @@ const LoginForm = ({ onSuccess }) => {
           label="Email"
           type="email"
           autoComplete="email"
-          disabled={isLoading}
+          disabled={isLoading || isLoadingCurrentUser}
           {...register('email', authFieldRules.email)}
         />
         {errors.email ? <p className="text-sm text-destructive">{errors.email.message}</p> : null}
@@ -63,7 +67,7 @@ const LoginForm = ({ onSuccess }) => {
           label="Password"
           type="password"
           autoComplete="current-password"
-          disabled={isLoading}
+          disabled={isLoading || isLoadingCurrentUser}
           {...register('password', authFieldRules.password)}
         />
         {errors.password ? (
@@ -79,8 +83,12 @@ const LoginForm = ({ onSuccess }) => {
         <p className="text-center text-sm text-destructive">{errors.root.server.message}</p>
       ) : null}
 
-      <Button type="submit" disabled={isLoading} className="w-full md:w-fit self-center">
-        {isLoading ? 'Signing in...' : 'Login'}
+      <Button
+        type="submit"
+        disabled={isLoading || isLoadingCurrentUser}
+        className="w-full md:w-fit self-center"
+      >
+        {isLoading || isLoadingCurrentUser ? 'Signing in...' : 'Login'}
       </Button>
     </form>
   );
