@@ -22,6 +22,7 @@ export function toRecipeListResponse(recipe) {
     difficulty: recipe.difficulty ?? null,
     rating: recipe.rating ?? null,
     image: recipe.thumbnailUrl ?? recipe.image ?? null,
+    thumbnailKey: recipe.thumbnailKey ?? null,
     userId: recipe.author?.id ?? recipe.authorId ?? recipe.userId ?? null,
     author: recipe.author ?? null,
   };
