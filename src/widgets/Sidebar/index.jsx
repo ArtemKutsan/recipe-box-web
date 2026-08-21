@@ -87,12 +87,12 @@ const Sidebar = () => {
           {isCollapsed ? '›' : '‹'}
         </button>
 
-        <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden">
+        <div className="flex min-w-12 flex-1 flex-col overflow-x-hidden">
           <div className="mb-4 flex items-center gap-2">
             <NavLink
               to={RouterPath.main}
               aria-label="Home"
-              className="relative flex min-w-0 items-center gap-2 md:ml-2"
+              className="relative flex min-w-0 items-center gap-2 md:px-2"
               onClick={handleCloseMobileMenu}
             >
               <ChefHatIcon aria-hidden="true" className="size-8 shrink-0 text-secondary" />
@@ -146,14 +146,14 @@ const Sidebar = () => {
           <div className="border-t pt-4">
             {isAuthenticated ? (
               <div className="flex flex-col gap-3">
-                <div className="relative flex items-center gap-3">
+                <div className="relative flex items-center gap-1">
                   <NavLink
                     to={RouterPath.profile}
                     aria-label="Open profile"
                     className="shrink-0"
                     onClick={handleCloseMobileMenu}
                   >
-                    <UserAvatar src={user?.avatarUrl} alt={displayName} className="size-12" />
+                    <UserAvatar src={user?.avatarUrl} alt={displayName} className="size-10 mx-1" />
                   </NavLink>
                   <div className={cn(collapsibleLabelBase, collapsibleLabelState)}>
                     <NavLink

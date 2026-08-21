@@ -156,7 +156,7 @@ const RecipeDetailsPage = () => {
                     className="shrink-0 rounded-full"
                     aria-label={`Open ${authorName}'s profile`}
                   >
-                    <UserAvatar src={author.avatarUrl} alt={authorName} className="size-12" />
+                    <UserAvatar src={author.avatarUrl} alt={authorName} className="size-16" />
                   </Link>
                 ) : null}
                 <div>
