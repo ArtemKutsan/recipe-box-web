@@ -3,6 +3,8 @@ export const initialRecipeFormValues = {
   description: '',
   authorNote: '',
   image: '',
+  imageFile: null,
+  thumbnailKey: null,
   cuisine: '',
   mealType: '',
   visibility: 'public',
@@ -97,6 +99,8 @@ export const buildRecipeFormValues = (recipe, mealTypes = [], cuisines = []) => 
   description: recipe.description ?? '',
   authorNote: recipe.authorNote ?? '',
   image: recipe.image ?? '',
+  imageFile: null,
+  thumbnailKey: recipe.thumbnailKey ?? null,
   cuisine: findDictionarySlug(cuisines, recipe.cuisine),
   mealType: findDictionarySlug(mealTypes, recipe.mealType?.[0]),
   visibility: recipe.visibility ?? 'public',
@@ -111,11 +115,12 @@ export const buildRecipeFormValues = (recipe, mealTypes = [], cuisines = []) => 
 });
 
 // Один payload используется и для создания, и для полного сохранения формы редактирования.
-export const buildRecipePayload = (formValues) => ({
+export const buildRecipePayload = (formValues, thumbnailKey = formValues.thumbnailKey ?? null) => ({
   title: formValues.name.trim(),
   description: formValues.description.trim(),
   authorNote: formValues.authorNote.trim(),
   thumbnailUrl: formValues.image.trim(),
+  thumbnailKey,
   cuisine: formValues.cuisine.trim(),
   mealType: [formValues.mealType],
   visibility: formValues.visibility,

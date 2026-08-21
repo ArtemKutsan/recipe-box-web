@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useGetCuisinesQuery } from '@/entities/cuisine';
+import { uploadRecipeImage, useCreatePresignedUploadMutation } from '@/entities/media';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useCreateRecipeMutation } from '@/entities/recipe';
 import { buildRecipePayload, initialRecipeFormValues, RecipeForm } from '@/features/recipe-form';
@@ -9,6 +10,7 @@ import { buildRecipePath } from '@/shared/config/routerPaths';
 const AddRecipePage = () => {
   const navigate = useNavigate();
   const [createRecipe, { isLoading }] = useCreateRecipeMutation();
+  const [createPresignedUpload, { isLoading: isUploadingImage }] = useCreatePresignedUploadMutation();
   const {
     data: mealTypes = [],
     isLoading: isMealTypesLoading,
@@ -37,6 +39,8 @@ const AddRecipePage = () => {
 
   const formMessage = isLoading
     ? 'Creating recipe...'
+    : isUploadingImage
+      ? 'Uploading image...'
     : isDictionariesLoading
       ? 'Loading recipe dictionaries...'
       : isMealTypesError || isCuisinesError
@@ -46,9 +50,11 @@ const AddRecipePage = () => {
 
   const onSubmit = async (formValues) => {
     clearErrors('root.server');
-    const nextRecipe = buildRecipePayload(formValues);
 
     try {
+      const imageFile = formValues.imageFile?.[0] ?? null;
+      const thumbnailKey = await uploadRecipeImage(imageFile, createPresignedUpload);
+      const nextRecipe = buildRecipePayload(formValues, thumbnailKey);
       const createdRecipe = await createRecipe(nextRecipe).unwrap();
 
       resetForm(initialRecipeFormValues);
@@ -77,7 +83,13 @@ const AddRecipePage = () => {
         onSubmit={onSubmit}
         message={formMessage}
         messageTone={formMessageTone}
-        isSubmitting={isLoading || isDictionariesLoading || isMealTypesError || isCuisinesError}
+        isSubmitting={
+          isLoading ||
+          isUploadingImage ||
+          isDictionariesLoading ||
+          isMealTypesError ||
+          isCuisinesError
+        }
         mealTypes={mealTypes}
         cuisines={cuisines}
       />

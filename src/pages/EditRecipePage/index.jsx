@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { selectAuthUser } from '@/entities/auth';
 import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
+import { uploadRecipeImage, useCreatePresignedUploadMutation } from '@/entities/media';
 import { useRecipe, useUpdateRecipeMutation } from '@/entities/recipe';
 import {
   buildRecipeFormValues,
@@ -15,6 +16,7 @@ import { buildRecipePath } from '@/shared/config/routerPaths';
 const EditRecipeForm = ({ recipe, mealTypes, cuisines }) => {
   const navigate = useNavigate();
   const [updateRecipe, { isLoading }] = useUpdateRecipeMutation();
+  const [createPresignedUpload, { isLoading: isUploadingImage }] = useCreatePresignedUploadMutation();
   const {
     register,
     handleSubmit,
@@ -29,9 +31,11 @@ const EditRecipeForm = ({ recipe, mealTypes, cuisines }) => {
     clearErrors('root.server');
 
     try {
+      const imageFile = formValues.imageFile?.[0] ?? null;
+      const thumbnailKey = await uploadRecipeImage(imageFile, createPresignedUpload);
       const updatedRecipe = await updateRecipe({
         recipeId: recipe.id,
-        recipe: buildRecipePayload(formValues),
+        recipe: buildRecipePayload(formValues, thumbnailKey),
       }).unwrap();
 
       navigate(buildRecipePath(updatedRecipe.id));
@@ -49,9 +53,15 @@ const EditRecipeForm = ({ recipe, mealTypes, cuisines }) => {
       errors={errors}
       handleSubmit={handleSubmit}
       onSubmit={onSubmit}
-      message={isLoading ? 'Saving recipe...' : errors.root?.server?.message ?? ''}
+      message={
+        isLoading
+          ? 'Saving recipe...'
+          : isUploadingImage
+            ? 'Uploading image...'
+            : errors.root?.server?.message ?? ''
+      }
       messageTone={errors.root?.server ? 'error' : 'default'}
-      isSubmitting={isLoading}
+      isSubmitting={isLoading || isUploadingImage}
       mealTypes={mealTypes}
       cuisines={cuisines}
       submitLabel="Save changes"
