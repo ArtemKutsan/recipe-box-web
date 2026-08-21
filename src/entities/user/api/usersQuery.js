@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
 import { toRecipeListResponse } from '@/entities/recipe';
+import { setCurrentUser } from '@/entities/auth';
 
 const buildUserRecipesQuery = (userId, queryParams = {}, isCurrentUser = false) => {
   const params = new URLSearchParams();
@@ -64,7 +65,27 @@ export const usersApi = createApi({
         totalPages: response.totalPages ?? 0,
       }),
     }),
+    updateMyAvatar: build.mutation({
+      query: (avatarKey) => ({
+        url: '/users/me/avatar',
+        method: 'PATCH',
+        body: { avatarKey },
+      }),
+      transformResponse: (response) => response.user ?? null,
+      async onQueryStarted(_avatarKey, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setCurrentUser(data));
+        } catch {
+          // Ошибку показа аватара обрабатывает ProfilePage.
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetUserByIdQuery, useGetUserRecipesQuery } = usersApi;
+export const {
+  useGetUserByIdQuery,
+  useGetUserRecipesQuery,
+  useUpdateMyAvatarMutation,
+} = usersApi;

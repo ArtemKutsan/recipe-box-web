@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectAuthUser } from '@/entities/auth';
 import { useGetFavoriteRecipesQuery } from '@/entities/favorite';
 import { RecipeList } from '@/entities/recipe/ui';
-import { UserAvatar, useUser, useUserRecipes } from '@/entities/user';
+import { UserAvatar, useUpdateMyAvatarMutation, useUser, useUserRecipes } from '@/entities/user';
+import { uploadUserAvatar, useCreatePresignedUploadMutation } from '@/entities/media';
 import { FavoriteButton } from '@/features/toggle-favorite';
 import { Pagination, ToggleGroup } from '@/shared/ui';
+import CameraIcon from '@/assets/icons/camera.svg?react';
 
 const PROFILE_RECIPES_PAGE_SIZE = 12;
 const AUTHORED_RECIPES = 'authored';
@@ -21,6 +23,11 @@ const ProfilePage = () => {
   const [activeRecipeCollection, setActiveRecipeCollection] = useState(AUTHORED_RECIPES);
   const [authoredPage, setAuthoredPage] = useState(1);
   const [savedPage, setSavedPage] = useState(1);
+  const [avatarError, setAvatarError] = useState(null);
+  const avatarInputRef = useRef(null);
+  const [createPresignedUpload, { isLoading: isPreparingAvatarUpload }] =
+    useCreatePresignedUploadMutation();
+  const [updateMyAvatar, { isLoading: isSavingAvatar }] = useUpdateMyAvatarMutation();
   const authUser = useSelector(selectAuthUser);
   const isCurrentUserProfile = !id;
   const isSavedRecipesActive = isCurrentUserProfile && activeRecipeCollection === SAVED_RECIPES;
@@ -116,6 +123,24 @@ const ProfilePage = () => {
     setAuthoredPage(page);
   };
 
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file) {
+      return;
+    }
+
+    setAvatarError(null);
+
+    try {
+      const avatarKey = await uploadUserAvatar(file, createPresignedUpload);
+      await updateMyAvatar(avatarKey).unwrap();
+    } catch (error) {
+      setAvatarError(error?.data?.error?.message ?? error?.message ?? 'Failed to update avatar.');
+    }
+  };
+
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
@@ -124,7 +149,39 @@ const ProfilePage = () => {
       </header>
 
       <div className="flex items-center gap-6 rounded-2xl border p-6">
-        <UserAvatar src={user.avatarUrl} alt={displayName} className="size-24" />
+        <div className="flex shrink-0 flex-col items-center gap-3">
+          <div className="relative">
+            <UserAvatar src={user.avatarUrl} alt={displayName} className="size-24" />
+            {isCurrentUserProfile ? (
+              <div className="absolute bottom-0 right-0 rounded-full bg-card shadow-md">
+                <button
+                  type="button"
+                  aria-label="Change avatar"
+                  title="Change avatar"
+                  className="inline-flex size-8 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={isPreparingAvatarUpload || isSavingAvatar}
+                  onClick={() => avatarInputRef.current?.click()}
+                >
+                  <CameraIcon className="size-4" aria-hidden="true" />
+                </button>
+              </div>
+            ) : null}
+          </div>
+          {isCurrentUserProfile ? (
+            <>
+              <input
+                ref={avatarInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={handleAvatarChange}
+              />
+              {avatarError ? (
+                <p className="max-w-32 text-center text-xs text-destructive">{avatarError}</p>
+              ) : null}
+            </>
+          ) : null}
+        </div>
 
         <div className="flex min-w-0 flex-col gap-3">
           <div className="flex flex-col gap-1">
