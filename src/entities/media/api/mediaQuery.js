@@ -8,7 +8,7 @@ export const mediaApi = createApi({
     createPresignedUpload: build.mutation({
       // Сначала просим backend подготовить временную ссылку для S3.
       query: ({ purpose, contentType, sizeBytes }) => ({
-        url: '/uploads/presign',
+        url: '/uploads/upload-url',
         method: 'POST',
         body: {
           purpose,
