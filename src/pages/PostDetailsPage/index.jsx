@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { formatPostDate, useGetPostByIdQuery } from '@/entities/post';
 import { UserAvatar } from '@/entities/user';
+import { Comments } from '@/features/comments';
 import { buildRecipePath, buildUserProfilePath, RouterPath } from '@/shared/config/routerPaths';
 
 const PostDetailsPage = () => {
@@ -68,6 +69,8 @@ const PostDetailsPage = () => {
           <span className="text-lg font-semibold">{post.recipe.title}</span>
         </Link>
       ) : null}
+
+      <Comments targetType="post" targetId={post.id} />
     </article>
   );
 };

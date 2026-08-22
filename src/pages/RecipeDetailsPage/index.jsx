@@ -12,7 +12,7 @@ import ListIcon from '@/assets/icons/list.svg?react';
 import { getDifficultyBadgeClassName, useRecipe } from '@/entities/recipe';
 import { UserAvatar } from '@/entities/user';
 import { FavoriteButton } from '@/features/toggle-favorite';
-import { RecipeComments } from '@/features/recipe-comments';
+import { Comments } from '@/features/comments';
 
 const RecipeDetailsPage = () => {
   const { id } = useParams();
@@ -179,7 +179,7 @@ const RecipeDetailsPage = () => {
         ) : null}
       </article>
       {recipe.visibility === 'public' || !recipe.visibility ? (
-        <RecipeComments recipeId={recipe.id} />
+        <Comments targetType="recipe" targetId={recipe.id} />
       ) : null}
     </div>
   );
