@@ -102,7 +102,7 @@ const ProfilePage = () => {
       pageSize: PROFILE_POSTS_PAGE_SIZE,
     },
     {
-      skip: !userId || (isCurrentUserProfile && !isPostsActive),
+      skip: !userId,
       isCurrentUser: isCurrentUserProfile,
     },
   );
@@ -246,10 +246,15 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="rounded-2xl border p-4">
           <div className="text-sm text-muted-foreground">Recipes</div>
           <div className="mt-2 text-2xl font-semibold tracking-tight">{total}</div>
+        </div>
+
+        <div className="rounded-2xl border p-4">
+          <div className="text-sm text-muted-foreground">Posts</div>
+          <div className="mt-2 text-2xl font-semibold tracking-tight">{postsTotal}</div>
         </div>
 
         {profileDetails.map((detail) => (
