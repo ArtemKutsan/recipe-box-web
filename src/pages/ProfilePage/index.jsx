@@ -4,7 +4,14 @@ import { useSelector } from 'react-redux';
 import { selectAuthUser } from '@/entities/auth';
 import { useGetFavoriteRecipesQuery } from '@/entities/favorite';
 import { RecipeList } from '@/entities/recipe/ui';
-import { UserAvatar, useUpdateMyAvatarMutation, useUser, useUserRecipes } from '@/entities/user';
+import {
+  UserAvatar,
+  useUpdateMyAvatarMutation,
+  useUser,
+  useUserPosts,
+  useUserRecipes,
+} from '@/entities/user';
+import { PostCard } from '@/entities/post';
 import {
   MEDIA_UPLOADS_ENABLED,
   uploadUserAvatar,
@@ -15,10 +22,13 @@ import { Pagination, ToggleGroup } from '@/shared/ui';
 import CameraIcon from '@/assets/icons/camera.svg?react';
 
 const PROFILE_RECIPES_PAGE_SIZE = 12;
+const PROFILE_POSTS_PAGE_SIZE = 10;
 const AUTHORED_RECIPES = 'authored';
+const AUTHORED_POSTS = 'posts';
 const SAVED_RECIPES = 'saved';
-const PROFILE_RECIPE_COLLECTIONS = [
+const PROFILE_COLLECTIONS = [
   { value: AUTHORED_RECIPES, label: 'My Recipes' },
+  { value: AUTHORED_POSTS, label: 'My Posts' },
   { value: SAVED_RECIPES, label: 'Saved Recipes' },
 ];
 
@@ -26,6 +36,7 @@ const ProfilePage = () => {
   const { id } = useParams();
   const [activeRecipeCollection, setActiveRecipeCollection] = useState(AUTHORED_RECIPES);
   const [authoredPage, setAuthoredPage] = useState(1);
+  const [postsPage, setPostsPage] = useState(1);
   const [savedPage, setSavedPage] = useState(1);
   const [avatarError, setAvatarError] = useState(null);
   const avatarInputRef = useRef(null);
@@ -35,6 +46,7 @@ const ProfilePage = () => {
   const authUser = useSelector(selectAuthUser);
   const isCurrentUserProfile = !id;
   const isSavedRecipesActive = isCurrentUserProfile && activeRecipeCollection === SAVED_RECIPES;
+  const isPostsActive = isCurrentUserProfile && activeRecipeCollection === AUTHORED_POSTS;
   const userId = id ?? authUser?.id;
   const {
     user: publicUser,
@@ -77,6 +89,23 @@ const ProfilePage = () => {
       skip: !isSavedRecipesActive,
     },
   );
+  const {
+    posts,
+    total: postsTotal,
+    totalPages: postsTotalPages,
+    status: postsStatus,
+    error: postsError,
+  } = useUserPosts(
+    userId,
+    {
+      page: postsPage,
+      pageSize: PROFILE_POSTS_PAGE_SIZE,
+    },
+    {
+      skip: !userId || (isCurrentUserProfile && !isPostsActive),
+      isCurrentUser: isCurrentUserProfile,
+    },
+  );
 
   if (isCurrentUserProfile && !authUser) {
     return <p>Please log in to view your profile.</p>;
@@ -94,21 +123,32 @@ const ProfilePage = () => {
     { label: 'Phone', value: user.phone || '—' },
   ];
   const displayedRecipes = isSavedRecipesActive ? (savedRecipesData?.items ?? []) : recipes;
-  const displayedTotal = isSavedRecipesActive ? (savedRecipesData?.total ?? 0) : total;
+  const displayedTotal = isPostsActive
+    ? postsTotal
+    : isSavedRecipesActive
+      ? (savedRecipesData?.total ?? 0)
+      : total;
   const displayedTotalPages = isSavedRecipesActive
     ? (savedRecipesData?.totalPages ?? 0)
-    : totalPages;
-  const displayedPage = isSavedRecipesActive ? savedPage : authoredPage;
+    : isPostsActive
+      ? postsTotalPages
+      : totalPages;
+  const displayedPage = isSavedRecipesActive ? savedPage : isPostsActive ? postsPage : authoredPage;
   const displayedStatus = isSavedRecipesActive
     ? areSavedRecipesLoading
       ? 'loading'
       : isSavedRecipesError
         ? 'failed'
         : 'succeeded'
-    : recipesStatus;
+    : isPostsActive
+      ? postsStatus
+      : recipesStatus;
   const displayedError = isSavedRecipesActive
     ? (savedRecipesError?.data?.error?.message ?? savedRecipesError?.message ?? null)
-    : recipesError;
+    : isPostsActive
+      ? postsError
+      : recipesError;
+  const displayedItemLabel = isPostsActive ? 'post' : 'recipe';
 
   const changeRecipeCollection = (collection) => {
     setActiveRecipeCollection(collection);
@@ -116,11 +156,20 @@ const ProfilePage = () => {
     if (collection === SAVED_RECIPES) {
       setSavedPage(1);
     }
+
+    if (collection === AUTHORED_POSTS) {
+      setPostsPage(1);
+    }
   };
 
   const changeDisplayedPage = (page) => {
     if (isSavedRecipesActive) {
       setSavedPage(page);
+      return;
+    }
+
+    if (isPostsActive) {
+      setPostsPage(page);
       return;
     }
 
@@ -224,40 +273,52 @@ const ProfilePage = () => {
         <div className="flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-end">
           <div className="flex flex-col gap-1">
             <h2 className="text-xl font-semibold tracking-tight">
-              {isSavedRecipesActive
+              {isPostsActive
+                ? 'My Posts'
+                : isSavedRecipesActive
                 ? 'Saved Recipes'
                 : isCurrentUserProfile
                   ? 'My Recipes'
                   : `Recipes by ${displayName}`}
             </h2>
             <p className="text-sm text-muted-foreground">
-              {displayedTotal} {displayedTotal === 1 ? 'recipe' : 'recipes'}
+              {displayedTotal} {displayedTotal === 1 ? displayedItemLabel : `${displayedItemLabel}s`}
             </p>
           </div>
 
           {isCurrentUserProfile ? (
             <ToggleGroup
-              options={PROFILE_RECIPE_COLLECTIONS}
+              options={PROFILE_COLLECTIONS}
               value={activeRecipeCollection}
               onChange={changeRecipeCollection}
-              ariaLabel="Profile recipe collections"
+              ariaLabel="Profile collections"
               className="self-start"
             />
           ) : null}
         </div>
 
         {displayedStatus === 'idle' || displayedStatus === 'loading' ? (
-          <p className="text-sm text-muted-foreground">Loading recipes...</p>
+          <p className="text-sm text-muted-foreground">
+            {isPostsActive ? 'Loading posts...' : 'Loading recipes...'}
+          </p>
         ) : displayedError ? (
           <p className="text-sm text-muted-foreground">{displayedError}</p>
-        ) : displayedRecipes.length > 0 ? (
+        ) : isPostsActive && posts.length > 0 ? (
+          <div className="flex flex-col">
+            {posts.map((post) => <PostCard key={post.id} post={post} />)}
+          </div>
+        ) : !isPostsActive && displayedRecipes.length > 0 ? (
           <RecipeList
             recipes={displayedRecipes}
             renderFavoriteAction={(recipe) => <FavoriteButton recipeId={recipe.id} />}
           />
         ) : (
           <div className="rounded-2xl border border-dashed bg-card p-6 text-sm text-muted-foreground">
-            {isSavedRecipesActive ? 'No saved recipes yet.' : 'No recipes published yet.'}
+            {isPostsActive
+              ? 'No posts published yet.'
+              : isSavedRecipesActive
+                ? 'No saved recipes yet.'
+                : 'No recipes published yet.'}
           </div>
         )}
 
@@ -267,6 +328,37 @@ const ProfilePage = () => {
           onPageChange={changeDisplayedPage}
         />
       </section>
+
+      {!isCurrentUserProfile ? (
+        <section className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-xl font-semibold tracking-tight">Posts by {displayName}</h2>
+            <p className="text-sm text-muted-foreground">
+              {postsTotal} {postsTotal === 1 ? 'post' : 'posts'}
+            </p>
+          </div>
+
+          {postsStatus === 'loading' ? (
+            <p className="text-sm text-muted-foreground">Loading posts...</p>
+          ) : postsError ? (
+            <p className="text-sm text-muted-foreground">{postsError}</p>
+          ) : posts.length > 0 ? (
+            <div className="flex flex-col">
+              {posts.map((post) => <PostCard key={post.id} post={post} />)}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed bg-card p-6 text-sm text-muted-foreground">
+              No posts published yet.
+            </div>
+          )}
+
+          <Pagination
+            page={postsPage}
+            totalPages={postsTotalPages}
+            onPageChange={setPostsPage}
+          />
+        </section>
+      ) : null}
     </section>
   );
 };

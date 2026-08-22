@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
 import { toRecipeListResponse } from '@/entities/recipe';
+import { toPostResponse } from '@/entities/post';
 import { setCurrentUser } from '@/entities/auth';
 
 const buildUserRecipesQuery = (userId, queryParams = {}, isCurrentUser = false) => {
@@ -44,6 +45,23 @@ const buildUserRecipesQuery = (userId, queryParams = {}, isCurrentUser = false) 
   return queryString ? `${path}?${queryString}` : path;
 };
 
+const buildUserPostsQuery = (userId, queryParams = {}, isCurrentUser = false) => {
+  const params = new URLSearchParams();
+
+  if (queryParams.pageSize) {
+    params.set('pageSize', queryParams.pageSize);
+  }
+
+  if (queryParams.page) {
+    params.set('page', queryParams.page);
+  }
+
+  const queryString = params.toString();
+  const path = isCurrentUser ? '/users/me/posts' : `/users/${userId}/posts`;
+
+  return queryString ? `${path}?${queryString}` : path;
+};
+
 export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery,
@@ -62,6 +80,17 @@ export const usersApi = createApi({
         cuisines: response.cuisines ?? [],
         page: response.page ?? 1,
         pageSize: response.pageSize ?? 20,
+        totalPages: response.totalPages ?? 0,
+      }),
+    }),
+    getUserPosts: build.query({
+      query: ({ userId, isCurrentUser = false, ...queryParams }) =>
+        buildUserPostsQuery(userId, queryParams, isCurrentUser),
+      transformResponse: (response) => ({
+        items: Array.isArray(response.items) ? response.items.map(toPostResponse) : [],
+        total: response.total ?? 0,
+        page: response.page ?? 1,
+        pageSize: response.pageSize ?? 10,
         totalPages: response.totalPages ?? 0,
       }),
     }),
@@ -87,5 +116,6 @@ export const usersApi = createApi({
 export const {
   useGetUserByIdQuery,
   useGetUserRecipesQuery,
+  useGetUserPostsQuery,
   useUpdateMyAvatarMutation,
 } = usersApi;
