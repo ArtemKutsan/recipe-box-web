@@ -6,3 +6,4 @@ export {
   useGetPostsQuery,
   useUpdatePostMutation,
 } from './api/postsQuery';
+export { PostCard } from './ui';

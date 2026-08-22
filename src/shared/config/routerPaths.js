@@ -6,6 +6,7 @@ AppRoute хранит внутренние ключи маршрутов, а н�
 export const AppRoute = {
   MAIN: 'main',
   RECIPES: 'recipes',
+  POSTS: 'posts',
   CATEGORIES: 'categories',
   AUTH: 'auth',
   ADD_RECIPE: 'add_recipe',
@@ -25,6 +26,7 @@ RouterPath хранит настоящие адреса страниц.
 export const RouterPath = {
   [AppRoute.MAIN]: '/',
   [AppRoute.RECIPES]: '/recipes',
+  [AppRoute.POSTS]: '/posts',
   [AppRoute.CATEGORIES]: '/categories',
   [AppRoute.AUTH]: '/auth',
   [AppRoute.ADD_RECIPE]: '/add-recipe',
