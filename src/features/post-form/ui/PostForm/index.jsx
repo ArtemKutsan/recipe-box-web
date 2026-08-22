@@ -14,13 +14,15 @@ const PostForm = ({
   handleSubmit,
   setValue,
   onSubmit,
+  initialSelectedRecipe = null,
   message,
   messageTone = 'default',
   isSubmitting,
+  submitLabel = 'Publish post',
 }) => {
   const [recipeSearch, setRecipeSearch] = useState('');
   const [recipePage, setRecipePage] = useState(1);
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [selectedRecipe, setSelectedRecipe] = useState(initialSelectedRecipe);
   const debouncedRecipeSearch = useDebounce(recipeSearch.trim(), 250);
   const canSearchRecipes = debouncedRecipeSearch.length >= MIN_RECIPE_SEARCH_LENGTH;
   const recipeQuery = useRecipes(
@@ -145,7 +147,7 @@ const PostForm = ({
       <div className="flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
         <p className={messageClassName}>{message}</p>
         <Button type="submit" disabled={isSubmitting}>
-          Publish post
+          {submitLabel}
         </Button>
       </div>
     </form>
