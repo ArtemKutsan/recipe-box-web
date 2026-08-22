@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authApi, authReducer } from '@/entities/auth';
 import { mealTypesApi } from '@/entities/meal-type';
 import { cuisinesApi } from '@/entities/cuisine';
+import { commentsApi } from '@/entities/comment';
 import { mealPlansApi } from '@/entities/meal-plan';
 import { recipesApi } from '@/entities/recipe/api/recipesQuery';
 import { usersApi } from '@/entities/user';
@@ -17,6 +18,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [mealTypesApi.reducerPath]: mealTypesApi.reducer,
     [cuisinesApi.reducerPath]: cuisinesApi.reducer,
+    [commentsApi.reducerPath]: commentsApi.reducer,
     [mealPlansApi.reducerPath]: mealPlansApi.reducer,
     [recipesApi.reducerPath]: recipesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
@@ -28,6 +30,7 @@ export const store = configureStore({
       authApi.middleware,
       mealTypesApi.middleware,
       cuisinesApi.middleware,
+      commentsApi.middleware,
       mealPlansApi.middleware,
       recipesApi.middleware,
       usersApi.middleware,
