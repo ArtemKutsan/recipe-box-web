@@ -6,6 +6,7 @@ import CategoriesPage from '@/pages/CategoriesPage';
 import AuthPage from '@/pages/AuthPage';
 import AuthLayout from '@/app/layouts/AuthLayout';
 import AddRecipePage from '@/pages/AddRecipePage';
+import AddPostPage from '@/pages/AddPostPage';
 import MealPlannerPage from '@/pages/MealPlannerPage';
 import ProfilePage from '@/pages/ProfilePage';
 import RecipeDetailsPage from '@/pages/RecipeDetailsPage';
@@ -49,6 +50,11 @@ export const routeConfig = {
   [AppRoute.ADD_RECIPE]: {
     path: RouterPath.add_recipe,
     element: <AddRecipePage />,
+    protected: true,
+  },
+  [AppRoute.ADD_POST]: {
+    path: RouterPath.add_post,
+    element: <AddPostPage />,
     protected: true,
   },
   [AppRoute.MEAL_PLANNER]: {
