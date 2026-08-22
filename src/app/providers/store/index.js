@@ -8,6 +8,7 @@ import { postsApi } from '@/entities/post';
 import { recipesApi } from '@/entities/recipe/api/recipesQuery';
 import { usersApi } from '@/entities/user';
 import { favoritesApi, favoritesReducer } from '@/entities/favorite';
+import { feedApi } from '@/entities/feed';
 import { mediaApi } from '@/entities/media';
 import { apiErrorMiddleware } from './apiErrorMiddleware';
 import { sessionCleanupMiddleware } from './sessionCleanupMiddleware';
@@ -25,6 +26,7 @@ export const store = configureStore({
     [recipesApi.reducerPath]: recipesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [favoritesApi.reducerPath]: favoritesApi.reducer,
+    [feedApi.reducerPath]: feedApi.reducer,
     [mediaApi.reducerPath]: mediaApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -38,6 +40,7 @@ export const store = configureStore({
       recipesApi.middleware,
       usersApi.middleware,
       favoritesApi.middleware,
+      feedApi.middleware,
       mediaApi.middleware,
       sessionCleanupMiddleware,
       apiErrorMiddleware,
