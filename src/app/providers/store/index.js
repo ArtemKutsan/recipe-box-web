@@ -4,6 +4,7 @@ import { mealTypesApi } from '@/entities/meal-type';
 import { cuisinesApi } from '@/entities/cuisine';
 import { commentsApi } from '@/entities/comment';
 import { mealPlansApi } from '@/entities/meal-plan';
+import { postsApi } from '@/entities/post';
 import { recipesApi } from '@/entities/recipe/api/recipesQuery';
 import { usersApi } from '@/entities/user';
 import { favoritesApi, favoritesReducer } from '@/entities/favorite';
@@ -20,6 +21,7 @@ export const store = configureStore({
     [cuisinesApi.reducerPath]: cuisinesApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
     [mealPlansApi.reducerPath]: mealPlansApi.reducer,
+    [postsApi.reducerPath]: postsApi.reducer,
     [recipesApi.reducerPath]: recipesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [favoritesApi.reducerPath]: favoritesApi.reducer,
@@ -32,6 +34,7 @@ export const store = configureStore({
       cuisinesApi.middleware,
       commentsApi.middleware,
       mealPlansApi.middleware,
+      postsApi.middleware,
       recipesApi.middleware,
       usersApi.middleware,
       favoritesApi.middleware,
