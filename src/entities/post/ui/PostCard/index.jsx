@@ -9,7 +9,7 @@ const PostCard = ({ post }) => {
   const postType = post.recipe ? 'Cooking result' : 'Community note';
 
   return (
-    <article className="flex flex-col gap-5 border-b py-8 first:pt-0">
+    <article className="flex flex-col gap-5 border-b py-8">
       <header className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <UserAvatar src={author?.avatarUrl} alt={authorName} className="size-10" />
