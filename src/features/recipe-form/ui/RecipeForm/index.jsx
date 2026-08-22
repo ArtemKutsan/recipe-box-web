@@ -145,6 +145,7 @@ const RecipeForm = ({
             <FormField
               label="Servings"
               type="number"
+              showLabel
               {...register('servings', recipeFormRules.servings)}
             />
             {renderError('servings')}
@@ -154,6 +155,7 @@ const RecipeForm = ({
             <FormField
               label="Prep Time"
               type="number"
+              showLabel
               {...register('prepTimeMinutes', recipeFormRules.prepTimeMinutes)}
             />
             {renderError('prepTimeMinutes')}
@@ -163,6 +165,7 @@ const RecipeForm = ({
             <FormField
               label="Cook Time"
               type="number"
+              showLabel
               {...register('cookTimeMinutes', recipeFormRules.cookTimeMinutes)}
             />
             {renderError('cookTimeMinutes')}
@@ -172,6 +175,7 @@ const RecipeForm = ({
             <FormField
               label="Calories"
               type="number"
+              showLabel
               {...register('caloriesPerServing', recipeFormRules.caloriesPerServing)}
             />
             {renderError('caloriesPerServing')}
@@ -181,6 +185,7 @@ const RecipeForm = ({
         <FormField
           label="Tags"
           placeholder="Pizza, Italian"
+          showLabel
           containerClassName="md:col-span-2"
           {...register('tags')}
         />

@@ -14,6 +14,7 @@ const FormField = forwardRef(function FormField(
     className,
     containerClassName,
     labelClassName,
+    showLabel = false,
     id,
     ...props
   },
@@ -32,7 +33,7 @@ const FormField = forwardRef(function FormField(
     >
       <span
         className={cn(
-          isSelect ? 'shrink-0 text-sm text-muted-foreground' : 'sr-only',
+          isSelect || showLabel ? 'shrink-0 text-sm text-muted-foreground' : 'sr-only',
           labelClassName,
         )}
       >

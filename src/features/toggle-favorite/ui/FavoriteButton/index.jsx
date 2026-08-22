@@ -46,7 +46,7 @@ const FavoriteButton = ({ recipeId, className }) => {
       type="button"
       className={cn(
         'group relative inline-flex items-center justify-center rounded-full transition-colors',
-        isFavorite ? 'text-secondary' : 'text-muted-foreground',
+        isFavorite ? 'text-red-600' : 'text-muted-foreground',
         className,
       )}
       aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}

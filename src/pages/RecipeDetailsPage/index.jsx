@@ -39,7 +39,7 @@ const RecipeDetailsPage = () => {
   const canEdit = authUser?.id != null && String(authUser.id) === String(author?.id);
 
   return (
-    <section className="mx-auto">
+    <div className="mx-auto">
       <article className="overflow-hidden rounded-4xl border bg-card">
         <div className="grid lg:grid-cols-[0.85fr_1.15fr]">
           {recipe.image ? (
@@ -177,7 +177,7 @@ const RecipeDetailsPage = () => {
           </section>
         ) : null}
       </article>
-    </section>
+    </div>
   );
 };
 
