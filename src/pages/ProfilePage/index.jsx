@@ -5,7 +5,11 @@ import { selectAuthUser } from '@/entities/auth';
 import { useGetFavoriteRecipesQuery } from '@/entities/favorite';
 import { RecipeList } from '@/entities/recipe/ui';
 import { UserAvatar, useUpdateMyAvatarMutation, useUser, useUserRecipes } from '@/entities/user';
-import { uploadUserAvatar, useCreatePresignedUploadMutation } from '@/entities/media';
+import {
+  MEDIA_UPLOADS_ENABLED,
+  uploadUserAvatar,
+  useCreatePresignedUploadMutation,
+} from '@/entities/media';
 import { FavoriteButton } from '@/features/toggle-favorite';
 import { Pagination, ToggleGroup } from '@/shared/ui';
 import CameraIcon from '@/assets/icons/camera.svg?react';
@@ -152,7 +156,7 @@ const ProfilePage = () => {
         <div className="flex shrink-0 flex-col items-center gap-3">
           <div className="relative">
             <UserAvatar src={user.avatarUrl} alt={displayName} className="size-24" />
-            {isCurrentUserProfile ? (
+            {isCurrentUserProfile && MEDIA_UPLOADS_ENABLED ? (
               <div className="absolute bottom-0 right-0 rounded-full bg-card shadow-md">
                 <button
                   type="button"
@@ -174,6 +178,7 @@ const ProfilePage = () => {
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
                 className="hidden"
+                disabled={!MEDIA_UPLOADS_ENABLED}
                 onChange={handleAvatarChange}
               />
               {avatarError ? (

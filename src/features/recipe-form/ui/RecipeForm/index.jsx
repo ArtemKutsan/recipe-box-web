@@ -2,6 +2,7 @@ import { Button, FormField } from '@/shared/ui';
 import { cn } from '@/shared/lib/cn';
 import { useRef, useState } from 'react';
 import { recipeFormRules } from '../../model/form';
+import { MEDIA_UPLOADS_ENABLED } from '@/entities/media/config';
 
 const RecipeForm = ({
   register,
@@ -50,7 +51,8 @@ const RecipeForm = ({
             <div className="shrink-0 bg-border p-1">
               <button
                 type="button"
-                className="h-8 rounded-lg bg-secondary px-4 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/90"
+                disabled={!MEDIA_UPLOADS_ENABLED}
+                className="h-8 rounded-lg bg-secondary px-4 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/90 disabled:cursor-not-allowed disabled:opacity-50"
                 onClick={() => imageInputRef.current?.click()}
               >
                 Browse
@@ -63,6 +65,7 @@ const RecipeForm = ({
               }}
               name={imageFileField.name}
               type="file"
+              disabled={!MEDIA_UPLOADS_ENABLED}
               accept="image/jpeg,image/png,image/webp"
               className="sr-only"
               onBlur={imageFileField.onBlur}
