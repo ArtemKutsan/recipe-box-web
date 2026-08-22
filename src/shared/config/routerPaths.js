@@ -13,6 +13,7 @@ export const AppRoute = {
   MEAL_PLANNER: 'meal_planner',
   PROFILE: 'profile',
   USER_PROFILE: 'user_profile',
+  POST_DETAIL: 'post_detail',
   RECIPE_DETAIL: 'recipe_detail',
   EDIT_RECIPE: 'edit_recipe',
   NOT_FOUND: 'not_found',
@@ -33,6 +34,7 @@ export const RouterPath = {
   [AppRoute.MEAL_PLANNER]: '/meal-planner',
   [AppRoute.PROFILE]: '/profile',
   [AppRoute.USER_PROFILE]: '/users/:id',
+  [AppRoute.POST_DETAIL]: '/posts/:id',
   [AppRoute.RECIPE_DETAIL]: '/recipes/:id',
   [AppRoute.EDIT_RECIPE]: '/recipes/:id/edit',
   [AppRoute.NOT_FOUND]: '*',
@@ -56,3 +58,4 @@ export const buildAuthPath = (mode = AuthMode.LOGIN) =>
 export const buildRecipePath = (recipeId) => RouterPath.recipe_detail.replace(':id', recipeId);
 export const buildEditRecipePath = (recipeId) => RouterPath.edit_recipe.replace(':id', recipeId);
 export const buildUserProfilePath = (userId) => RouterPath.user_profile.replace(':id', userId);
+export const buildPostPath = (postId) => RouterPath.post_detail.replace(':id', postId);

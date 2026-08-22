@@ -1,6 +1,7 @@
 import MainPage from '@/pages/MainPage';
 import RecipesPage from '@/pages/RecipesPage';
 import PostsPage from '@/pages/PostsPage';
+import PostDetailsPage from '@/pages/PostDetailsPage';
 import CategoriesPage from '@/pages/CategoriesPage';
 import AuthPage from '@/pages/AuthPage';
 import AuthLayout from '@/app/layouts/AuthLayout';
@@ -31,6 +32,10 @@ export const routeConfig = {
   [AppRoute.POSTS]: {
     path: RouterPath.posts,
     element: <PostsPage />,
+  },
+  [AppRoute.POST_DETAIL]: {
+    path: RouterPath.post_detail,
+    element: <PostDetailsPage />,
   },
   [AppRoute.CATEGORIES]: {
     path: RouterPath.categories,

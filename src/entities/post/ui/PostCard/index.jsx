@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { UserAvatar } from '@/entities/user';
-import { buildRecipePath, buildUserProfilePath } from '@/shared/config/routerPaths';
+import { buildPostPath, buildRecipePath, buildUserProfilePath } from '@/shared/config/routerPaths';
 
 const formatPostDate = (value) => {
   if (!value) {
@@ -51,6 +51,13 @@ const PostCard = ({ post }) => {
           {post.recipe.title}
         </Link>
       ) : null}
+
+      <Link
+        to={buildPostPath(post.id)}
+        className="self-start text-sm font-medium text-secondary hover:text-secondary/80"
+      >
+        Open post
+      </Link>
     </article>
   );
 };
