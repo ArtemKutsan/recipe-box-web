@@ -12,7 +12,7 @@ import { cn } from '@/shared/lib/cn';
 import LikeIcon from '@/assets/icons/like.svg?react';
 import LikeFilledIcon from '@/assets/icons/like-filled.svg?react';
 
-const FavoriteButton = ({ recipeId, className }) => {
+const FavoriteButton = ({ recipeId, className, iconClassName }) => {
   const [isHoverPreviewDisabled, setIsHoverPreviewDisabled] = useState(false);
   const navigate = useNavigate();
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -45,7 +45,7 @@ const FavoriteButton = ({ recipeId, className }) => {
     <button
       type="button"
       className={cn(
-        'group relative inline-flex items-center justify-center rounded-full transition-colors',
+        'group/favorite relative inline-flex items-center justify-center rounded-full transition-colors',
         isFavorite ? 'text-red-600' : 'text-muted-foreground',
         className,
       )}
@@ -58,19 +58,19 @@ const FavoriteButton = ({ recipeId, className }) => {
       <LikeIcon
         aria-hidden="true"
         className={cn(
-          'size-5 transition-opacity',
+          cn('size-5 transition-opacity', iconClassName),
           isDisplayedAsFavorite
             ? 'opacity-0'
-            : cn('opacity-100', canShowHoverPreview && 'group-hover:opacity-0'),
+            : cn('opacity-100', canShowHoverPreview && 'group-hover/favorite:opacity-0'),
         )}
       />
       <LikeFilledIcon
         aria-hidden="true"
         className={cn(
-          'absolute size-5 transition-opacity',
+          cn('absolute size-5 transition-opacity', iconClassName),
           isDisplayedAsFavorite
             ? 'opacity-100'
-            : cn('opacity-0', canShowHoverPreview && 'group-hover:opacity-100'),
+            : cn('opacity-0', canShowHoverPreview && 'group-hover/favorite:opacity-100'),
         )}
       />
     </button>

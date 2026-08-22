@@ -1,5 +1,5 @@
-import LikeIcon from '@/assets/icons/like.svg?react';
 import TrashIcon from '@/assets/icons/trash.svg?react';
+import { FavoriteButton } from '@/features/toggle-favorite';
 
 const MealPlannerCard = ({ item, day, mealPeriod, onReplaceMeal, onRemoveMeal }) => {
   const handleRemoveMeal = () => {
@@ -45,7 +45,11 @@ const MealPlannerCard = ({ item, day, mealPeriod, onReplaceMeal, onRemoveMeal })
         >
           <TrashIcon className="size-4" aria-hidden="true" />
         </button>
-        <LikeIcon className="size-4" aria-hidden="true" />
+        <FavoriteButton
+          recipeId={item.id}
+          className="pointer-events-auto size-4 p-0"
+          iconClassName="size-4"
+        />
       </div>
     </article>
   );

@@ -4,6 +4,7 @@ import { selectAuthUser } from '@/entities/auth';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useRecipes } from '@/entities/recipe';
 import { useUserRecipes } from '@/entities/user';
+import { FavoriteButton } from '@/features/toggle-favorite';
 import SearchIcon from '@/assets/icons/search.svg?react';
 import { Modal, Pagination, ToggleGroup } from '@/shared/ui';
 
@@ -202,22 +203,37 @@ const MealRecipeModal = ({
       <div className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
           {activeQuery.recipes.map((recipe) => (
-            <button
-              type="button"
+            <article
               key={recipe.id}
-              onClick={() => handleSelectRecipe(recipe.id)}
-              className="flex cursor-pointer items-center gap-3 rounded-2xl border bg-card p-3 text-left"
+              className="group relative flex items-center gap-3 rounded-2xl border bg-card p-3"
             >
+              <button
+                type="button"
+                onClick={() => handleSelectRecipe(recipe.id)}
+                className="absolute inset-0 z-10 cursor-pointer rounded-2xl"
+                aria-label={`Select ${recipe.name}`}
+              />
               <img
                 src={recipe.image}
                 alt={recipe.name}
                 className="size-16 shrink-0 rounded-lg object-cover"
               />
-              <div className="flex min-w-0 flex-1 self-stretch flex-col justify-between">
+              <div className="pointer-events-none flex min-w-0 flex-1 self-stretch flex-col justify-between">
                 <h3 className="line-clamp-3 text-sm font-medium leading-4">{recipe.name}</h3>
-                <p className="text-xs text-muted-foreground">{recipe.caloriesPerServing} kcal</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs text-muted-foreground">
+                    {recipe.caloriesPerServing} kcal
+                  </p>
+                  <div className="pointer-events-auto relative z-20">
+                    <FavoriteButton
+                      recipeId={recipe.id}
+                      className="size-4 bg-card/90 p-0"
+                      iconClassName="size-4"
+                    />
+                  </div>
+                </div>
               </div>
-            </button>
+            </article>
           ))}
         </div>
 
