@@ -6,7 +6,7 @@ import {
   useGetNotificationsQuery,
   useMarkNotificationReadMutation,
 } from '@/entities/notification';
-import { buildRecipePath } from '@/shared/config/routerPaths';
+import { buildPostPath, buildRecipePath } from '@/shared/config/routerPaths';
 import { Button, Modal } from '@/shared/ui';
 import NotificationIcon from '@/assets/icons/notification.svg?react';
 
@@ -32,6 +32,26 @@ const Notifications = () => {
   const [markNotificationRead] = useMarkNotificationReadMutation();
   const notifications = data?.items ?? [];
   const unreadCount = notifications.filter((notification) => !notification.isRead).length;
+
+  const getNotificationPath = (notification) => {
+    if (notification.type === 'recipe_favorited' && notification.entity?.id) {
+      return buildRecipePath(notification.entity.id);
+    }
+
+    if (notification.type === 'comment_replied' && notification.entity?.id) {
+      const { context } = notification;
+
+      if (context?.type === 'recipe') {
+        return `${buildRecipePath(context.publicId)}#comment-${notification.entity.id}`;
+      }
+
+      if (context?.type === 'post') {
+        return `${buildPostPath(context.publicId)}#comment-${notification.entity.id}`;
+      }
+    }
+
+    return null;
+  };
 
   const handleNotificationClick = (notification) => {
     if (!notification.isRead) {
@@ -75,10 +95,7 @@ const Notifications = () => {
 
         <div className="space-y-2">
           {notifications.map((notification) => {
-            const recipePath =
-              notification.entityType === 'recipe' && notification.entity?.id
-                ? buildRecipePath(notification.entity.id)
-                : null;
+            const notificationPath = getNotificationPath(notification);
             const content = (
               <div
                 className={`flex items-start justify-between gap-3 rounded-xl border p-3 text-left ${
@@ -99,10 +116,10 @@ const Notifications = () => {
               </div>
             );
 
-            return recipePath ? (
+            return notificationPath ? (
               <NavLink
                 key={notification.id}
-                to={recipePath}
+                to={notificationPath}
                 onClick={() => handleNotificationClick(notification)}
                 className="block"
               >

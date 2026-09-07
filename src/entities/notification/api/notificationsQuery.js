@@ -8,6 +8,7 @@ function toNotificationResponse(notification) {
     entityType: notification.entityType,
     actor: notification.actor ?? null,
     entity: notification.entity ?? null,
+    context: notification.context ?? null,
     isRead: Boolean(notification.isRead),
     readAt: notification.readAt ?? null,
     createdAt: notification.createdAt ?? null,

@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { selectIsAuthenticated } from '@/entities/auth';
 import { useCreateCommentMutation, useGetCommentsQuery } from '@/entities/comment';
 import { UserAvatar } from '@/entities/user';
@@ -67,7 +68,7 @@ const CommentItem = ({
 
   return (
     <div className={visualIndentClass}>
-      <article>
+      <article id={`comment-${comment.id}`}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
             <UserAvatar
@@ -145,6 +146,7 @@ const CommentItem = ({
 };
 
 const Comments = ({ targetType, targetId }) => {
+  const location = useLocation();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const [page, setPage] = useState(1);
   const [replyToId, setReplyToId] = useState(null);
@@ -155,6 +157,14 @@ const Comments = ({ targetType, targetId }) => {
     pageSize: COMMENT_PAGE_SIZE,
   });
   const comments = data?.items ?? EMPTY_COMMENTS;
+
+  useEffect(() => {
+    if (isLoading || !location.hash) {
+      return;
+    }
+
+    document.querySelector(location.hash)?.scrollIntoView({ block: 'center' });
+  }, [comments, isLoading, location.hash]);
   const commentsByParent = useMemo(() => {
     const grouped = new Map();
 
