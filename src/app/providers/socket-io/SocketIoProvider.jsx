@@ -29,11 +29,17 @@ const SocketIoProvider = ({ children }) => {
       // Payload события пока не записываем вручную: RTK Query сам повторит GET.
       dispatch(notificationsApi.util.invalidateTags([{ type: 'Notifications', id: 'LIST' }]));
     };
+    // После reconnect забираем пропущенные уведомления через REST.
+    const handleSocketConnect = () => {
+      dispatch(notificationsApi.util.invalidateTags([{ type: 'Notifications', id: 'LIST' }]));
+    };
 
     socket.on('notification:new', handleNewNotification);
+    socket.on('connect', handleSocketConnect);
 
     return () => {
       socket.off('notification:new', handleNewNotification);
+      socket.off('connect', handleSocketConnect);
       socket.disconnect();
     };
   }, [dispatch, isAuthenticated]);
