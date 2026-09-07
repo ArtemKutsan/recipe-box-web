@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '@/entities/auth';
 import {
   useGetNotificationsQuery,
+  useMarkAllNotificationsReadMutation,
   useMarkNotificationReadMutation,
 } from '@/entities/notification';
 import { buildPostPath, buildRecipePath } from '@/shared/config/routerPaths';
@@ -36,6 +37,7 @@ const Notifications = () => {
   const [markNotificationRead] = useMarkNotificationReadMutation();
   const notifications = data?.items ?? [];
   const unreadCount = data?.unreadCount ?? 0;
+  const [markAllNotificationsRead, markAllState] = useMarkAllNotificationsReadMutation();
 
   const getNotificationPath = (notification) => {
     if (notification.type === 'recipe_favorited' && notification.entity?.id) {
@@ -89,6 +91,19 @@ const Notifications = () => {
       </Button>
 
       <Modal isOpen={isOpen} title="Notifications" onClose={() => setIsOpen(false)}>
+        {unreadCount > 0 ? (
+          <div className="mb-3 flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={markAllState.isLoading}
+              onClick={() => void markAllNotificationsRead()}
+            >
+              {markAllState.isLoading ? 'Marking...' : 'Mark all as read'}
+            </Button>
+          </div>
+        ) : null}
         {isLoading ? <p className="text-sm text-muted-foreground">Loading...</p> : null}
         {isError ? (
           <p className="text-sm text-destructive">Failed to load notifications.</p>

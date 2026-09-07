@@ -40,10 +40,18 @@ export const notificationsApi = createApi({
       }),
       invalidatesTags: [{ type: 'Notifications', id: 'LIST' }],
     }),
+    markAllNotificationsRead: build.mutation({
+      query: () => ({
+        url: '/notifications/read-all',
+        method: 'PATCH',
+      }),
+      invalidatesTags: [{ type: 'Notifications', id: 'LIST' }],
+    }),
   }),
 });
 
 export const {
   useGetNotificationsQuery,
   useMarkNotificationReadMutation,
+  useMarkAllNotificationsReadMutation,
 } = notificationsApi;
