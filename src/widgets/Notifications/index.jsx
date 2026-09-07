@@ -35,7 +35,7 @@ const Notifications = () => {
   );
   const [markNotificationRead] = useMarkNotificationReadMutation();
   const notifications = data?.items ?? [];
-  const unreadCount = notifications.filter((notification) => !notification.isRead).length;
+  const unreadCount = data?.unreadCount ?? 0;
 
   const getNotificationPath = (notification) => {
     if (notification.type === 'recipe_favorited' && notification.entity?.id) {

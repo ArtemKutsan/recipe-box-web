@@ -28,6 +28,7 @@ export const notificationsApi = createApi({
         page: response.page ?? 1,
         pageSize: response.pageSize ?? 20,
         total: response.total ?? 0,
+        unreadCount: response.unreadCount ?? 0,
         totalPages: response.totalPages ?? 0,
       }),
       providesTags: [{ type: 'Notifications', id: 'LIST' }],
