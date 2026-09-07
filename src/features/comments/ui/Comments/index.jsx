@@ -112,6 +112,17 @@ const CommentItem = ({
         </p>
       </article>
 
+      {replyToId === comment.id ? (
+        <div className="mt-3">
+          <CommentForm
+            targetType={targetType}
+            targetId={targetId}
+            parentCommentId={comment.id}
+            onDone={() => onReply(null)}
+          />
+        </div>
+      ) : null}
+
       {replies.length > 0 ? (
         <div className="mt-3 space-y-3">
           {replies.map((reply) => (
@@ -127,16 +138,6 @@ const CommentItem = ({
               parentComment={comment}
             />
           ))}
-        </div>
-      ) : null}
-      {replyToId === comment.id ? (
-        <div className="mt-3">
-          <CommentForm
-            targetType={targetType}
-            targetId={targetId}
-            parentCommentId={comment.id}
-            onDone={() => onReply(null)}
-          />
         </div>
       ) : null}
     </div>
