@@ -10,6 +10,7 @@ import { usersApi } from '@/entities/user';
 import { favoritesApi, favoritesReducer } from '@/entities/favorite';
 import { feedApi } from '@/entities/feed';
 import { mediaApi } from '@/entities/media';
+import { notificationsApi } from '@/entities/notification';
 import { apiErrorMiddleware } from './apiErrorMiddleware';
 import { sessionCleanupMiddleware } from './sessionCleanupMiddleware';
 
@@ -28,6 +29,7 @@ export const store = configureStore({
     [favoritesApi.reducerPath]: favoritesApi.reducer,
     [feedApi.reducerPath]: feedApi.reducer,
     [mediaApi.reducerPath]: mediaApi.reducer,
+    [notificationsApi.reducerPath]: notificationsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -42,6 +44,7 @@ export const store = configureStore({
       favoritesApi.middleware,
       feedApi.middleware,
       mediaApi.middleware,
+      notificationsApi.middleware,
       sessionCleanupMiddleware,
       apiErrorMiddleware,
     ),
