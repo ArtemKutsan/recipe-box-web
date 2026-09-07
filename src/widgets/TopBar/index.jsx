@@ -7,6 +7,7 @@ import { Button } from '@/shared/ui';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
 import GlobalSearch from '@/widgets/GlobalSearch';
+import Notifications from '@/widgets/Notifications';
 
 /*
 TopBar показывает верхнюю панель для компьютера и телефона.
@@ -60,10 +61,13 @@ const TopBar = () => {
         </button>
 
         {isAuthenticated ? (
-          <Button as={NavLink} to={RouterPath.add_recipe} variant="secondary" className="shrink-0">
-            <span aria-hidden="true">+</span>
-            <span className="hidden sm:inline">Add Recipe</span>
-          </Button>
+          <div className="flex shrink-0 items-center gap-2">
+            <Notifications />
+            <Button as={NavLink} to={RouterPath.add_recipe} variant="secondary">
+              <span aria-hidden="true">+</span>
+              <span className="hidden sm:inline">Add Recipe</span>
+            </Button>
+          </div>
         ) : (
           <div className="flex shrink-0 items-center gap-2">
             <Button as={NavLink} to={buildAuthPath()}>
@@ -101,17 +105,20 @@ const TopBar = () => {
           </Button>
 
           {isAuthenticated ? (
-            <Button
-              as={NavLink}
-              to={RouterPath.add_recipe}
-              variant="secondary"
-              size="icon"
-              aria-label="Add recipe"
-            >
-              <span aria-hidden="true" className="text-xl leading-none">
-                +
-              </span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Notifications />
+              <Button
+                as={NavLink}
+                to={RouterPath.add_recipe}
+                variant="secondary"
+                size="icon"
+                aria-label="Add recipe"
+              >
+                <span aria-hidden="true" className="text-xl leading-none">
+                  +
+                </span>
+              </Button>
+            </div>
           ) : null}
         </div>
       </div>
