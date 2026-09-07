@@ -23,7 +23,7 @@ const Notifications = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const { data, isLoading, isError } = useGetNotificationsQuery(
     { page: 1, pageSize: 20 },
-    { skip: !isAuthenticated || !isOpen },
+    { skip: !isAuthenticated },
   );
   const [markNotificationRead] = useMarkNotificationReadMutation();
   const notifications = data?.items ?? [];
