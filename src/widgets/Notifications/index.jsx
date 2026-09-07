@@ -19,6 +19,10 @@ function getNotificationText(notification) {
     return `${notification.actor?.name ?? 'Someone'} replied to your comment.`;
   }
 
+  if (notification.type === 'comment_created') {
+    return `${notification.actor?.name ?? 'Someone'} commented on your content.`;
+  }
+
   return 'You have a new notification.';
 }
 
