@@ -44,7 +44,10 @@ const Notifications = () => {
       return buildRecipePath(notification.entity.id);
     }
 
-    if (notification.type === 'comment_replied' && notification.entity?.id) {
+    if (
+      ['comment_replied', 'comment_created'].includes(notification.type) &&
+      notification.entity?.id
+    ) {
       const { context } = notification;
 
       if (context?.type === 'recipe') {
@@ -123,9 +126,9 @@ const Notifications = () => {
               >
                 <div className="min-w-0">
                   <p className="text-sm text-foreground">{getNotificationText(notification)}</p>
-                  {notification.entity?.name ? (
+                  {notification.entity?.name || notification.context?.title ? (
                     <p className="mt-1 truncate text-xs text-muted-foreground">
-                      {notification.entity.name}
+                      {notification.entity?.name ?? notification.context.title}
                     </p>
                   ) : null}
                 </div>
