@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '@/entities/auth';
+import { commentsApi } from '@/entities/comment';
 import {
   useGetNotificationsQuery,
   useMarkAllNotificationsReadMutation,
@@ -29,6 +30,7 @@ function getNotificationText(notification) {
 
 const Notifications = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const { data, isLoading, isError } = useGetNotificationsQuery(
     { page: 1, pageSize: 20 },
@@ -63,9 +65,26 @@ const Notifications = () => {
   };
 
   const handleNotificationClick = (notification) => {
+    if (
+      ['comment_replied', 'comment_created'].includes(notification.type) &&
+      notification.context?.type &&
+      notification.context.publicId
+    ) {
+      dispatch(
+        commentsApi.util.invalidateTags([
+          {
+            type: 'Comments',
+            id: `${notification.context.type}-${notification.context.publicId}`,
+          },
+        ]),
+      );
+    }
+
     if (!notification.isRead) {
       void markNotificationRead(notification.id);
     }
+
+    setIsOpen(false);
   };
 
   if (!isAuthenticated) {
