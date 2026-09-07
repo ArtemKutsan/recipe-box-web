@@ -15,6 +15,10 @@ function getNotificationText(notification) {
     return `${notification.actor?.name ?? 'Someone'} added your recipe to favorites.`;
   }
 
+  if (notification.type === 'comment_replied') {
+    return `${notification.actor?.name ?? 'Someone'} replied to your comment.`;
+  }
+
   return 'You have a new notification.';
 }
 
