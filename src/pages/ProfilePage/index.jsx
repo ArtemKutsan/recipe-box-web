@@ -315,7 +315,7 @@ const ProfilePage = () => {
         ) : !isPostsActive && displayedRecipes.length > 0 ? (
           <RecipeList
             recipes={displayedRecipes}
-            renderFavoriteAction={(recipe) => <FavoriteButton recipeId={recipe.id} />}
+            renderFavoriteButton={(recipe) => <FavoriteButton recipeId={recipe.id} />}
           />
         ) : (
           <div className="rounded-2xl border border-dashed bg-card p-6 text-sm text-muted-foreground">

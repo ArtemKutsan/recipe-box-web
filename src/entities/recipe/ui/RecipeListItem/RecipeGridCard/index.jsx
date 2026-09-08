@@ -4,7 +4,7 @@ import { buildRecipePath } from '@/shared/config/routerPaths';
 import { Badge, InfoLabel } from '@/shared/ui';
 import TimerIcon from '@/assets/icons/timer.svg?react';
 
-const RecipeGridCard = ({ recipe, favoriteAction = null }) => {
+const RecipeGridCard = ({ recipe, favoriteButton = null }) => {
   const totalTime = (recipe?.prepTimeMinutes ?? 0) + (recipe?.cookTimeMinutes ?? 0);
   const cuisineLabel = recipe?.cuisine ?? 'Cuisine';
   const mealTypeLabel = Array.isArray(recipe?.mealType) ? recipe.mealType[0] : '';
@@ -51,7 +51,7 @@ const RecipeGridCard = ({ recipe, favoriteAction = null }) => {
               {difficultyLabel}
             </Badge>
           ) : null}
-          {favoriteAction ? <div className="flex relative z-20">{favoriteAction}</div> : null}
+          {favoriteButton ? <div className="flex relative z-20">{favoriteButton}</div> : null}
         </div>
       </div>
     </article>

@@ -58,7 +58,7 @@ const FavoriteButton = ({ recipeId, className, iconClassName }) => {
       <LikeIcon
         aria-hidden="true"
         className={cn(
-          cn('size-5 transition-opacity', iconClassName),
+          cn('size-4 transition-opacity', iconClassName),
           isDisplayedAsFavorite
             ? 'opacity-0'
             : cn('opacity-100', canShowHoverPreview && 'group-hover/favorite:opacity-0'),
@@ -67,7 +67,7 @@ const FavoriteButton = ({ recipeId, className, iconClassName }) => {
       <LikeFilledIcon
         aria-hidden="true"
         className={cn(
-          cn('absolute size-5 transition-opacity', iconClassName),
+          cn('absolute size-4 transition-opacity', iconClassName),
           isDisplayedAsFavorite
             ? 'opacity-100'
             : cn('opacity-0', canShowHoverPreview && 'group-hover/favorite:opacity-100'),

@@ -162,7 +162,7 @@ const CategoriesPage = () => {
                 <RecipeListItem
                   key={recipe.id}
                   recipe={recipe}
-                  favoriteAction={<FavoriteButton recipeId={recipe.id} />}
+                  favoriteButton={<FavoriteButton recipeId={recipe.id} />}
                 />
               ))
             ) : (

@@ -1,7 +1,7 @@
 import RecipeListItem from '../RecipeListItem';
 import { cn } from '@/shared/lib/cn';
 
-const RecipeList = ({ recipes = [], viewMode = 'list', renderFavoriteAction }) => {
+const RecipeList = ({ recipes = [], viewMode = 'list', renderFavoriteButton }) => {
   if (recipes.length === 0) {
     return <p>No recipes yet</p>;
   }
@@ -19,7 +19,7 @@ const RecipeList = ({ recipes = [], viewMode = 'list', renderFavoriteAction }) =
           <RecipeListItem
             recipe={recipe}
             viewMode={viewMode}
-            favoriteAction={renderFavoriteAction?.(recipe)}
+            favoriteButton={renderFavoriteButton?.(recipe)}
           />
         </li>
       ))}

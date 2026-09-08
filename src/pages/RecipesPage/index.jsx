@@ -122,7 +122,7 @@ const RecipesPage = () => {
         <RecipeList
           recipes={recipes}
           viewMode={viewMode}
-          renderFavoriteAction={(recipe) => <FavoriteButton recipeId={recipe.id} />}
+          renderFavoriteButton={(recipe) => <FavoriteButton recipeId={recipe.id} />}
         />
       )}
 

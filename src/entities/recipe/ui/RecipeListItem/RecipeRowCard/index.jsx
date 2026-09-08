@@ -7,7 +7,7 @@ import FireIcon from '@/assets/icons/fire-line.svg?react';
 import UtensilsIcon from '@/assets/icons/utensils.svg?react';
 import ChefHatIcon from '@/assets/icons/chef-hat.svg?react';
 
-const RecipeRowCard = ({ recipe, favoriteAction = null }) => {
+const RecipeRowCard = ({ recipe, favoriteButton = null }) => {
   const totalTime = (recipe?.prepTimeMinutes ?? 0) + (recipe?.cookTimeMinutes ?? 0);
   const cuisineLabel = recipe?.cuisine ?? 'Cuisine';
 
@@ -56,7 +56,7 @@ const RecipeRowCard = ({ recipe, favoriteAction = null }) => {
       </div>
 
       <div className="relative z-20 flex items-start justify-end gap-4 md:flex-col md:items-end md:justify-start md:pl-0">
-        {favoriteAction}
+        {favoriteButton}
       </div>
     </article>
   );
