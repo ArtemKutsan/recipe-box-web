@@ -44,7 +44,7 @@ const MealRecipeModal = ({
     isLoading: isMealTypesLoading,
     isError: isMealTypesError,
     error: mealTypesError,
-  } = useGetMealTypesQuery();
+  } = useGetMealTypesQuery(undefined, { skip: !selectedSlot });
 
   const queryParams = useMemo(
     () => ({
@@ -57,10 +57,10 @@ const MealRecipeModal = ({
   );
 
   const allRecipesQuery = useRecipes(queryParams, {
-    skip: recipeSource !== 'all',
+    skip: !selectedSlot || recipeSource !== 'all',
   });
   const myRecipesQuery = useUserRecipes(authUser?.id, queryParams, {
-    skip: recipeSource !== 'my' || !authUser?.id,
+    skip: !selectedSlot || recipeSource !== 'my' || !authUser?.id,
   });
 
   const activeQuery = recipeSource === 'my' ? myRecipesQuery : allRecipesQuery;
