@@ -163,11 +163,20 @@ const Comments = ({ targetType, targetId }) => {
       return;
     }
 
-    const frameId = requestAnimationFrame(() => {
-      document.querySelector(location.hash)?.scrollIntoView({ block: 'center' });
-    });
+    const scrollToComment = () => {
+      requestAnimationFrame(() => {
+        document.querySelector(location.hash)?.scrollIntoView({ block: 'center' });
+      });
+    };
 
-    return () => cancelAnimationFrame(frameId);
+    if (document.readyState === 'complete') {
+      scrollToComment();
+      return undefined;
+    }
+
+    window.addEventListener('load', scrollToComment, { once: true });
+
+    return () => window.removeEventListener('load', scrollToComment);
   }, [comments, isLoading, location.hash]);
   const commentsByParent = useMemo(() => {
     const grouped = new Map();
