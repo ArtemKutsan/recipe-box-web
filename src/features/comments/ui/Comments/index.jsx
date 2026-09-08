@@ -163,7 +163,11 @@ const Comments = ({ targetType, targetId }) => {
       return;
     }
 
-    document.querySelector(location.hash)?.scrollIntoView({ block: 'center' });
+    const frameId = requestAnimationFrame(() => {
+      document.querySelector(location.hash)?.scrollIntoView({ block: 'center' });
+    });
+
+    return () => cancelAnimationFrame(frameId);
   }, [comments, isLoading, location.hash]);
   const commentsByParent = useMemo(() => {
     const grouped = new Map();
