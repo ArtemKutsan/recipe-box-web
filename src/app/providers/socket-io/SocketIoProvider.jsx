@@ -5,7 +5,7 @@ import { selectIsAuthenticated } from '@/entities/auth';
 import { notificationsApi } from '@/entities/notification';
 import { API_BASE_URL } from '@/shared/config/api';
 
-const SOCKET_PATH = '/api/v1/socket.io';
+const SOCKET_PATH = '/socket.io';
 
 function getSocketOrigin() {
   return new URL(API_BASE_URL, window.location.origin).origin;
