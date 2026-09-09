@@ -9,9 +9,7 @@ const RecipeList = ({ recipes = [], viewMode = 'list', renderFavoriteButton }) =
   return (
     <ul
       className={cn(
-        viewMode === 'grid'
-          ? 'grid gap-3 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-          : 'space-y-4',
+        viewMode === 'grid' ? 'grid gap-3 grid-cols-1 md:grid-cols-3 lg:grid-cols-4' : 'space-y-4',
       )}
     >
       {recipes.map((recipe) => (
