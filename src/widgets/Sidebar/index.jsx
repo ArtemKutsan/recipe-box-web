@@ -15,12 +15,15 @@ const navLinkActive = 'bg-secondary/5 text-secondary';
 const navLinkIdle = 'text-foreground/90 hover:bg-lite hover:text-accent-foreground';
 const collapsibleLabelBase =
   'min-w-0 max-w-48 shrink-0 overflow-hidden transition-[max-width,opacity] duration-200';
+const SIDEBAR_EXPANDED_BREAKPOINT = 1024;
 
 const Sidebar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectAuthUser);
   const [logout] = useLogoutMutation();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < SIDEBAR_EXPANDED_BREAKPOINT,
+  );
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const displayName = user?.name ?? 'Account';
   const visibleNavItems = navItems.filter((item) => !item.authOnly || isAuthenticated);
