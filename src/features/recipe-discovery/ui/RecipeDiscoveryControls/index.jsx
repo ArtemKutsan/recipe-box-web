@@ -1,4 +1,3 @@
-import { recipeSortOptions } from '../../config/options';
 import ArrowUpIcon from '@/assets/icons/arrow-up.svg?react';
 import CategoriesIcon from '@/assets/icons/categories.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
@@ -16,6 +15,13 @@ const RECIPE_VIEW_OPTIONS = [
     label: <ListIcon className="size-4" aria-hidden="true" />,
     ariaLabel: 'Show recipes as list',
   },
+];
+
+const RECIPE_SORT_OPTIONS = [
+  { value: '', label: 'Sort by default' },
+  { value: 'title', label: 'Name' },
+  { value: 'rating', label: 'Rating' },
+  { value: 'cookTimeMinutes', label: 'Cook time' },
 ];
 
 const RECIPE_ORDER_OPTIONS = [
@@ -120,7 +126,7 @@ const RecipeDiscoveryControls = ({
                 onChange={(event) => onSortByChange(event.target.value)}
                 className="min-w-0 flex-1 bg-transparent text-sm outline-none"
               >
-                {recipeSortOptions.map((option) => (
+                {RECIPE_SORT_OPTIONS.map((option) => (
                   <option key={option.value || 'default'} value={option.value}>
                     {option.label}
                   </option>
