@@ -191,7 +191,7 @@ const Comments = ({ targetType, targetId }) => {
   }, [comments]);
 
   return (
-    <section className="mt-8 space-y-6" aria-labelledby={`${targetType}-comments-title`}>
+    <div className="space-y-6" aria-labelledby={`${targetType}-comments-title`}>
       <div className="flex items-baseline gap-2">
         <h2 id={`${targetType}-comments-title`} className="text-2xl font-semibold">
           Comments
@@ -232,7 +232,7 @@ const Comments = ({ targetType, targetId }) => {
         totalPages={data?.totalPages ?? 0}
         onPageChange={setPage}
       />
-    </section>
+    </div>
   );
 };
 

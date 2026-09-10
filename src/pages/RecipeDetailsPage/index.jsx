@@ -178,9 +178,11 @@ const RecipeDetailsPage = () => {
           </section>
         ) : null}
       </article>
-      {recipe.visibility === 'public' || !recipe.visibility ? (
-        <Comments targetType="recipe" targetId={recipe.id} />
-      ) : null}
+      <section className="mt-8 max-w-5xl mx-auto">
+        {recipe.visibility === 'public' || !recipe.visibility ? (
+          <Comments targetType="recipe" targetId={recipe.id} />
+        ) : null}
+      </section>
     </div>
   );
 };

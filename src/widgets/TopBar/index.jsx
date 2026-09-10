@@ -38,8 +38,8 @@ const TopBar = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 border-b bg-background/90 px-4 backdrop-blur md:px-6 py-4">
-      <div className="mx-auto hidden w-full max-w-7xl items-center gap-4 md:flex">
+    <header className="sticky top-0 z-30 bg-background/90 px-4 backdrop-blur md:px-6 py-4">
+      <div className="mx-auto hidden w-full items-center gap-4 md:flex">
         <button
           type="button"
           onClick={() => setIsSearchOpen(true)}
