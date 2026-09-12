@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
-import { toRecipeListResponse } from '@/entities/recipe';
+import { toRecipeResponse } from '@/entities/recipe';
 import { toPostResponse } from '@/entities/post';
 import { setCurrentUser } from '@/entities/auth';
 
@@ -75,7 +75,7 @@ export const usersApi = createApi({
       query: ({ userId, isCurrentUser = false, ...queryParams }) =>
         buildUserRecipesQuery(userId, queryParams, isCurrentUser),
       transformResponse: (response) => ({
-        items: Array.isArray(response.items) ? response.items.map(toRecipeListResponse) : [],
+        items: Array.isArray(response.items) ? response.items.map(toRecipeResponse) : [],
         total: response.total ?? 0,
         cuisines: response.cuisines ?? [],
         page: response.page ?? 1,

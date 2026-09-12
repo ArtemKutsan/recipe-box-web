@@ -1,9 +1,9 @@
-import { toRecipeListResponse } from './toRecipeListResponse';
+import { toRecipeResponse } from './toRecipeResponse';
 
 // Детальная карточка использует тот же базовый контракт, но содержит полный список полей.
 export function toRecipeDetailResponse(recipe) {
   return {
-    ...toRecipeListResponse(recipe),
+    ...toRecipeResponse(recipe),
     authorNote: recipe.authorNote ?? '',
     ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
     instructions: Array.isArray(recipe.instructions) ? recipe.instructions : [],

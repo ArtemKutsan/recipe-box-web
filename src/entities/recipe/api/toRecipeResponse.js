@@ -1,5 +1,5 @@
 // Приводим рецепт из backend-контракта к формату, который уже ждут страницы.
-export function toRecipeListResponse(recipe) {
+export function toRecipeResponse(recipe) {
   const id = recipe.id ?? recipe.publicId ?? null;
   const title = recipe.title ?? recipe.name ?? '';
 

@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
 import { buildRecipesQuery } from './buildRecipesQuery';
 import { toRecipeDetailResponse } from './toRecipeDetailResponse';
-import { toRecipeListResponse } from './toRecipeListResponse';
+import { toRecipeResponse } from './toRecipeResponse';
 
 export const recipesApi = createApi({
   reducerPath: 'recipesApi',
@@ -22,7 +22,7 @@ export const recipesApi = createApi({
       // - total/page/pageSize/totalPages: метаданные для пагинации и подсчета
       // - cuisines: список кухонь, который CategoriesPage использует после выбора mealType
       transformResponse: (response) => ({
-        items: Array.isArray(response.items) ? response.items.map(toRecipeListResponse) : [],
+        items: Array.isArray(response.items) ? response.items.map(toRecipeResponse) : [],
         total: response.total ?? 0,
         cuisines: response.cuisines ?? [],
         page: response.page ?? 1,

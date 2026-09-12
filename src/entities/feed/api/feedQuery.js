@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { toPostResponse } from '@/entities/post';
-import { toRecipeListResponse } from '@/entities/recipe';
+import { toRecipeResponse } from '@/entities/recipe';
 import { baseQuery } from '@/shared/api';
 
 function toFeedItemResponse(item) {
@@ -16,7 +16,7 @@ function toFeedItemResponse(item) {
     return {
       type: 'recipe',
       publishedAt: item.publishedAt ?? null,
-      recipe: toRecipeListResponse(item.recipe),
+      recipe: toRecipeResponse(item.recipe),
     };
   }
 

@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { toRecipeListResponse } from '@/entities/recipe';
+import { toRecipeResponse } from '@/entities/recipe';
 import { baseQuery } from '@/shared/api';
 
 export const favoritesApi = createApi({
@@ -19,7 +19,7 @@ export const favoritesApi = createApi({
       transformResponse: (response) => ({
         items: Array.isArray(response.items)
           ? response.items.map((recipe) => ({
-              ...toRecipeListResponse(recipe),
+              ...toRecipeResponse(recipe),
               isFavorite: recipe.isFavorite ?? true,
               savedAt: recipe.savedAt ?? null,
             }))
