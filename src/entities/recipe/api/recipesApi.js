@@ -1,6 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
-import { toRecipeDetailResponse, toRecipeListResponse } from '@/entities/recipe/api/response';
+import { buildRecipesQuery } from './buildRecipesQuery';
+import { toRecipeDetailResponse } from './toRecipeDetailResponse';
+import { toRecipeListResponse } from './toRecipeListResponse';
 
 export const recipesApi = createApi({
   reducerPath: 'recipesApi',
@@ -11,43 +13,8 @@ export const recipesApi = createApi({
       // Собираем query string только из тех фильтров, которые реально нужны текущему экрану.
       // mealType, cuisine и tag идут в backend как slug, search/sort управляют списком,
       // page/pageSize нужны для пагинации, а сам ответ backend возвращает items и cuisines.
-      query: ({ search, mealType, cuisine, tag, sortBy, order, pageSize, page } = {}) => {
-        const params = new URLSearchParams();
-
-        if (search) {
-          params.set('q', search);
-        }
-
-        if (mealType && mealType !== 'All') {
-          params.set('mealType', mealType);
-        }
-
-        if (cuisine) {
-          params.set('cuisine', cuisine);
-        }
-
-        if (tag) {
-          params.set('tag', tag);
-        }
-
-        if (sortBy) {
-          params.set('sortBy', sortBy);
-        }
-
-        if (order) {
-          params.set('sortOrder', order);
-        }
-
-        if (pageSize) {
-          params.set('pageSize', pageSize);
-        }
-
-        if (page) {
-          params.set('page', page);
-        }
-
-        const query = params.toString();
-
+      query: (params = {}) => {
+        const query = buildRecipesQuery(params);
         return query ? `/recipes?${query}` : '/recipes';
       },
       // Приводим backend-ответ к удобной форме для фронта:
@@ -65,7 +32,10 @@ export const recipesApi = createApi({
       providesTags: (result) => {
         const items = Array.isArray(result?.items) ? result.items : [];
 
-        return [{ type: 'Recipes', id: 'LIST' }, ...items.map((recipe) => ({ type: 'Recipes', id: recipe.id }))];
+        return [
+          { type: 'Recipes', id: 'LIST' },
+          ...items.map((recipe) => ({ type: 'Recipes', id: recipe.id })),
+        ];
       },
     }),
     getRecipeById: build.query({

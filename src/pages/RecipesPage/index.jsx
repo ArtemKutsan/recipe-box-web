@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
-import { buildRecipesQuery } from '@/entities/recipe/lib';
+import { normalizeRecipeQueryParams } from '@/entities/recipe/api/normalizeRecipeQueryParams';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
@@ -25,7 +25,7 @@ const RecipesPage = () => {
 
   const query = useMemo(
     () =>
-      buildRecipesQuery({
+      normalizeRecipeQueryParams({
         search,
         mealType,
         cuisine,

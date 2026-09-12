@@ -27,16 +27,3 @@ export function toRecipeListResponse(recipe) {
     author: recipe.author ?? null,
   };
 }
-
-// Детальная карточка сейчас использует тот же контракт, но с полным списком полей.
-export function toRecipeDetailResponse(recipe) {
-  return {
-    ...toRecipeListResponse(recipe),
-    authorNote: recipe.authorNote ?? '',
-    ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
-    instructions: Array.isArray(recipe.instructions) ? recipe.instructions : [],
-    images: Array.isArray(recipe.images) ? recipe.images : [],
-    createdAt: recipe.createdAt ?? null,
-    updatedAt: recipe.updatedAt ?? null,
-  };
-}

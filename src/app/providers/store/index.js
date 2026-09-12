@@ -5,7 +5,7 @@ import { cuisinesApi } from '@/entities/cuisine';
 import { commentsApi } from '@/entities/comment';
 import { mealPlansApi } from '@/entities/meal-plan';
 import { postsApi } from '@/entities/post';
-import { recipesApi } from '@/entities/recipe/api/recipesQuery';
+import { recipesApi } from '@/entities/recipe/api/recipesApi';
 import { usersApi } from '@/entities/user';
 import { favoritesApi, favoritesReducer } from '@/entities/favorite';
 import { feedApi } from '@/entities/feed';

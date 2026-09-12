@@ -1,4 +1,4 @@
-import { useGetRecipeByIdQuery } from '../api/recipesQuery';
+import { useGetRecipeByIdQuery } from '../api/recipesApi';
 
 // Хук сущности для получения одного рецепта через RTK Query.
 export const useRecipe = (recipeId) => {
