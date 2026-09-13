@@ -7,7 +7,9 @@ import TimerIcon from '@/assets/icons/timer.svg?react';
 const RecipeGridCard = ({ recipe, favoriteButton = null }) => {
   const totalTime = (recipe?.prepTimeMinutes ?? 0) + (recipe?.cookTimeMinutes ?? 0);
   const cuisineLabel = recipe?.cuisine ?? 'Cuisine';
-  const mealTypeLabel = Array.isArray(recipe?.mealType) ? recipe.mealType[0] : '';
+  const mealTypeLabel = Array.isArray(recipe?.mealType)
+    ? recipe.mealType.filter(Boolean).join(' • ')
+    : '';
   const difficultyLabel = recipe?.difficulty ? String(recipe.difficulty) : '';
 
   return (
@@ -36,7 +38,7 @@ const RecipeGridCard = ({ recipe, favoriteButton = null }) => {
           <h3 className="line-clamp-2 md:line-clamp-3 md:text-sm font-semibold leading-5 md:leading-4 text-foreground">
             {recipe?.name ?? 'RecipeListItem'}
           </h3>
-          <p className="mt-1 text-sm md:text-xs text-muted-foreground sm:text-xs md:leading-3">
+          <p className="mt-1 line-clamp-2 text-sm md:text-xs text-muted-foreground sm:text-xs md:leading-3">
             {cuisineLabel}
             {mealTypeLabel ? ` • ${mealTypeLabel}` : ''}
           </p>

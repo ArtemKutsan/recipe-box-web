@@ -49,7 +49,7 @@
   --accent-foreground: var(--color-800);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: var(--color-100);
-  --border: var(--color-300);
+  --border: var(--color-200);
   --input: var(--color-300);
   --ring: var(--color-300);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -149,6 +149,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100dvh;
+  font-family: 'Onest Variable', ui-sans-serif, system-ui, sans-serif;
   background: var(--background);
   color: var(--foreground);
 }
