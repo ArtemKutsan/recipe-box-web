@@ -1,4 +1,4 @@
 // Компоненты и функции для фильтрации рецептов по категориям (кухня и тип блюда)
-export { default as CuisineList } from './ui/CuisineList';
-export { default as MealTypeSelector } from './ui/MealTypeSelector';
-export { getMealTypeItems } from './lib/getMealTypeItems';
+export { default as CuisineFilter } from './ui/CuisineFilter';
+export { default as MealTypeFilter } from './ui/MealTypeFilter';
+export { buildMealTypeOptions } from './model/buildMealTypeOptions';

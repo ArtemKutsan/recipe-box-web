@@ -3,9 +3,9 @@ import { RecipeListItem } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import {
-  CuisineList,
-  MealTypeSelector,
-  getMealTypeItems,
+  CuisineFilter,
+  MealTypeFilter,
+  buildMealTypeOptions,
 } from '@/features/recipe-categorization';
 import { FavoriteButton } from '@/features/toggle-favorite';
 
@@ -50,9 +50,7 @@ const CategoriesPage = () => {
     error: cuisineListError,
   } = useRecipesQuery(cuisineListParams);
 
-  // Рецепты на экран нужны только после выбора кухни.
-  // До этого момента мы показываем только список кухонь, поэтому не дергаем список рецептов целиком.
-  const shouldLoadRecipes = Boolean(activeCuisine);
+  // Загружаем рецепты сразу для текущего mealType, а cuisine добавляем после её выбора.
   const {
     recipes,
     isLoading: recipesLoading,
@@ -66,15 +64,11 @@ const CategoriesPage = () => {
       page: 1,
       pageSize: 20,
     },
-    {
-      // Пока кухня не выбрана, список рецептов не нужен.
-      skip: !shouldLoadRecipes,
-    },
   );
 
   // Справочник mealTypes нужен для верхнего селектора категорий.
   // Дальше он не строит cuisine-список сам, потому что кухни теперь приходят из ответа recipes.
-  const mealTypeItems = useMemo(() => getMealTypeItems(mealTypes, allRecipesTotal), [mealTypes, allRecipesTotal]);
+  const mealTypeItems = useMemo(() => buildMealTypeOptions(mealTypes, allRecipesTotal), [mealTypes, allRecipesTotal]);
   const cuisineItems = useMemo(
     // Берем кухни из ответа recipes и превращаем их в UI-элементы.
     () => mapCuisineItemsToCards(cuisineItemsRaw),
@@ -115,61 +109,57 @@ const CategoriesPage = () => {
   }
 
   return (
-    <section className="space-y-8">
+    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold">Categories</h1>
         <p>Browse recipes by category</p>
       </header>
 
       {/* Верхний селектор строится из справочника mealTypes и общего total. */}
-      <MealTypeSelector items={mealTypeItems} activeItem={activeMealType} onSelect={selectMealType} />
+      <MealTypeFilter items={mealTypeItems} activeMealType={activeMealType} onSelect={selectMealType} />
 
       <div>
-        <div className="mb-6 flex items-center justify-between gap-4">
-          <h2 className="text-xl font-semibold">
-            {activeCuisine
-              ? `${activeCuisineLabel} recipes`
-              : activeMealType === 'All'
-                ? 'All Cuisines'
-                : `${activeMealTypeLabel} Cuisines`}
-          </h2>
+        <CuisineFilter
+          cuisines={cuisineItems}
+          activeCuisine={activeCuisine}
+          onSelect={setActiveCuisine}
+        />
 
-          {activeCuisine ? (
-            <button
-              type="button"
-              onClick={() => setActiveCuisine(null)}
-              className="text-sm font-medium text-secondary/80"
-            >
-              All cuisines
-            </button>
-          ) : null}
+        <div className="mt-8">
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <h2 className="text-xl font-semibold">
+                {activeCuisine
+                  ? `${activeMealTypeLabel} · ${activeCuisineLabel} recipes`
+                  : `${activeMealTypeLabel} recipes`}
+              </h2>
+
+              {activeCuisine ? (
+                <button
+                  type="button"
+                  onClick={() => setActiveCuisine(null)}
+                  className="text-sm font-medium text-secondary/80"
+                >
+                  All cuisines
+                </button>
+              ) : null}
+            </div>
+
+            <div className="grid gap-4">
+              {recipesLoading || recipesFetching ? (
+                <p>Loading...</p>
+              ) : recipes.length > 0 ? (
+                recipes.map((recipe) => (
+                  <RecipeListItem
+                    key={recipe.id}
+                    recipe={recipe}
+                    favoriteButton={<FavoriteButton recipeId={recipe.id} />}
+                  />
+                ))
+              ) : (
+                <p>No recipes found</p>
+              )}
+            </div>
         </div>
-
-        {/* Пока кухня не выбрана, показываем доступные кухни для текущего mealType. */}
-        {!activeCuisine ? (
-          <CuisineList
-            cuisines={cuisineItems}
-            mealType={activeMealTypeLabel}
-            onSelect={setActiveCuisine}
-          />
-        ) : (
-          // После выбора кухни берем уже paginated recipes и рендерим карточки.
-          <div className="grid gap-4">
-            {recipesLoading || recipesFetching ? (
-              <p>Loading...</p>
-            ) : recipes.length > 0 ? (
-              recipes.map((recipe) => (
-                <RecipeListItem
-                  key={recipe.id}
-                  recipe={recipe}
-                  favoriteButton={<FavoriteButton recipeId={recipe.id} />}
-                />
-              ))
-            ) : (
-              <p>No recipes found</p>
-            )}
-          </div>
-        )}
       </div>
     </section>
   );
