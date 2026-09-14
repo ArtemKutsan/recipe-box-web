@@ -108,12 +108,14 @@ const ProfilePage = () => {
   );
 
   if (isCurrentUserProfile && !authUser) {
-    return <p>Please log in to view your profile.</p>;
+    return <p className="text-sm text-muted-foreground">Please log in to view your profile.</p>;
   }
 
-  if (status === 'idle' || status === 'loading') return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (!user) return <p>User not found.</p>;
+  if (status === 'idle' || status === 'loading') {
+    return <p className="text-sm text-muted-foreground">Loading profile...</p>;
+  }
+  if (error) return <p className="text-sm text-destructive">{error}</p>;
+  if (!user) return <p className="text-sm text-muted-foreground">User not found.</p>;
 
   const displayName = user.name ?? 'RecipeBox user';
   const profileBio = user.bio || 'This cook has not added a profile bio yet.';

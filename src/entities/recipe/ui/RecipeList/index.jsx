@@ -3,7 +3,7 @@ import { cn } from '@/shared/lib/cn';
 
 const RecipeList = ({ recipes = [], viewMode = 'list', renderFavoriteButton }) => {
   if (recipes.length === 0) {
-    return <p>No recipes yet</p>;
+    return <p className="text-sm text-muted-foreground">No recipes yet.</p>;
   }
 
   return (

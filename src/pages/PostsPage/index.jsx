@@ -12,11 +12,11 @@ const PostsPage = () => {
   });
 
   if (isLoading) {
-    return <p>Loading posts...</p>;
+    return <p className="text-sm text-muted-foreground">Loading posts...</p>;
   }
 
   if (isError) {
-    return <p>{error?.data?.message ?? 'Failed to load posts'}</p>;
+    return <p className="text-sm text-destructive">{error?.data?.message ?? 'Failed to load posts.'}</p>;
   }
 
   const posts = data?.items ?? [];

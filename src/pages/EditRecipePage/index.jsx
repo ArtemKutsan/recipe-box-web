@@ -82,19 +82,19 @@ const EditRecipePage = () => {
   } = useGetCuisinesQuery();
 
   if (status === 'idle' || status === 'loading' || isMealTypesLoading || isCuisinesLoading) {
-    return <p>Loading recipe...</p>;
+    return <p className="text-sm text-muted-foreground">Loading recipe...</p>;
   }
 
   if (error || isMealTypesError || isCuisinesError) {
-    return <p>{error ?? 'Failed to load recipe dictionaries'}</p>;
+    return <p className="text-sm text-destructive">{error ?? 'Failed to load recipe dictionaries.'}</p>;
   }
 
   if (!recipe) {
-    return <p>Recipe not found</p>;
+    return <p className="text-sm text-muted-foreground">Recipe not found.</p>;
   }
 
   if (String(authUser?.id) !== String(recipe.author?.id)) {
-    return <p>You can edit only your own recipes.</p>;
+    return <p className="text-sm text-muted-foreground">You can edit only your own recipes.</p>;
   }
 
   return (

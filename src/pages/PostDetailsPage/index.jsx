@@ -21,15 +21,15 @@ const PostDetailsPage = () => {
   const { data: post, isLoading, isError, error } = useGetPostByIdQuery(id);
 
   if (isLoading) {
-    return <p>Loading post...</p>;
+    return <p className="text-sm text-muted-foreground">Loading post...</p>;
   }
 
   if (isError) {
-    return <p>{error?.data?.message ?? 'Failed to load post'}</p>;
+    return <p className="text-sm text-destructive">{error?.data?.message ?? 'Failed to load post.'}</p>;
   }
 
   if (!post) {
-    return <p>Post not found</p>;
+    return <p className="text-sm text-muted-foreground">Post not found.</p>;
   }
 
   const authorName = post.author?.name ?? 'Unknown user';

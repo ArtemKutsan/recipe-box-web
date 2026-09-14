@@ -48,14 +48,14 @@ const MealPlannerPage = () => {
   );
 
   if (isMealPlanLoading) {
-    return <p>Loading...</p>;
+    return <p className="text-sm text-muted-foreground">Loading meal plan...</p>;
   }
 
   if (isMealPlanError) {
     const message =
       mealPlanError?.data?.message ?? mealPlanError?.message ?? 'Failed to load meal plan.';
 
-    return <p>{message}</p>;
+    return <p className="text-sm text-destructive">{message}</p>;
   }
 
   const handleUpdateMealPlanSlot = async ({ day, mealPeriod, recipeId }) => {

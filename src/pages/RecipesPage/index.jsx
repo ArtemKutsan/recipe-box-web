@@ -162,11 +162,13 @@ const RecipesPage = () => {
       />
 
       {isError ? (
-        <p>{error?.data?.message ?? error?.message ?? 'Failed to load recipes'}</p>
+        <p className="text-sm text-destructive">
+          {error?.data?.message ?? error?.message ?? 'Failed to load recipes.'}
+        </p>
       ) : isLoading ? (
-        <p>Loading recipes...</p>
+        <p className="text-sm text-muted-foreground">Loading recipes...</p>
       ) : isEmpty ? (
-        <p>No recipes found.</p>
+        <p className="text-sm text-muted-foreground">No recipes found.</p>
       ) : (
         <RecipeList
           recipes={recipes}

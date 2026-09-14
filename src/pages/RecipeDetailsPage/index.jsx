@@ -20,15 +20,15 @@ const RecipeDetailsPage = () => {
   const { recipe, status, error } = useRecipe(id);
 
   if (status === 'idle' || status === 'loading') {
-    return <p>Loading...</p>;
+    return <p className="text-sm text-muted-foreground">Loading recipe...</p>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className="text-sm text-destructive">{error}</p>;
   }
 
   if (!recipe) {
-    return <p>Recipe not found</p>;
+    return <p className="text-sm text-muted-foreground">Recipe not found.</p>;
   }
 
   const tags = recipe.tags ?? [];
