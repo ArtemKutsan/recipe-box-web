@@ -43,7 +43,7 @@ const TopBar = () => {
         <button
           type="button"
           onClick={() => setIsSearchOpen(true)}
-          className="relative flex h-10 min-w-0 flex-1 items-center rounded-xl border bg-card px-4 pr-20 text-left text-sm text-muted-foreground transition-colors hover:border-secondary hover:text-foreground focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/15"
+          className="relative flex h-10 min-w-0 flex-1 items-center rounded-xl border bg-white px-4 pr-20 text-left text-sm text-muted-foreground transition-colors hover:border-secondary hover:text-foreground focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/15"
           aria-haspopup="dialog"
           aria-expanded={isSearchOpen}
           aria-label="Open search"

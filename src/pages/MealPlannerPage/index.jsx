@@ -52,7 +52,8 @@ const MealPlannerPage = () => {
   }
 
   if (isMealPlanError) {
-    const message = mealPlanError?.data?.message ?? mealPlanError?.message ?? 'Failed to load meal plan.';
+    const message =
+      mealPlanError?.data?.message ?? mealPlanError?.message ?? 'Failed to load meal plan.';
 
     return <p>{message}</p>;
   }
@@ -77,7 +78,7 @@ const MealPlannerPage = () => {
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold">Meal Planner</h1>
+        <h1 className="text-2xl font-semibold mt-1">Meal Planner</h1>
         <p>Plan your meals for the week</p>
       </header>
       {updateError ? <p className="text-sm text-destructive">{updateError}</p> : null}
@@ -91,7 +92,11 @@ const MealPlannerPage = () => {
       {/* selectedSlot управляет открытием модалки и определяет тип отображаемых рецептов */}
       {/* После закрытия очищаем выбранный слот, поэтому модалка перестаёт рендериться */}
       <MealRecipeModal
-        key={selectedSlot ? `${selectedSlot.day}-${selectedSlot.mealPeriod}` : 'meal-recipe-modal-closed'}
+        key={
+          selectedSlot
+            ? `${selectedSlot.day}-${selectedSlot.mealPeriod}`
+            : 'meal-recipe-modal-closed'
+        }
         selectedSlot={selectedSlot}
         recipeSource={effectiveRecipeSource}
         canUseMyRecipes={canUseMyRecipes}

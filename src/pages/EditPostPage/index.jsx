@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import {
-  useGetPostByIdQuery,
-  useUpdatePostMutation,
-} from '@/entities/post';
+import { useGetPostByIdQuery, useUpdatePostMutation } from '@/entities/post';
 import { initialPostFormValues, PostForm } from '@/features/post-form';
 import { buildPostPath, RouterPath } from '@/shared/config/routerPaths';
 
@@ -60,11 +57,14 @@ const EditPostPage = () => {
 
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-      <Link to={RouterPath.post_detail.replace(':id', post.id)} className="self-start text-sm font-medium text-secondary">
+      <Link
+        to={RouterPath.post_detail.replace(':id', post.id)}
+        className="self-start text-sm font-medium text-secondary"
+      >
         Back to post
       </Link>
       <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Edit post</h1>
+        <h1 className="text-2xl font-semibold tracking-tight mt-2">Edit post</h1>
         <p className="text-muted-foreground">Update your community publication.</p>
       </header>
 
@@ -73,11 +73,9 @@ const EditPostPage = () => {
         errors={errors}
         handleSubmit={handleSubmit}
         setValue={setValue}
-        initialSelectedRecipe={
-          post.recipe ? { id: post.recipe.id, name: post.recipe.title } : null
-        }
+        initialSelectedRecipe={post.recipe ? { id: post.recipe.id, name: post.recipe.title } : null}
         onSubmit={onSubmit}
-        message={isSaving ? 'Saving post...' : errors.root?.server?.message ?? ''}
+        message={isSaving ? 'Saving post...' : (errors.root?.server?.message ?? '')}
         messageTone={errors.root?.server ? 'error' : 'default'}
         isSubmitting={isSaving}
         submitLabel="Save changes"

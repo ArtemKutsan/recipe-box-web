@@ -10,7 +10,8 @@ import { buildRecipePath } from '@/shared/config/routerPaths';
 const AddRecipePage = () => {
   const navigate = useNavigate();
   const [createRecipe, { isLoading }] = useCreateRecipeMutation();
-  const [createPresignedUpload, { isLoading: isUploadingImage }] = useCreatePresignedUploadMutation();
+  const [createPresignedUpload, { isLoading: isUploadingImage }] =
+    useCreatePresignedUploadMutation();
   const {
     data: mealTypes = [],
     isLoading: isMealTypesLoading,
@@ -41,12 +42,15 @@ const AddRecipePage = () => {
     ? 'Creating recipe...'
     : isUploadingImage
       ? 'Uploading image...'
-    : isDictionariesLoading
-      ? 'Loading recipe dictionaries...'
-      : isMealTypesError || isCuisinesError
-        ? dictionariesError?.data?.message ?? dictionariesError?.message ?? 'Failed to load recipe dictionaries'
-        : errors.root?.server?.message ?? '';
-  const formMessageTone = isMealTypesError || isCuisinesError || errors.root?.server ? 'error' : 'default';
+      : isDictionariesLoading
+        ? 'Loading recipe dictionaries...'
+        : isMealTypesError || isCuisinesError
+          ? (dictionariesError?.data?.message ??
+            dictionariesError?.message ??
+            'Failed to load recipe dictionaries')
+          : (errors.root?.server?.message ?? '');
+  const formMessageTone =
+    isMealTypesError || isCuisinesError || errors.root?.server ? 'error' : 'default';
 
   const onSubmit = async (formValues) => {
     clearErrors('root.server');
@@ -72,7 +76,7 @@ const AddRecipePage = () => {
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Add Recipe</h1>
+        <h1 className="text-2xl font-semibold tracking-tight mt-1">Add Recipe</h1>
         <p>Add a new recipe</p>
       </header>
 

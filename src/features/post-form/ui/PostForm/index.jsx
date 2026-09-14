@@ -61,7 +61,7 @@ const PostForm = ({
       </div>
 
       <div className="flex flex-col gap-3">
-        <div className="flex min-h-10 items-center overflow-hidden rounded-xl border bg-card">
+        <div className="flex min-h-10 items-center overflow-hidden rounded-xl border bg-white">
           <span className="shrink-0 px-3 text-sm text-muted-foreground">Related recipe</span>
           {selectedRecipe ? (
             <span className="min-w-0 flex-1 truncate px-3 text-sm text-foreground">

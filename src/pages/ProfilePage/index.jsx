@@ -197,7 +197,7 @@ const ProfilePage = () => {
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Profile</h1>
+        <h1 className="text-2xl font-semibold tracking-tight mt-1">Profile</h1>
         <p>{isCurrentUserProfile ? 'Your RecipeBox account' : 'Public RecipeBox profile'}</p>
       </header>
 
@@ -281,13 +281,14 @@ const ProfilePage = () => {
               {isPostsActive
                 ? 'My Posts'
                 : isSavedRecipesActive
-                ? 'Saved Recipes'
-                : isCurrentUserProfile
-                  ? 'My Recipes'
-                  : `Recipes by ${displayName}`}
+                  ? 'Saved Recipes'
+                  : isCurrentUserProfile
+                    ? 'My Recipes'
+                    : `Recipes by ${displayName}`}
             </h2>
             <p className="text-sm text-muted-foreground">
-              {displayedTotal} {displayedTotal === 1 ? displayedItemLabel : `${displayedItemLabel}s`}
+              {displayedTotal}{' '}
+              {displayedTotal === 1 ? displayedItemLabel : `${displayedItemLabel}s`}
             </p>
           </div>
 
@@ -310,7 +311,9 @@ const ProfilePage = () => {
           <p className="text-sm text-muted-foreground">{displayedError}</p>
         ) : isPostsActive && posts.length > 0 ? (
           <div className="flex flex-col">
-            {posts.map((post) => <PostCard key={post.id} post={post} />)}
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
           </div>
         ) : !isPostsActive && displayedRecipes.length > 0 ? (
           <RecipeList
@@ -349,7 +352,9 @@ const ProfilePage = () => {
             <p className="text-sm text-muted-foreground">{postsError}</p>
           ) : posts.length > 0 ? (
             <div className="flex flex-col">
-              {posts.map((post) => <PostCard key={post.id} post={post} />)}
+              {posts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed bg-card p-6 text-sm text-muted-foreground">
@@ -357,11 +362,7 @@ const ProfilePage = () => {
             </div>
           )}
 
-          <Pagination
-            page={postsPage}
-            totalPages={postsTotalPages}
-            onPageChange={setPostsPage}
-          />
+          <Pagination page={postsPage} totalPages={postsTotalPages} onPageChange={setPostsPage} />
         </section>
       ) : null}
     </section>

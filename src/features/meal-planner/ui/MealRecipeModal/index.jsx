@@ -161,7 +161,7 @@ const MealRecipeModal = ({
       className="bg-background shadow-2xl"
     >
       <div className="mb-4 flex flex-col gap-3">
-        <label className="flex min-h-10 items-center gap-3 rounded-xl border bg-card px-4">
+        <label className="flex min-h-10 items-center gap-3 rounded-xl border bg-white px-4">
           <span className="shrink-0 text-muted-foreground" aria-hidden="true">
             <SearchIcon className="size-4" />
           </span>
@@ -175,7 +175,7 @@ const MealRecipeModal = ({
         </label>
 
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-card px-3">
+          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-white px-3">
             <span className="shrink-0 text-sm text-muted-foreground">Meal type</span>
             <select
               value={selectedMealType}

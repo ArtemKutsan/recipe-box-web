@@ -30,7 +30,7 @@ const AddPostPage = () => {
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Create post</h1>
+        <h1 className="text-2xl font-semibold tracking-tight mt-1">Create post</h1>
         <p className="text-muted-foreground">Share something from your cooking experience.</p>
       </header>
 
@@ -40,7 +40,7 @@ const AddPostPage = () => {
         handleSubmit={handleSubmit}
         setValue={setValue}
         onSubmit={onSubmit}
-        message={isLoading ? 'Publishing post...' : errors.root?.server?.message ?? ''}
+        message={isLoading ? 'Publishing post...' : (errors.root?.server?.message ?? '')}
         messageTone={errors.root?.server ? 'error' : 'default'}
         isSubmitting={isLoading}
       />

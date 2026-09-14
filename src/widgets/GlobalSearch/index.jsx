@@ -68,7 +68,7 @@ const GlobalSearch = ({ isOpen, onClose }) => {
       overlayClassName="max-md:p-0"
     >
       <div className="flex flex-col gap-4">
-        <label className="flex items-center gap-3 rounded-2xl border bg-card px-4 py-3">
+        <label className="flex items-center gap-3 rounded-2xl border bg-white px-4 py-3">
           <span className="text-sm text-muted-foreground">Search</span>
           <input
             type="search"

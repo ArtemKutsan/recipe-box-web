@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { cn } from '@/shared/lib/cn';
 
 const fieldControlClassName =
-  'flex min-h-10 items-center gap-3 rounded-xl border bg-card px-3';
+  'flex min-h-10 items-center gap-3 rounded-xl border bg-white px-3';
 const fieldInputClassName =
   'min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground';
 

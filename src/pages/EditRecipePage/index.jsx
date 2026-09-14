@@ -6,17 +6,14 @@ import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import { uploadRecipeImage, useCreatePresignedUploadMutation } from '@/entities/media';
 import { useRecipe, useUpdateRecipeMutation } from '@/entities/recipe';
-import {
-  buildRecipeFormValues,
-  buildRecipePayload,
-  RecipeForm,
-} from '@/features/recipe-form';
+import { buildRecipeFormValues, buildRecipePayload, RecipeForm } from '@/features/recipe-form';
 import { buildRecipePath } from '@/shared/config/routerPaths';
 
 const EditRecipeForm = ({ recipe, mealTypes, cuisines }) => {
   const navigate = useNavigate();
   const [updateRecipe, { isLoading }] = useUpdateRecipeMutation();
-  const [createPresignedUpload, { isLoading: isUploadingImage }] = useCreatePresignedUploadMutation();
+  const [createPresignedUpload, { isLoading: isUploadingImage }] =
+    useCreatePresignedUploadMutation();
   const {
     register,
     handleSubmit,
@@ -58,7 +55,7 @@ const EditRecipeForm = ({ recipe, mealTypes, cuisines }) => {
           ? 'Saving recipe...'
           : isUploadingImage
             ? 'Uploading image...'
-            : errors.root?.server?.message ?? ''
+            : (errors.root?.server?.message ?? '')
       }
       messageTone={errors.root?.server ? 'error' : 'default'}
       isSubmitting={isLoading || isUploadingImage}
@@ -103,7 +100,7 @@ const EditRecipePage = () => {
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Edit Recipe</h1>
+        <h1 className="text-2xl font-semibold tracking-tight mt-1">Edit Recipe</h1>
         <p>Update your recipe</p>
       </header>
 

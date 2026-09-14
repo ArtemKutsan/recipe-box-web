@@ -73,7 +73,7 @@ const Sidebar = () => {
       <aside
         id="mobile-navigation"
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex min-h-screen w-full shrink-0 flex-col border-r bg-card px-4 pt-5 pb-6 transition-[transform,width,padding] duration-200 md:flex md:w-54 md:translate-x-0 lg:sticky lg:top-0 lg:h-screen',
+          'fixed inset-y-0 left-0 z-50 flex min-h-screen w-full shrink-0 flex-col border-r bg-card px-4 pt-4 pb-4 transition-[transform,width,padding] duration-200 md:flex md:w-54 md:translate-x-0 lg:sticky lg:top-0 lg:h-screen',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full',
           isCollapsed ? 'md:w-20 md:sticky md:h-screen' : 'md:shadow-2xl lg:shadow-none',
         )}
@@ -91,7 +91,7 @@ const Sidebar = () => {
         </button>
 
         <div className="flex min-w-12 flex-1 flex-col overflow-x-hidden">
-          <div className="mb-4 flex items-center gap-2">
+          <div className="mb-4 flex items-center gap-2 min-h-10">
             <NavLink
               to={RouterPath.main}
               aria-label="Home"
@@ -111,7 +111,7 @@ const Sidebar = () => {
             </NavLink>
           </div>
 
-          <nav className="flex-1 pt-4">
+          <nav className="flex-1 pt-6">
             <ul className="list-none space-y-2">
               {visibleNavItems.map((item) => (
                 <li key={item.to}>
