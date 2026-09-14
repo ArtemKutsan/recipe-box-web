@@ -4,7 +4,7 @@ import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { normalizeRecipeQueryParams } from '@/entities/recipe/api/normalizeRecipeQueryParams';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
-import { RecipeFilters } from '@/features/recipe-discovery';
+import { RecipeFilters, RecipeListControls } from '@/features/recipe-discovery';
 import { buildMealTypeOptions } from '@/features/recipe-categorization';
 import { FavoriteButton } from '@/features/toggle-favorite';
 import { Pagination } from '@/shared/ui';
@@ -52,7 +52,8 @@ const RecipesPage = () => {
     }
 
     if (!cuisineItems.some((item) => item.slug === cuisine)) {
-      // Reset a cuisine that became invalid for the newly selected meal type.
+      // Сбрасываем кухню, которая стала недоступна после выбора нового типа блюда.
+      // Вернуться к этому решению и проверить, нужен ли сброс в updateMealType.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setCuisine('');
       setPage(1);
@@ -140,21 +141,24 @@ const RecipesPage = () => {
         search={search}
         mealType={mealType}
         cuisine={cuisine}
-        sortBy={sortBy}
-        order={order}
-        viewMode={viewMode}
         mealTypes={mealTypes}
         cuisines={cuisineItems}
         mealTypeItems={mealTypeItems}
         cuisineItems={cuisineItems}
-        resultTitle={resultTitle}
         onSearchChange={updateSearch}
         onMealTypeChange={updateMealType}
         onCuisineChange={updateCuisine}
+        onClearFilters={clearFilters}
+      />
+
+      <RecipeListControls
+        resultTitle={resultTitle}
+        sortBy={sortBy}
+        order={order}
+        viewMode={viewMode}
         onSortByChange={updateSortBy}
         onOrderChange={updateOrder}
         onViewModeChange={setViewMode}
-        onClearFilters={clearFilters}
       />
 
       {isError ? (
