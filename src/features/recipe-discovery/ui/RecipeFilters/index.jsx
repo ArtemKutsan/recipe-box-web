@@ -1,10 +1,10 @@
-import SearchIcon from '@/assets/icons/search.svg?react';
 import {
   CuisineCarousel,
   CuisineSelect,
   MealTypeCarousel,
   MealTypeSelect,
 } from '@/features/recipe-categorization';
+import RecipeSearch from '../RecipeSearch';
 import { Button } from '@/shared/ui';
 
 const RecipeFilters = ({
@@ -37,19 +37,7 @@ const RecipeFilters = ({
         </div>
 
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <label className="text-sm flex min-h-10 min-w-0 items-center gap-3 rounded-xl border bg-white px-3 md:flex-[1.35]">
-            <span className="shrink-0 text-muted-foreground" aria-hidden="true">
-              <SearchIcon className="size-4" />
-            </span>
-            <input
-              type="search"
-              value={search}
-              onChange={(event) => onSearchChange(event.target.value)}
-              placeholder="Search in recipes"
-              className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-              aria-label="Search in recipes"
-            />
-          </label>
+          <RecipeSearch value={search} onChange={onSearchChange} />
 
           <MealTypeSelect value={mealType} options={mealTypes} onChange={onMealTypeChange} />
           <CuisineSelect value={cuisine} options={cuisines} onChange={onCuisineChange} />
