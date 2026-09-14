@@ -1,9 +1,7 @@
-import {
-  CuisineCarousel,
-  CuisineSelect,
-  MealTypeCarousel,
-  MealTypeSelect,
-} from '@/features/recipe-filters';
+import CuisineCarousel from '../CuisineCarousel';
+import CuisineSelect from '../CuisineSelect';
+import MealTypeCarousel from '../MealTypeCarousel';
+import MealTypeSelect from '../MealTypeSelect';
 import RecipeSearch from '../RecipeSearch';
 import ClearFiltersButton from '../ClearFiltersButton';
 
