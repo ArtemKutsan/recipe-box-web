@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { getDifficultyBadgeClassName } from '../../getDifficultyBadgeClassName';
+import { getDifficultyBadgeClassName } from '../../../getDifficultyBadgeClassName';
 import { buildRecipePath } from '@/shared/config/routerPaths';
 import { Badge, InfoLabel } from '@/shared/ui';
 import TimerIcon from '@/assets/icons/timer.svg?react';

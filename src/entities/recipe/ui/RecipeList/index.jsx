@@ -1,4 +1,4 @@
-import RecipeListItem from '../RecipeListItem';
+import RecipeListItem from './RecipeListItem';
 import { cn } from '@/shared/lib/cn';
 
 const RecipeList = ({ recipes = [], viewMode = 'list', renderFavoriteButton }) => {
