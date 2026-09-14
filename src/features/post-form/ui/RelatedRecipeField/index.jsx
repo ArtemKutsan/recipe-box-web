@@ -62,9 +62,13 @@ const RelatedRecipeField = ({ initialSelectedRecipe = null, setValue }) => {
             <p className="text-sm text-muted-foreground">Searching recipes...</p>
           ) : null}
           {canSearchRecipes && recipeQuery.status === 'failed' ? (
-            <p className="text-sm text-destructive">{recipeQuery.error ?? 'Failed to search recipes.'}</p>
+            <p className="text-sm text-destructive">
+              {recipeQuery.error ?? 'Failed to search recipes.'}
+            </p>
           ) : null}
-          {canSearchRecipes && recipeQuery.status === 'succeeded' && recipeQuery.recipes.length === 0 ? (
+          {canSearchRecipes &&
+          recipeQuery.status === 'succeeded' &&
+          recipeQuery.recipes.length === 0 ? (
             <p className="text-sm text-muted-foreground">No recipes found.</p>
           ) : null}
           {recipeQuery.recipes.length > 0 ? (
@@ -73,18 +77,24 @@ const RelatedRecipeField = ({ initialSelectedRecipe = null, setValue }) => {
                 <button
                   key={recipe.id}
                   type="button"
-                  className="flex w-full items-center justify-between gap-3 rounded-xl border bg-card px-3 py-2 text-left text-sm transition-colors hover:border-secondary/40 hover:bg-accent/40"
+                  className="min-h-10 flex w-full items-center justify-between gap-3 rounded-xl border bg-card px-3 py-2 text-left text-sm transition-colors hover:border-secondary/40 hover:bg-accent/40"
                   onClick={() => {
                     setSelectedRecipe(recipe);
                     setValue('recipeId', recipe.id, { shouldValidate: true });
                   }}
                 >
                   <span className="min-w-0 truncate">{recipe.title}</span>
-                  <span className="shrink-0 text-xs text-muted-foreground">{recipe.cuisine ?? 'Cuisine'}</span>
+                  <span className="shrink-0 text-xs text-muted-foreground">
+                    {recipe.cuisine ?? 'Cuisine'}
+                  </span>
                 </button>
               ))}
               <div className="border-t pt-3">
-                <Pagination page={recipePage} totalPages={recipeQuery.totalPages} onPageChange={setRecipePage} />
+                <Pagination
+                  page={recipePage}
+                  totalPages={recipeQuery.totalPages}
+                  onPageChange={setRecipePage}
+                />
               </div>
             </div>
           ) : null}
