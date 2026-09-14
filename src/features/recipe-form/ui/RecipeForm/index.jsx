@@ -2,6 +2,7 @@ import { Button, FormField } from '@/shared/ui';
 import { cn } from '@/shared/lib/cn';
 import { recipeFormRules } from '../../model/form';
 import RecipeImageField from '../RecipeImageField';
+import RecipeClassificationFields from '../RecipeClassificationFields';
 
 const RecipeForm = ({
   register,
@@ -60,53 +61,13 @@ const RecipeForm = ({
           {...register('authorNote')}
         />
 
-        <div className="md:col-span-2 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <FormField
-              as="select"
-              label="Cuisine"
-              required
-              {...register('cuisine', recipeFormRules.cuisine)}
-            >
-              <option value="">Select cuisine</option>
-              {cuisines.map((cuisine) => (
-                <option key={cuisine.slug} value={cuisine.slug}>
-                  {cuisine.title}
-                </option>
-              ))}
-            </FormField>
-            {renderError('cuisine')}
-          </div>
-
-          <div>
-            <FormField
-              as="select"
-              label="Meal Type"
-              required
-              {...register('mealType', recipeFormRules.mealType)}
-            >
-              <option value="">Select meal type</option>
-              {mealTypes.map((mealType) => (
-                <option key={mealType.slug} value={mealType.slug}>
-                  {mealType.title}
-                </option>
-              ))}
-            </FormField>
-            {renderError('mealType')}
-          </div>
-
-          <div>
-            <FormField as="select" label="Visibility" {...register('visibility')}>
-              <option value="public">Public</option>
-              <option value="private">Private</option>
-            </FormField>
-          </div>
-
-          <FormField as="select" label="Difficulty" {...register('difficulty')}>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </FormField>
+        <RecipeClassificationFields
+          register={register}
+          errors={errors}
+          mealTypes={mealTypes}
+          cuisines={cuisines}
+          rules={recipeFormRules}
+        />
 
           <div>
             <FormField
@@ -178,8 +139,6 @@ const RecipeForm = ({
           />
           {renderError('instructions')}
         </div>
-      </div>
-
       <div className="mt-6 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
         <p className={messageClassName}>{message}</p>
         <Button type="submit" variant="secondary" disabled={isSubmitting}>
