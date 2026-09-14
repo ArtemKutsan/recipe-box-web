@@ -2,7 +2,12 @@ import ArrowUpIcon from '@/assets/icons/arrow-up.svg?react';
 import CategoriesIcon from '@/assets/icons/categories.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
-import { CuisineCarousel, MealTypeCarousel } from '@/features/recipe-categorization';
+import {
+  CuisineCarousel,
+  CuisineSelect,
+  MealTypeCarousel,
+  MealTypeSelect,
+} from '@/features/recipe-categorization';
 import { Button, ToggleGroup } from '@/shared/ui';
 
 const RECIPE_VIEW_OPTIONS = [
@@ -89,37 +94,8 @@ const RecipeDiscoveryControls = ({
             />
           </label>
 
-          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-white px-3">
-            <span className="shrink-0 text-sm text-muted-foreground">Meal type</span>
-            <select
-              value={mealType}
-              onChange={(event) => onMealTypeChange(event.target.value)}
-              className="min-w-0 flex-1 bg-transparent text-sm outline-none"
-            >
-              <option value="">All</option>
-              {mealTypes.map((item) => (
-                <option key={item.slug} value={item.slug}>
-                  {item.title}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-white px-3">
-            <span className="shrink-0 text-sm text-muted-foreground">Cuisine</span>
-            <select
-              value={cuisine}
-              onChange={(event) => onCuisineChange(event.target.value)}
-              className="min-w-0 flex-1 bg-transparent text-sm outline-none"
-            >
-              <option value="">All</option>
-              {cuisines.map((item) => (
-                <option key={item.slug} value={item.slug}>
-                  {item.title}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MealTypeSelect value={mealType} options={mealTypes} onChange={onMealTypeChange} />
+          <CuisineSelect value={cuisine} options={cuisines} onChange={onCuisineChange} />
           <div className="flex items-center justify-start md:shrink-0 md:justify-end">
             <Button
               type="button"
