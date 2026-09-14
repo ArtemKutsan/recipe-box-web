@@ -1,4 +1,4 @@
-// src/features/recipe-categorization/ui/MealTypeCarousel/MealTypeOption.jsx
+// src/features/recipe-filters/ui/MealTypeCarousel/MealTypeOption.jsx
 import { cn } from '@/shared/lib/cn';
 
 const MealTypeOption = ({ item, isActive, onSelect }) => {

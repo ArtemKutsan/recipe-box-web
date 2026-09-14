@@ -6,7 +6,7 @@ import {
   CuisineCarousel,
   MealTypeCarousel,
   buildMealTypeOptions,
-} from '@/features/recipe-categorization';
+} from '@/features/recipe-filters';
 import { FavoriteButton } from '@/features/toggle-favorite';
 
 const mapCuisineItemsToCards = (cuisines) =>

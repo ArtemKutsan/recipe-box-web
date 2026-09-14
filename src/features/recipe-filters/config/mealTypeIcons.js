@@ -1,4 +1,4 @@
-// src/features/recipe-categorization/config/mealTypeIcons.js
+// src/features/recipe-filters/config/mealTypeIcons.js
 import CategoriesIcon from '@/assets/icons/categories.svg?react';
 import BurgerIcon from '@/assets/icons/burger.svg?react';
 import SunIcon from '@/assets/icons/sun.svg?react';

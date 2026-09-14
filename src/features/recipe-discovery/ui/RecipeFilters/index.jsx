@@ -3,7 +3,7 @@ import {
   CuisineSelect,
   MealTypeCarousel,
   MealTypeSelect,
-} from '@/features/recipe-categorization';
+} from '@/features/recipe-filters';
 import RecipeSearch from '../RecipeSearch';
 import ClearFiltersButton from '../ClearFiltersButton';
 

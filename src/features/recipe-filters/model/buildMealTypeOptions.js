@@ -1,7 +1,7 @@
 import {
   fallbackMealTypeIcon,
   mealTypeIcons,
-} from '@/features/recipe-categorization/config/mealTypeIcons';
+} from '@/features/recipe-filters/config/mealTypeIcons';
 
 // Собирает UI-список типов блюд из справочника backend и добавляет пункт All.
 export const buildMealTypeOptions = (mealTypes, recipesCount = 0) => {
