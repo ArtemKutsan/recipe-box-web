@@ -5,7 +5,7 @@ import {
   MealTypeSelect,
 } from '@/features/recipe-categorization';
 import RecipeSearch from '../RecipeSearch';
-import { Button } from '@/shared/ui';
+import ClearFiltersButton from '../ClearFiltersButton';
 
 const RecipeFilters = ({
   search,
@@ -41,16 +41,7 @@ const RecipeFilters = ({
 
           <MealTypeSelect value={mealType} options={mealTypes} onChange={onMealTypeChange} />
           <CuisineSelect value={cuisine} options={cuisines} onChange={onCuisineChange} />
-          <div className="flex items-center justify-start md:shrink-0 md:justify-end">
-            <Button
-              type="button"
-              variant="ghost"
-              className="min-h-10 px-0 hover:text-secondary md:px-3"
-              onClick={onClearFilters}
-            >
-              Clear filters
-            </Button>
-          </div>
+          <ClearFiltersButton onClick={onClearFilters} />
         </div>
       </div>
 
