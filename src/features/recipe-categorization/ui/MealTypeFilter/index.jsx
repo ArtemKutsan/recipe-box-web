@@ -4,7 +4,7 @@ import MealTypeFilterOption from './MealTypeFilterOption';
 const MealTypeFilter = ({ items, activeMealType, onSelect }) => {
   return (
     <Carousel
-      className="px-16"
+      className="px-14"
       slideSize="auto"
       slideGap="md"
       emblaOptions={{ align: 'start', dragFree: true }}
@@ -12,7 +12,7 @@ const MealTypeFilter = ({ items, activeMealType, onSelect }) => {
       controlSize={40}
       nextControlProps={{ 'aria-label': 'Scroll meal types right' }}
       previousControlProps={{ 'aria-label': 'Scroll meal types left' }}
-      classNames={{ control: '!bg-card !opacity-100' }}
+      classNames={{ controls: '!px-0', control: '!bg-card !opacity-100 !px-0' }}
     >
       {items.map((item) => (
         <Carousel.Slide key={item.slug} className="w-auto">

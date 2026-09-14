@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { normalizeRecipeQueryParams } from '@/entities/recipe/api/normalizeRecipeQueryParams';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
-import { useGetCuisinesQuery } from '@/entities/cuisine';
 import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
+import { buildMealTypeOptions } from '@/features/recipe-categorization';
 import { FavoriteButton } from '@/features/toggle-favorite';
 import { Pagination } from '@/shared/ui';
 
@@ -20,8 +20,44 @@ const RecipesPage = () => {
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState('grid');
   const { data: mealTypes = [] } = useGetMealTypesQuery();
-  const { data: cuisines = [] } = useGetCuisinesQuery();
+  const {
+    cuisines: availableCuisines,
+    total: availableRecipesTotal,
+    isLoading: cuisinesLoading,
+  } = useRecipesQuery({
+    mealType: mealType || undefined,
+    pageSize: 1,
+  });
   const search = searchParams.get('search') ?? '';
+  const mealTypeItems = useMemo(
+    () => buildMealTypeOptions(mealTypes, availableRecipesTotal),
+    [availableRecipesTotal, mealTypes],
+  );
+  const cuisineItems = useMemo(
+    () =>
+      availableCuisines.map((item) => ({
+        title: item.title,
+        slug: item.slug,
+        count: item.recipesCount ?? item.count ?? 0,
+      })),
+    [availableCuisines],
+  );
+  const resultTitle = cuisine
+    ? `${mealTypeItems.find((item) => item.slug === mealType)?.title ?? 'All'} · ${cuisineItems.find((item) => item.slug === cuisine)?.title ?? cuisine} recipes`
+    : `${mealTypeItems.find((item) => item.slug === mealType)?.title ?? 'All'} recipes`;
+
+  useEffect(() => {
+    if (!mealType || cuisinesLoading || !cuisine) {
+      return;
+    }
+
+    if (!cuisineItems.some((item) => item.slug === cuisine)) {
+      // Reset a cuisine that became invalid for the newly selected meal type.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCuisine('');
+      setPage(1);
+    }
+  }, [cuisine, cuisineItems, cuisinesLoading, mealType]);
 
   const query = useMemo(
     () =>
@@ -62,35 +98,41 @@ const RecipesPage = () => {
   };
 
   const updateSearch = (value) => {
-    setSearchParams((currentParams) => {
-      const nextParams = new URLSearchParams(currentParams);
+    setSearchParams(
+      (currentParams) => {
+        const nextParams = new URLSearchParams(currentParams);
 
-      if (value.trim()) {
-        nextParams.set('search', value);
-      } else {
-        nextParams.delete('search');
-      }
+        if (value.trim()) {
+          nextParams.set('search', value);
+        } else {
+          nextParams.delete('search');
+        }
 
-      return nextParams;
-    }, { replace: true });
+        return nextParams;
+      },
+      { replace: true },
+    );
     setPage(1);
   };
 
   const clearFilters = () => {
     setMealType('');
     setCuisine('');
-    setSearchParams((currentParams) => {
-      const nextParams = new URLSearchParams(currentParams);
-      nextParams.delete('search');
-      return nextParams;
-    }, { replace: true });
+    setSearchParams(
+      (currentParams) => {
+        const nextParams = new URLSearchParams(currentParams);
+        nextParams.delete('search');
+        return nextParams;
+      },
+      { replace: true },
+    );
     setPage(1);
   };
 
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Recipes</h1>
+        <h1 className="text-2xl font-semibold tracking-tight mt-1">Recipes</h1>
         <p>Find your next favorite recipe</p>
       </header>
 
@@ -102,7 +144,10 @@ const RecipesPage = () => {
         order={order}
         viewMode={viewMode}
         mealTypes={mealTypes}
-        cuisines={cuisines}
+        cuisines={cuisineItems}
+        mealTypeItems={mealTypeItems}
+        cuisineItems={cuisineItems}
+        resultTitle={resultTitle}
         onSearchChange={updateSearch}
         onMealTypeChange={updateMealType}
         onCuisineChange={updateCuisine}

@@ -2,6 +2,7 @@ import ArrowUpIcon from '@/assets/icons/arrow-up.svg?react';
 import CategoriesIcon from '@/assets/icons/categories.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
+import { CuisineFilter, MealTypeFilter } from '@/features/recipe-categorization';
 import { Button, ToggleGroup } from '@/shared/ui';
 
 const RECIPE_VIEW_OPTIONS = [
@@ -46,6 +47,9 @@ const RecipeDiscoveryControls = ({
   viewMode,
   mealTypes = [],
   cuisines = [],
+  mealTypeItems = [],
+  cuisineItems = [],
+  resultTitle = '',
   onSearchChange,
   onMealTypeChange,
   onCuisineChange,
@@ -56,9 +60,22 @@ const RecipeDiscoveryControls = ({
 }) => {
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4 rounded-4xl bg-card p-4">
+        <div className="flex flex-col gap-3">
+          <MealTypeFilter
+            items={mealTypeItems}
+            activeMealType={mealType || 'All'}
+            onSelect={(value) => onMealTypeChange(value === 'All' ? '' : value)}
+          />
+          <CuisineFilter
+            cuisines={cuisineItems}
+            activeCuisine={cuisine || null}
+            onSelect={onCuisineChange}
+          />
+        </div>
+
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <label className="flex min-h-10 min-w-0 items-center gap-3 rounded-xl border bg-card px-3 md:flex-[1.35]">
+          <label className="text-sm flex min-h-10 min-w-0 items-center gap-3 rounded-xl border bg-white px-3 md:flex-[1.35]">
             <span className="shrink-0 text-muted-foreground" aria-hidden="true">
               <SearchIcon className="size-4" />
             </span>
@@ -72,7 +89,7 @@ const RecipeDiscoveryControls = ({
             />
           </label>
 
-          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-card px-3">
+          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-white px-3">
             <span className="shrink-0 text-sm text-muted-foreground">Meal type</span>
             <select
               value={mealType}
@@ -88,7 +105,7 @@ const RecipeDiscoveryControls = ({
             </select>
           </label>
 
-          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-card px-3">
+          <label className="flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-xl border bg-white px-3">
             <span className="shrink-0 text-sm text-muted-foreground">Cuisine</span>
             <select
               value={cuisine}
@@ -107,16 +124,20 @@ const RecipeDiscoveryControls = ({
             <Button
               type="button"
               variant="ghost"
-              className="min-h-10 px-0 text-secondary/80 md:px-3"
+              className="min-h-10 px-0 hover:text-secondary md:px-3"
               onClick={onClearFilters}
             >
               Clear filters
             </Button>
           </div>
         </div>
+      </div>
+
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        {resultTitle ? <h2 className="text-xl font-semibold">{resultTitle}</h2> : null}
 
         <div className="flex min-w-0 items-center justify-end gap-2">
-          <div className="overflow-clip flex min-w-0 flex-1 items-center border rounded-xl bg-card sm:max-w-xs">
+          <div className="overflow-clip flex min-w-0 flex-1 items-center border rounded-xl bg-white sm:max-w-xs">
             <label className="flex min-w-0 flex-1 items-center gap-3 px-3">
               <span className="hidden shrink-0 text-sm text-muted-foreground sm:inline">
                 Sort by

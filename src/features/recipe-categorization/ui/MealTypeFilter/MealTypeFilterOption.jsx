@@ -2,7 +2,7 @@
 import { cn } from '@/shared/lib/cn';
 
 const MealTypeFilterOption = ({ item, isActive, onSelect }) => {
-  const { name, slug, count, Icon } = item;
+  const { title, slug, count, Icon } = item;
 
   return (
     <button
@@ -21,9 +21,9 @@ const MealTypeFilterOption = ({ item, isActive, onSelect }) => {
       />
       <span className="flex min-w-0 flex-col">
         <span className="truncate text-sm font-semibold">
-          {name === 'All' ? 'All Recipes' : name}
+          {title === 'All' ? 'All Recipes' : title}
         </span>
-        <span className="text-sm font-semibold text-muted-foreground">{count} recipes</span>
+        <span className="text-sm font-medium text-muted-foreground">{count} recipes</span>
       </span>
     </button>
   );

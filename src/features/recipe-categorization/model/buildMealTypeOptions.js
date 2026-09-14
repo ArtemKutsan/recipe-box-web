@@ -6,7 +6,7 @@ import {
 // Собирает UI-список типов блюд из справочника backend и добавляет пункт All.
 export const buildMealTypeOptions = (mealTypes, recipesCount = 0) => {
   const options = mealTypes.map((mealType) => ({
-    name: mealType.title,
+    title: mealType.title,
     slug: mealType.slug,
     count: mealType.recipesCount ?? 0,
     Icon: mealTypeIcons[mealType.title] ?? fallbackMealTypeIcon,
@@ -14,7 +14,7 @@ export const buildMealTypeOptions = (mealTypes, recipesCount = 0) => {
 
   return [
     {
-      name: 'All',
+      title: 'All',
       slug: 'All',
       count: recipesCount,
       Icon: mealTypeIcons.All ?? fallbackMealTypeIcon,

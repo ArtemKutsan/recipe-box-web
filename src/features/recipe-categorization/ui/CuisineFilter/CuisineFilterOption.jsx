@@ -1,7 +1,7 @@
 import { cn } from '@/shared/lib/cn';
 
 const CuisineFilterOption = ({ cuisine, isActive, onSelect }) => {
-  const { name, slug, count } = cuisine;
+  const { title, slug, count } = cuisine;
 
   return (
     <button
@@ -14,8 +14,8 @@ const CuisineFilterOption = ({ cuisine, isActive, onSelect }) => {
           : 'border-border bg-card text-foreground hover:border-secondary/50',
       )}
     >
-      <span className="truncate text-sm font-semibold">{name}</span>
-      <span className="text-sm font-semibold text-muted-foreground">{count} recipes</span>
+      <span className="truncate text-sm font-semibold">{title}</span>
+      <span className="text-sm font-medium text-muted-foreground">{count} recipes</span>
     </button>
   );
 };

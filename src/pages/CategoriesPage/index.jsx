@@ -13,7 +13,7 @@ const mapCuisineItemsToCards = (cuisines) =>
   // Backend уже отдает не весь каталог рецептов, а готовые кухни для текущего фильтра.
   // Здесь мы только приводим их к UI-формату карточек без дополнительной бизнес-логики.
   cuisines.map((cuisine) => ({
-    name: cuisine.title,
+    title: cuisine.title,
     slug: cuisine.slug,
     count: cuisine.recipesCount ?? 0,
     image: null,
@@ -76,9 +76,9 @@ const CategoriesPage = () => {
   );
 
   const activeMealTypeLabel =
-    mealTypeItems.find((item) => item.slug === activeMealType)?.name ?? 'All';
+    mealTypeItems.find((item) => item.slug === activeMealType)?.title ?? 'All';
   const activeCuisineLabel =
-    cuisineItems.find((item) => item.slug === activeCuisine)?.name ?? activeCuisine;
+    cuisineItems.find((item) => item.slug === activeCuisine)?.title ?? activeCuisine;
 
   const selectMealType = (mealType) => {
     // При смене mealType сбрасываем выбранную кухню,
