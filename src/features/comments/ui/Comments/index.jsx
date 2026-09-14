@@ -1,56 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { selectIsAuthenticated } from '@/entities/auth';
-import { useCreateCommentMutation, useGetCommentsQuery } from '@/entities/comment';
+import { useGetCommentsQuery } from '@/entities/comment';
 import { UserAvatar } from '@/entities/user';
 import { buildUserProfilePath } from '@/shared/config/routerPaths';
-import { Button, FormField, Pagination } from '@/shared/ui';
+import { Button, Pagination } from '@/shared/ui';
+import CommentForm from '../CommentForm';
 
 const COMMENT_PAGE_SIZE = 10;
 const EMPTY_COMMENTS = [];
 
 const getVisualIndentClass = (depth) => {
   return depth >= 1 && depth <= 4 ? 'ml-4 md:ml-4' : 'ml-0 md:ml-4';
-};
-
-const CommentForm = ({ targetType, targetId, parentCommentId = null, onDone }) => {
-  const [createComment, createState] = useCreateCommentMutation();
-  const { register, handleSubmit, reset } = useForm({ defaultValues: { body: '' } });
-  const targetLabel = targetType === 'post' ? 'post' : 'recipe';
-
-  const handleCreateComment = async ({ body }) => {
-    await createComment({
-      targetType,
-      targetId,
-      body,
-      parentCommentId,
-    }).unwrap();
-    reset();
-    onDone();
-  };
-
-  return (
-    <form className="space-y-3" onSubmit={handleSubmit(handleCreateComment)}>
-      <FormField
-        as="textarea"
-        label={parentCommentId ? 'Reply' : 'Comment'}
-        placeholder={
-          parentCommentId ? 'Write a reply' : `Share your thoughts about this ${targetLabel}`
-        }
-        rows={3}
-        {...register('body', { required: true, maxLength: 2000 })}
-      />
-      <Button type="submit" disabled={createState.isLoading}>
-        {createState.isLoading ? 'Sending...' : parentCommentId ? 'Reply' : 'Add comment'}
-      </Button>
-      {createState.isError ? (
-        <p className="text-sm text-destructive">Failed to send comment.</p>
-      ) : null}
-    </form>
-  );
 };
 
 const CommentItem = ({
