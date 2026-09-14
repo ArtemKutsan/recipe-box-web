@@ -1,1 +1,1 @@
-export { default as RecipeDiscoveryControls } from './ui/RecipeDiscoveryControls';
+export { default as RecipeFilters } from './ui/RecipeFilters';

@@ -43,7 +43,7 @@ const RECIPE_ORDER_OPTIONS = [
   },
 ];
 
-const RecipeDiscoveryControls = ({
+const RecipeFilters = ({
   search,
   mealType,
   cuisine,
@@ -155,4 +155,4 @@ const RecipeDiscoveryControls = ({
   );
 };
 
-export default RecipeDiscoveryControls;
+export default RecipeFilters;

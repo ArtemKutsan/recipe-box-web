@@ -4,7 +4,7 @@ import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { normalizeRecipeQueryParams } from '@/entities/recipe/api/normalizeRecipeQueryParams';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
-import { RecipeDiscoveryControls } from '@/features/recipe-discovery';
+import { RecipeFilters } from '@/features/recipe-discovery';
 import { buildMealTypeOptions } from '@/features/recipe-categorization';
 import { FavoriteButton } from '@/features/toggle-favorite';
 import { Pagination } from '@/shared/ui';
@@ -136,7 +136,7 @@ const RecipesPage = () => {
         <p>Find your next favorite recipe</p>
       </header>
 
-      <RecipeDiscoveryControls
+      <RecipeFilters
         search={search}
         mealType={mealType}
         cuisine={cuisine}
