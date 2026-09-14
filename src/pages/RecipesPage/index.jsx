@@ -4,7 +4,7 @@ import { RecipeList } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { normalizeRecipeQueryParams } from '@/entities/recipe/api/normalizeRecipeQueryParams';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
-import { RecipeListControls } from '@/features/recipe-discovery';
+import { RecipeListControls } from '@/features/recipe-list-controls';
 import { buildMealTypeOptions, RecipeFilters } from '@/features/recipe-filters';
 import { FavoriteButton } from '@/features/toggle-favorite';
 import { Pagination } from '@/shared/ui';
