@@ -1,5 +1,4 @@
-import { Button } from '@/shared/ui';
-import { cn } from '@/shared/lib/cn';
+import RecipeFormActions from '../RecipeFormActions';
 import { recipeFormRules } from '../../model/form';
 import RecipeImageField from '../RecipeImageField';
 import RecipeClassificationFields from '../RecipeClassificationFields';
@@ -23,11 +22,6 @@ const RecipeForm = ({
     errors[fieldName] ? (
       <p className="text-sm text-destructive">{errors[fieldName].message}</p>
     ) : null;
-  const messageClassName = cn(
-    'text-sm',
-    messageTone === 'error' ? 'text-destructive' : 'text-foreground',
-  );
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 md:grid-cols-2">
@@ -49,12 +43,12 @@ const RecipeForm = ({
         <RecipeMetricsFields register={register} errors={errors} rules={recipeFormRules} />
         <RecipeContentFields register={register} errors={errors} rules={recipeFormRules} />
       </div>
-      <div className="mt-6 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
-        <p className={messageClassName}>{message}</p>
-        <Button type="submit" variant="secondary" disabled={isSubmitting}>
-          {submitLabel}
-        </Button>
-      </div>
+      <RecipeFormActions
+        message={message}
+        messageTone={messageTone}
+        isSubmitting={isSubmitting}
+        submitLabel={submitLabel}
+      />
     </form>
   );
 };
