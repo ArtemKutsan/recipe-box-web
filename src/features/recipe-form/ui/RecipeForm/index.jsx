@@ -3,6 +3,7 @@ import { cn } from '@/shared/lib/cn';
 import { recipeFormRules } from '../../model/form';
 import RecipeImageField from '../RecipeImageField';
 import RecipeClassificationFields from '../RecipeClassificationFields';
+import RecipeMetricsFields from '../RecipeMetricsFields';
 
 const RecipeForm = ({
   register,
@@ -69,45 +70,7 @@ const RecipeForm = ({
           rules={recipeFormRules}
         />
 
-          <div>
-            <FormField
-              label="Servings"
-              type="number"
-              showLabel
-              {...register('servings', recipeFormRules.servings)}
-            />
-            {renderError('servings')}
-          </div>
-
-          <div>
-            <FormField
-              label="Prep Time"
-              type="number"
-              showLabel
-              {...register('prepTimeMinutes', recipeFormRules.prepTimeMinutes)}
-            />
-            {renderError('prepTimeMinutes')}
-          </div>
-
-          <div>
-            <FormField
-              label="Cook Time"
-              type="number"
-              showLabel
-              {...register('cookTimeMinutes', recipeFormRules.cookTimeMinutes)}
-            />
-            {renderError('cookTimeMinutes')}
-          </div>
-
-          <div>
-            <FormField
-              label="Calories"
-              type="number"
-              showLabel
-              {...register('caloriesPerServing', recipeFormRules.caloriesPerServing)}
-            />
-            {renderError('caloriesPerServing')}
-          </div>
+          <RecipeMetricsFields register={register} errors={errors} rules={recipeFormRules} />
         </div>
 
         <FormField
