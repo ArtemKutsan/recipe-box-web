@@ -1,7 +1,7 @@
 import { Carousel } from '@/shared/ui';
-import CuisineFilterOption from './CuisineFilterOption';
+import CuisineOption from './CuisineOption';
 
-const CuisineFilter = ({ cuisines, activeCuisine, onSelect }) => {
+const CuisineCarousel = ({ cuisines, activeCuisine, onSelect }) => {
   return (
     <Carousel
       className="px-14"
@@ -16,7 +16,7 @@ const CuisineFilter = ({ cuisines, activeCuisine, onSelect }) => {
     >
       {cuisines.map((cuisine) => (
         <Carousel.Slide key={cuisine.slug} className="w-auto">
-          <CuisineFilterOption
+          <CuisineOption
             cuisine={cuisine}
             isActive={activeCuisine === cuisine.slug}
             onSelect={onSelect}
@@ -27,4 +27,4 @@ const CuisineFilter = ({ cuisines, activeCuisine, onSelect }) => {
   );
 };
 
-export default CuisineFilter;
+export default CuisineCarousel;

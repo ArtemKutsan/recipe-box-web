@@ -2,7 +2,7 @@ import ArrowUpIcon from '@/assets/icons/arrow-up.svg?react';
 import CategoriesIcon from '@/assets/icons/categories.svg?react';
 import ListIcon from '@/assets/icons/list.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
-import { CuisineFilter, MealTypeFilter } from '@/features/recipe-categorization';
+import { CuisineCarousel, MealTypeCarousel } from '@/features/recipe-categorization';
 import { Button, ToggleGroup } from '@/shared/ui';
 
 const RECIPE_VIEW_OPTIONS = [
@@ -62,12 +62,12 @@ const RecipeDiscoveryControls = ({
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4 rounded-4xl bg-card p-4">
         <div className="flex flex-col gap-3">
-          <MealTypeFilter
+          <MealTypeCarousel
             items={mealTypeItems}
             activeMealType={mealType || 'All'}
             onSelect={(value) => onMealTypeChange(value === 'All' ? '' : value)}
           />
-          <CuisineFilter
+          <CuisineCarousel
             cuisines={cuisineItems}
             activeCuisine={cuisine || null}
             onSelect={onCuisineChange}

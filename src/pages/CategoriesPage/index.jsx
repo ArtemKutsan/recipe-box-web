@@ -3,8 +3,8 @@ import { RecipeListItem } from '@/entities/recipe/ui';
 import { useRecipesQuery } from '@/entities/recipe';
 import { useGetMealTypesQuery } from '@/entities/meal-type';
 import {
-  CuisineFilter,
-  MealTypeFilter,
+  CuisineCarousel,
+  MealTypeCarousel,
   buildMealTypeOptions,
 } from '@/features/recipe-categorization';
 import { FavoriteButton } from '@/features/toggle-favorite';
@@ -116,10 +116,10 @@ const CategoriesPage = () => {
       </header>
 
       {/* Верхний селектор строится из справочника mealTypes и общего total. */}
-      <MealTypeFilter items={mealTypeItems} activeMealType={activeMealType} onSelect={selectMealType} />
+      <MealTypeCarousel items={mealTypeItems} activeMealType={activeMealType} onSelect={selectMealType} />
 
       <div>
-        <CuisineFilter
+        <CuisineCarousel
           cuisines={cuisineItems}
           activeCuisine={activeCuisine}
           onSelect={setActiveCuisine}

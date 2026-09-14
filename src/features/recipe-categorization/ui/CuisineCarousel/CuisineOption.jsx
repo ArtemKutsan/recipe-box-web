@@ -1,6 +1,6 @@
 import { cn } from '@/shared/lib/cn';
 
-const CuisineFilterOption = ({ cuisine, isActive, onSelect }) => {
+const CuisineOption = ({ cuisine, isActive, onSelect }) => {
   const { title, slug, count } = cuisine;
 
   return (
@@ -20,4 +20,4 @@ const CuisineFilterOption = ({ cuisine, isActive, onSelect }) => {
   );
 };
 
-export default CuisineFilterOption;
+export default CuisineOption;

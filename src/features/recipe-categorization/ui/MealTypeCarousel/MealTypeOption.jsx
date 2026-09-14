@@ -1,7 +1,7 @@
-// src/features/recipe-categorization/ui/MealTypeFilter/MealTypeFilterOption.jsx
+// src/features/recipe-categorization/ui/MealTypeCarousel/MealTypeOption.jsx
 import { cn } from '@/shared/lib/cn';
 
-const MealTypeFilterOption = ({ item, isActive, onSelect }) => {
+const MealTypeOption = ({ item, isActive, onSelect }) => {
   const { title, slug, count, Icon } = item;
 
   return (
@@ -29,4 +29,4 @@ const MealTypeFilterOption = ({ item, isActive, onSelect }) => {
   );
 };
 
-export default MealTypeFilterOption;
+export default MealTypeOption;

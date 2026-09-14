@@ -1,7 +1,7 @@
 import { Carousel } from '@/shared/ui';
-import MealTypeFilterOption from './MealTypeFilterOption';
+import MealTypeOption from './MealTypeOption';
 
-const MealTypeFilter = ({ items, activeMealType, onSelect }) => {
+const MealTypeCarousel = ({ items, activeMealType, onSelect }) => {
   return (
     <Carousel
       className="px-14"
@@ -16,7 +16,7 @@ const MealTypeFilter = ({ items, activeMealType, onSelect }) => {
     >
       {items.map((item) => (
         <Carousel.Slide key={item.slug} className="w-auto">
-          <MealTypeFilterOption
+          <MealTypeOption
             item={item}
             isActive={activeMealType === item.slug}
             onSelect={onSelect}
@@ -27,4 +27,4 @@ const MealTypeFilter = ({ items, activeMealType, onSelect }) => {
   );
 };
 
-export default MealTypeFilter;
+export default MealTypeCarousel;
