@@ -73,7 +73,7 @@ const EditPostPage = () => {
         errors={errors}
         handleSubmit={handleSubmit}
         setValue={setValue}
-        initialSelectedRecipe={post.recipe ? { id: post.recipe.id, name: post.recipe.title } : null}
+        initialSelectedRecipe={post.recipe ? { id: post.recipe.id, title: post.recipe.title } : null}
         onSubmit={onSubmit}
         message={isSaving ? 'Saving post...' : (errors.root?.server?.message ?? '')}
         messageTone={errors.root?.server ? 'error' : 'default'}

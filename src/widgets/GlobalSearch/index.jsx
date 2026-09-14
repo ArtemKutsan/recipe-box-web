@@ -118,7 +118,7 @@ const GlobalSearch = ({ isOpen, onClose }) => {
                   {recipe.image ? (
                     <img
                       src={recipe.image}
-                      alt={recipe.name}
+                      alt={recipe.title}
                       className="size-20 shrink-0 rounded-xl object-cover"
                     />
                   ) : (
@@ -128,7 +128,7 @@ const GlobalSearch = ({ isOpen, onClose }) => {
                   )}
 
                   <div className="min-w-0">
-                    <h4 className="line-clamp-2 text-sm font-medium">{recipe.name}</h4>
+                    <h4 className="line-clamp-2 text-sm font-medium">{recipe.title}</h4>
                     <p className="mt-2 text-sm text-muted-foreground">
                       {recipe.cuisine ?? 'Cuisine'}
                       {Array.isArray(recipe.mealType) && recipe.mealType.length > 0

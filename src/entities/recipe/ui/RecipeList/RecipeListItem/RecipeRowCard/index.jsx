@@ -16,12 +16,12 @@ const RecipeRowCard = ({ recipe, favoriteButton = null }) => {
       <Link
         to={buildRecipePath(recipe.id)}
         className="absolute inset-0 z-10"
-        aria-label={`Open ${recipe?.name ?? 'recipe'}`}
+        aria-label={`Open ${recipe?.title ?? 'recipe'}`}
       />
       {recipe?.image ? (
         <img
           src={recipe.image}
-          alt={recipe.name ?? 'Recipe'}
+          alt={recipe.title ?? 'Recipe'}
           className="h-full min-h-40 w-full bg-muted object-cover rounded-xl"
         />
       ) : (
@@ -32,7 +32,7 @@ const RecipeRowCard = ({ recipe, favoriteButton = null }) => {
 
       <div className="flex min-w-0 flex-col justify-between gap-4">
         <div className="space-y-2">
-          <h3 className="text-2xl font-semibold">{recipe?.name ?? 'RecipeListItem'}</h3>
+          <h3 className="text-2xl font-semibold">{recipe?.title ?? 'RecipeListItem'}</h3>
           {recipe?.description?.trim() ? (
             <p className="max-w-2xl text-sm text-muted-foreground line-clamp-3">
               {recipe.description}

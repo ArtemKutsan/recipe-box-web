@@ -38,7 +38,7 @@ const FeedRecipeItem = ({ recipe, publishedAt }) => {
         {recipe.image ? (
           <img
             src={recipe.image}
-            alt={recipe.name}
+            alt={recipe.title}
             className="aspect-[4/3] w-full rounded-xl object-cover sm:size-40 sm:shrink-0"
           />
         ) : (
@@ -47,7 +47,7 @@ const FeedRecipeItem = ({ recipe, publishedAt }) => {
           </div>
         )}
         <div className="min-w-0 space-y-2">
-          <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{recipe.name}</h2>
+          <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{recipe.title}</h2>
           {recipe.description ? (
             <p className="line-clamp-3 text-base leading-7 text-muted-foreground">
               {recipe.description}

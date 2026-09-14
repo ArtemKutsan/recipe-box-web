@@ -7,8 +7,8 @@ const RecipeBasicFields = ({ register, errors, rules }) => {
   return (
     <>
       <div>
-        <FormField label="Name" required {...register('name', rules.name)} />
-        {renderError('name')}
+        <FormField label="Title" required {...register('title', rules.title)} />
+        {renderError('title')}
       </div>
       <div>
         <FormField label="Image URL" {...register('image', rules.image)} />

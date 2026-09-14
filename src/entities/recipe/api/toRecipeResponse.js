@@ -1,11 +1,11 @@
 // Приводим рецепт из backend-контракта к формату, который уже ждут страницы.
 export function toRecipeResponse(recipe) {
   const id = recipe.id ?? recipe.publicId ?? null;
-  const title = recipe.title ?? recipe.name ?? '';
+  const title = recipe.title ?? '';
 
   return {
     id,
-    name: title,
+    title,
     description: recipe.description ?? '',
     mealType: Array.isArray(recipe.mealType)
       ? recipe.mealType

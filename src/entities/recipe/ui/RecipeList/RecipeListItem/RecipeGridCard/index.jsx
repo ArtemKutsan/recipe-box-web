@@ -17,14 +17,14 @@ const RecipeGridCard = ({ recipe, favoriteButton = null }) => {
       <Link
         to={buildRecipePath(recipe.id)}
         className="absolute inset-0 z-10"
-        aria-label={`Open ${recipe?.name ?? 'recipe'}`}
+        aria-label={`Open ${recipe?.title ?? 'recipe'}`}
       />
       <div className="relative flex gap-3">
         <div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-muted sm:h-20 sm:w-20">
           {recipe?.image ? (
             <img
               src={recipe.image}
-              alt={recipe.name ?? 'Recipe'}
+              alt={recipe.title ?? 'Recipe'}
               className="size-full object-cover"
             />
           ) : (
@@ -36,7 +36,7 @@ const RecipeGridCard = ({ recipe, favoriteButton = null }) => {
 
         <div className="min-w-0 flex-1 flex flex-col justify-between">
           <h3 className="line-clamp-2 md:line-clamp-3 md:text-sm font-semibold leading-5 md:leading-4 text-foreground">
-            {recipe?.name ?? 'RecipeListItem'}
+            {recipe?.title ?? 'RecipeListItem'}
           </h3>
           <p className="mt-1 line-clamp-2 text-sm md:text-xs text-muted-foreground sm:text-xs md:leading-3">
             {cuisineLabel}

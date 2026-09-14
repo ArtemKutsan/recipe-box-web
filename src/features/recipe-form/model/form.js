@@ -1,5 +1,5 @@
 export const initialRecipeFormValues = {
-  name: '',
+  title: '',
   description: '',
   authorNote: '',
   image: '',
@@ -46,9 +46,9 @@ const isOptionalUrl = (value) => {
 };
 
 export const recipeFormRules = {
-  name: {
-    required: 'Recipe name is required',
-    minLength: { value: 3, message: 'Recipe name must be at least 3 characters' },
+  title: {
+    required: 'Recipe title is required',
+    minLength: { value: 3, message: 'Recipe title must be at least 3 characters' },
   },
   image: {
     validate: isOptionalUrl,
@@ -95,7 +95,7 @@ const findDictionarySlug = (items, value) => {
 
 // Приводим данные рецепта из API к значениям, которые ожидают поля формы.
 export const buildRecipeFormValues = (recipe, mealTypes = [], cuisines = []) => ({
-  name: recipe.name ?? '',
+  title: recipe.title ?? '',
   description: recipe.description ?? '',
   authorNote: recipe.authorNote ?? '',
   image: recipe.image ?? '',
@@ -116,7 +116,7 @@ export const buildRecipeFormValues = (recipe, mealTypes = [], cuisines = []) => 
 
 // Один payload используется и для создания, и для полного сохранения формы редактирования.
 export const buildRecipePayload = (formValues, thumbnailKey = formValues.thumbnailKey ?? null) => ({
-  title: formValues.name.trim(),
+  title: formValues.title.trim(),
   description: formValues.description.trim(),
   authorNote: formValues.authorNote.trim(),
   thumbnailUrl: formValues.image.trim(),

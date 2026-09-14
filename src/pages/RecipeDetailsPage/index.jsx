@@ -46,7 +46,7 @@ const RecipeDetailsPage = () => {
           {recipe.image ? (
             <img
               src={recipe.image}
-              alt={recipe.name}
+              alt={recipe.title}
               className="h-full min-h-64 w-full object-cover"
             />
           ) : (
@@ -76,7 +76,7 @@ const RecipeDetailsPage = () => {
 
             <div className="space-y-4">
               <h1 className="max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-                {recipe.name}
+                {recipe.title}
               </h1>
               {/* Описание */}
               <p className="max-w-2xl">

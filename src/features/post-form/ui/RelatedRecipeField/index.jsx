@@ -23,7 +23,7 @@ const RelatedRecipeField = ({ initialSelectedRecipe = null, setValue }) => {
         <span className="shrink-0 px-3 text-sm text-muted-foreground">Related recipe</span>
         {selectedRecipe ? (
           <span className="min-w-0 flex-1 truncate px-3 text-sm text-foreground">
-            {selectedRecipe.name}
+            {selectedRecipe.title}
           </span>
         ) : (
           <input
@@ -79,7 +79,7 @@ const RelatedRecipeField = ({ initialSelectedRecipe = null, setValue }) => {
                     setValue('recipeId', recipe.id, { shouldValidate: true });
                   }}
                 >
-                  <span className="min-w-0 truncate">{recipe.name}</span>
+                  <span className="min-w-0 truncate">{recipe.title}</span>
                   <span className="shrink-0 text-xs text-muted-foreground">{recipe.cuisine ?? 'Cuisine'}</span>
                 </button>
               ))}

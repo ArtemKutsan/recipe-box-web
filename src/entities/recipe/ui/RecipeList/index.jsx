@@ -9,7 +9,7 @@ const RecipeList = ({ recipes = [], viewMode = 'list', renderFavoriteButton }) =
       )}
     >
       {recipes.map((recipe) => (
-        <li key={recipe.id ?? recipe.name}>
+        <li key={recipe.id ?? recipe.title}>
           <RecipeListItem
             recipe={recipe}
             viewMode={viewMode}
