@@ -1,10 +1,11 @@
-import { Button, FormField } from '@/shared/ui';
+import { Button } from '@/shared/ui';
 import { cn } from '@/shared/lib/cn';
 import { recipeFormRules } from '../../model/form';
 import RecipeImageField from '../RecipeImageField';
 import RecipeClassificationFields from '../RecipeClassificationFields';
 import RecipeMetricsFields from '../RecipeMetricsFields';
 import RecipeContentFields from '../RecipeContentFields';
+import RecipeBasicFields from '../RecipeBasicFields';
 
 const RecipeForm = ({
   register,
@@ -30,15 +31,7 @@ const RecipeForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-4 md:grid-cols-2">
-        <div>
-          <FormField label="Name" required {...register('name', recipeFormRules.name)} />
-          {renderError('name')}
-        </div>
-
-        <div>
-          <FormField label="Image URL" {...register('image', recipeFormRules.image)} />
-          {renderError('image')}
-        </div>
+        <RecipeBasicFields register={register} errors={errors} rules={recipeFormRules} />
 
         <div>
           <RecipeImageField register={register} />
@@ -53,7 +46,7 @@ const RecipeForm = ({
           rules={recipeFormRules}
         />
 
-          <RecipeMetricsFields register={register} errors={errors} rules={recipeFormRules} />
+        <RecipeMetricsFields register={register} errors={errors} rules={recipeFormRules} />
         <RecipeContentFields register={register} errors={errors} rules={recipeFormRules} />
       </div>
       <div className="mt-6 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
