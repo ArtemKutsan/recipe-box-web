@@ -3,7 +3,6 @@ import RecipesPage from '@/pages/RecipesPage';
 import PostsPage from '@/pages/PostsPage';
 import PostDetailsPage from '@/pages/PostDetailsPage';
 import EditPostPage from '@/pages/EditPostPage';
-import CategoriesPage from '@/pages/CategoriesPage';
 import AuthPage from '@/pages/AuthPage';
 import AuthLayout from '@/app/layouts/AuthLayout';
 import AddRecipePage from '@/pages/AddRecipePage';
@@ -43,10 +42,6 @@ export const routeConfig = {
     path: RouterPath.edit_post,
     element: <EditPostPage />,
     protected: true,
-  },
-  [AppRoute.CATEGORIES]: {
-    path: RouterPath.categories,
-    element: <CategoriesPage />,
   },
   [AppRoute.AUTH]: {
     path: RouterPath.auth,

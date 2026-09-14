@@ -20,7 +20,7 @@ export const recipesApi = createApi({
       // Приводим backend-ответ к удобной форме для фронта:
       // - items: готовые карточки рецептов
       // - total/page/pageSize/totalPages: метаданные для пагинации и подсчета
-      // - cuisines: список кухонь, который CategoriesPage использует после выбора mealType
+      // - cuisines: список кухонь для фильтров рецептов после выбора mealType
       transformResponse: (response) => ({
         items: Array.isArray(response.items) ? response.items.map(toRecipeResponse) : [],
         total: response.total ?? 0,
