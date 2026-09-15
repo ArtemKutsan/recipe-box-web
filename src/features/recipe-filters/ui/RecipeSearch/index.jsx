@@ -13,6 +13,18 @@ const RecipeSearch = ({ value, onChange }) => (
       className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
       aria-label="Search in recipes"
     />
+    {value ? (
+      <button
+        type="button"
+        onClick={() => onChange('')}
+        className="shrink-0 text-muted-foreground hover:text-foreground"
+        aria-label="Clear recipe search"
+      >
+        <span className="text-2xl leading-none" aria-hidden="true">
+          ×
+        </span>
+      </button>
+    ) : null}
   </label>
 );
 

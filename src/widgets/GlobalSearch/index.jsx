@@ -1,8 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useSearchQuery } from '@/entities/search';
-import { buildPostPath, buildRecipePath, buildUserProfilePath } from '@/shared/config/routerPaths';
-import { Modal } from '@/shared/ui';
+import {
+  buildPostPath,
+  buildRecipePath,
+  buildUserProfilePath,
+  RouterPath,
+} from '@/shared/config/routerPaths';
+import { Button, Modal } from '@/shared/ui';
 import useDebounce from '@/shared/hooks/useDebounce';
 
 const MIN_SEARCH_LENGTH = 2;
@@ -17,6 +22,7 @@ function SearchSection({ title, children }) {
 }
 
 function GlobalSearch({ isOpen, onClose }) {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearch = useDebounce(searchValue.trim(), 250);
   const canSearch = isOpen && debouncedSearch.length >= MIN_SEARCH_LENGTH;
@@ -29,6 +35,11 @@ function GlobalSearch({ isOpen, onClose }) {
   const handleClose = () => {
     setSearchValue('');
     onClose();
+  };
+
+  const openAllRecipes = () => {
+    handleClose();
+    navigate(`${RouterPath.recipes}?search=${encodeURIComponent(debouncedSearch)}`);
   };
 
   return (
@@ -83,6 +94,14 @@ function GlobalSearch({ isOpen, onClose }) {
                     <span className="min-w-0 truncate text-sm font-medium">{recipe.title}</span>
                   </Link>
                 ))}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="self-end text-secondary"
+                  onClick={openAllRecipes}
+                >
+                  View all recipes
+                </Button>
               </SearchSection>
             ) : null}
 
