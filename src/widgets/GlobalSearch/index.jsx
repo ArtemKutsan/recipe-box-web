@@ -1,68 +1,40 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useMemo, useState } from 'react';
-import { useRecipes } from '@/entities/recipe';
-import { buildRecipePath, RouterPath } from '@/shared/config/routerPaths';
-import { Button, Modal, Pagination } from '@/shared/ui';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useSearchQuery } from '@/entities/search';
+import { buildPostPath, buildRecipePath, buildUserProfilePath } from '@/shared/config/routerPaths';
+import { Modal } from '@/shared/ui';
 import useDebounce from '@/shared/hooks/useDebounce';
 
-/*
-TopBar передаёт сюда isOpen и onClose для открытия и закрытия модалки.
-Текст поиска и номер страницы храним внутри компонента.
-Через 250 мс после ввода useRecipes отправляет запрос и получает рецепты.
-При новом поиске или закрытии возвращаем пагинацию на первую страницу.
-Нажатие на рецепт открывает его страницу, а View all recipes открывает общий список.
-*/
-const RESULT_PAGE_SIZE = 8;
 const MIN_SEARCH_LENGTH = 2;
 
-const GlobalSearch = ({ isOpen, onClose }) => {
-  const navigate = useNavigate();
+function SearchSection({ title, children }) {
+  return (
+    <section className="flex flex-col gap-2">
+      <h3 className="text-sm font-semibold">{title}</h3>
+      <div className="grid gap-2 sm:grid-cols-2">{children}</div>
+    </section>
+  );
+}
+
+function GlobalSearch({ isOpen, onClose }) {
   const [searchValue, setSearchValue] = useState('');
-  const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(searchValue.trim(), 250);
   const canSearch = isOpen && debouncedSearch.length >= MIN_SEARCH_LENGTH;
-
-  const queryParams = useMemo(
-    () => ({
-      search: debouncedSearch,
-      page,
-      pageSize: RESULT_PAGE_SIZE,
-    }),
-    [debouncedSearch, page],
-  );
-
-  const { recipes, totalPages, status, error } = useRecipes(queryParams, {
-    skip: !canSearch,
-  });
+  const { data, isLoading, isError } = useSearchQuery(debouncedSearch, { skip: !canSearch });
+  const recipes = data?.recipes ?? [];
+  const posts = data?.posts ?? [];
+  const users = data?.users ?? [];
+  const hasResults = recipes.length > 0 || posts.length > 0 || users.length > 0;
 
   const handleClose = () => {
-    setPage(1);
+    setSearchValue('');
     onClose();
-  };
-
-  const openRecipesPage = () => {
-    const searchParams = new URLSearchParams();
-
-    if (debouncedSearch) {
-      searchParams.set('search', debouncedSearch);
-    }
-
-    handleClose();
-    navigate({
-      pathname: RouterPath.recipes,
-      search: searchParams.size > 0 ? `?${searchParams.toString()}` : '',
-    });
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-    setPage(1);
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      title="Search recipes"
+      title="Search"
       onClose={handleClose}
       className="max-w-4xl bg-background shadow-2xl max-md:h-[100dvh] max-md:max-h-none max-md:max-w-none max-md:rounded-none"
       overlayClassName="max-md:p-0"
@@ -73,85 +45,91 @@ const GlobalSearch = ({ isOpen, onClose }) => {
           <input
             type="search"
             value={searchValue}
-            onChange={handleSearchChange}
-            placeholder="Search recipes..."
+            onChange={(event) => setSearchValue(event.target.value)}
+            placeholder="Search recipes, posts, people..."
             className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             autoFocus
           />
         </label>
 
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold">Recipes</h3>
-            <p className="text-xs text-muted-foreground">
-              Start typing to search recipes and open the full catalog from the page button.
-            </p>
-          </div>
-          {debouncedSearch.length >= MIN_SEARCH_LENGTH ? (
-            <Button type="button" variant="ghost" className="text-secondary/80" onClick={openRecipesPage}>
-              View all recipes
-            </Button>
-          ) : null}
-        </div>
-
-        {debouncedSearch.length < MIN_SEARCH_LENGTH ? (
+        {!canSearch ? (
           <p className="rounded-2xl border border-dashed bg-card p-4 text-sm text-muted-foreground">
-            Start typing to search recipes. The modal will show a compact recipe list and a page
-            button once results are available.
+            Start typing to search recipes, posts, and people.
           </p>
-        ) : status === 'loading' ? (
-          <p className="text-sm text-muted-foreground">Searching recipes...</p>
-        ) : status === 'failed' ? (
-          <p className="text-sm text-destructive">{error ?? 'Failed to search recipes.'}</p>
-        ) : recipes.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No recipes found.</p>
+        ) : isLoading ? (
+          <p className="text-sm text-muted-foreground">Searching...</p>
+        ) : isError ? (
+          <p className="text-sm text-destructive">Failed to load search results.</p>
+        ) : !hasResults ? (
+          <p className="text-sm text-muted-foreground">Nothing found.</p>
         ) : (
-          <div className="space-y-4">
-            <div className="grid gap-3 sm:grid-cols-2">
-              {recipes.map((recipe) => (
-                <Link
-                  key={recipe.id}
-                  to={buildRecipePath(recipe.id)}
-                  onClick={handleClose}
-                  className="flex items-center gap-4 rounded-2xl border bg-card p-4 text-left transition-colors hover:border-secondary/40 hover:bg-accent/40"
-                >
-                  {recipe.image ? (
-                    <img
-                      src={recipe.image}
-                      alt={recipe.title}
-                      className="size-20 shrink-0 rounded-xl object-cover"
-                    />
-                  ) : (
-                    <div className="flex size-20 shrink-0 items-center justify-center rounded-xl bg-muted text-xs text-muted-foreground">
-                      No image
-                    </div>
-                  )}
+          <div className="flex flex-col gap-6">
+            {recipes.length > 0 ? (
+              <SearchSection title="Recipes">
+                {recipes.map((recipe) => (
+                  <Link
+                    key={recipe.id}
+                    to={buildRecipePath(recipe.id)}
+                    onClick={handleClose}
+                    className="flex items-center gap-3 rounded-xl border bg-card p-3 text-left transition-colors hover:border-secondary/40 hover:bg-accent/40"
+                  >
+                    {recipe.thumbnailUrl ? (
+                      <img
+                        src={recipe.thumbnailUrl}
+                        alt={recipe.title}
+                        className="size-12 shrink-0 rounded-lg object-cover"
+                      />
+                    ) : null}
+                    <span className="min-w-0 truncate text-sm font-medium">{recipe.title}</span>
+                  </Link>
+                ))}
+              </SearchSection>
+            ) : null}
 
-                  <div className="min-w-0">
-                    <h4 className="line-clamp-2 text-sm font-medium">{recipe.title}</h4>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {recipe.cuisine ?? 'Cuisine'}
-                      {Array.isArray(recipe.mealType) && recipe.mealType.length > 0
-                        ? ` • ${recipe.mealType[0]}`
-                        : ''}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            {posts.length > 0 ? (
+              <SearchSection title="Posts">
+                {posts.map((post) => (
+                  <Link
+                    key={post.id}
+                    to={buildPostPath(post.id)}
+                    onClick={handleClose}
+                    className="rounded-xl border bg-card p-3 text-left transition-colors hover:border-secondary/40 hover:bg-accent/40"
+                  >
+                    <span className="block truncate text-sm font-medium">{post.title}</span>
+                    <span className="mt-1 block truncate text-xs text-muted-foreground">
+                      {post.author?.name ?? 'RecipeBox user'}
+                    </span>
+                  </Link>
+                ))}
+              </SearchSection>
+            ) : null}
 
-            <div className="flex justify-center border-t pt-4">
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                onPageChange={setPage}
-              />
-            </div>
+            {users.length > 0 ? (
+              <SearchSection title="People">
+                {users.map((user) => (
+                  <Link
+                    key={user.id}
+                    to={buildUserProfilePath(user.id)}
+                    onClick={handleClose}
+                    className="flex items-center gap-3 rounded-xl border bg-card p-3 text-left transition-colors hover:border-secondary/40 hover:bg-accent/40"
+                  >
+                    {user.avatarUrl ? (
+                      <img
+                        src={user.avatarUrl}
+                        alt={user.name}
+                        className="size-12 shrink-0 rounded-lg object-cover"
+                      />
+                    ) : null}
+                    <span className="truncate text-sm font-medium">{user.name}</span>
+                  </Link>
+                ))}
+              </SearchSection>
+            ) : null}
           </div>
         )}
       </div>
     </Modal>
   );
-};
+}
 
 export default GlobalSearch;
