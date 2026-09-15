@@ -95,7 +95,7 @@ const Modal = ({ isOpen, title, children, className, overlayClassName, onClose }
         aria-modal="true"
         aria-labelledby={titleId}
         className={cn(
-          'flex max-h-[calc(100dvh-4rem)] w-full max-w-xl flex-col overflow-hidden rounded-4xl bg-card',
+          'flex max-h-[calc(100dvh-2rem)] w-full max-w-xl flex-col overflow-hidden rounded-4xl bg-card',
           className,
         )}
       >
