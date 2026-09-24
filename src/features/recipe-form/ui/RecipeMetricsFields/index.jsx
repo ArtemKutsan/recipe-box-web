@@ -1,5 +1,12 @@
 import { FormField } from '@/shared/ui';
 
+const minValues = {
+  servings: 1,
+  prepTimeMinutes: 0,
+  cookTimeMinutes: 0,
+  caloriesPerServing: 0,
+};
+
 const RecipeMetricsFields = ({ register, errors, rules }) => {
   const renderError = (fieldName) =>
     errors[fieldName] ? <p className="text-sm text-destructive">{errors[fieldName].message}</p> : null;
@@ -13,7 +20,14 @@ const RecipeMetricsFields = ({ register, errors, rules }) => {
         ['caloriesPerServing', 'Calories'],
       ].map(([name, label]) => (
         <div key={name}>
-          <FormField label={label} type="number" showLabel {...register(name, rules[name])} />
+          <FormField
+            label={label}
+            type="number"
+            min={minValues[name]}
+            step="1"
+            showLabel
+            {...register(name, rules[name])}
+          />
           {renderError(name)}
         </div>
       ))}
