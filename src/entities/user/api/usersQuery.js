@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
 import { toRecipeResponse } from '@/entities/recipe/api/toRecipeResponse';
-import { toPostResponse } from '@/entities/post';
+import { toPostResponse } from '@/entities/post/api/response';
 import { setCurrentUser } from '@/entities/auth';
 
 const buildUserRecipesQuery = (userId, queryParams = {}, isCurrentUser = false) => {
