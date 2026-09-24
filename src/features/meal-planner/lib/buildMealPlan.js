@@ -3,6 +3,7 @@ const buildRecipeMeta = (recipe) => ({
   title: recipe.title,
   image: recipe.thumbnailUrl,
   caloriesPerServing: recipe.caloriesPerServing,
+  unavailable: recipe.unavailable ?? false,
 });
 
 export const buildMealPlan = ({ days, mealPeriods, mealPlan }) => {

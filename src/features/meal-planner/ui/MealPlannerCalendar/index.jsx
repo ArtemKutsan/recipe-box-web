@@ -36,7 +36,7 @@ const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
               </div> */}
 
               {items.map((item, index) =>
-                item ? (
+                item && !item.unavailable ? (
                   <MealPlannerCard
                     key={`${label}-${index}`}
                     item={item}
@@ -51,6 +51,7 @@ const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
                     day={days[index].label}
                     mealPeriod={label}
                     onAddMeal={onAddMeal}
+                    unavailable={item?.unavailable}
                   />
                 ),
               )}
