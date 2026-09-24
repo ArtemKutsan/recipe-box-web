@@ -122,7 +122,7 @@ const ProfilePage = () => {
   const profileDetails = [
     { label: 'Age', value: user.age ?? '—' },
     { label: 'Gender', value: user.gender || '—' },
-    { label: 'Phone', value: user.phone || '—' },
+    ...(isCurrentUserProfile ? [{ label: 'Phone', value: user.phone || '—' }] : []),
   ];
   const displayedRecipes = isSavedRecipesActive ? (savedRecipesData?.items ?? []) : recipes;
   const displayedTotal = isPostsActive
