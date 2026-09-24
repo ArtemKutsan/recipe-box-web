@@ -3,6 +3,7 @@ import { baseQuery } from '@/shared/api';
 import { buildRecipesQuery } from './buildRecipesQuery';
 import { toRecipeDetailResponse } from './toRecipeDetailResponse';
 import { toRecipeResponse } from './toRecipeResponse';
+import { usersApi } from '@/entities/user/api/usersQuery';
 
 export const recipesApi = createApi({
   reducerPath: 'recipesApi',
@@ -64,6 +65,21 @@ export const recipesApi = createApi({
         { type: 'Recipes', id: recipeId },
       ],
     }),
+    deleteRecipe: build.mutation({
+      query: (recipeId) => ({
+        url: `/recipes/${recipeId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'Recipes', id: 'LIST' }],
+      async onQueryStarted(_recipeId, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(usersApi.util.invalidateTags([{ type: 'UserRecipes', id: 'LIST' }]));
+        } catch {
+          // Не обновляем профиль, если удаление рецепта не завершилось успешно.
+        }
+      },
+    }),
   }),
 });
 
@@ -72,4 +88,5 @@ export const {
   useGetRecipeByIdQuery,
   useCreateRecipeMutation,
   useUpdateRecipeMutation,
+  useDeleteRecipeMutation,
 } = recipesApi;

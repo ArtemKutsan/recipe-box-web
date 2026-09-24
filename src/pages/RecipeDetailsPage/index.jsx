@@ -1,7 +1,9 @@
-import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectAuthUser } from '@/entities/auth';
-import { buildEditRecipePath, buildUserProfilePath } from '@/shared/config/routerPaths';
+import { useDeleteRecipeMutation } from '@/entities/recipe';
+import { buildEditRecipePath, buildUserProfilePath, RouterPath } from '@/shared/config/routerPaths';
 import { Badge, BulletList, Button, InfoLabel, NumberedList } from '@/shared/ui';
 import TimerIcon from '@/assets/icons/timer.svg?react';
 import FireIcon from '@/assets/icons/fire-line.svg?react';
@@ -16,7 +18,10 @@ import { Comments } from '@/features/comments';
 
 const RecipeDetailsPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const authUser = useSelector(selectAuthUser);
+  const [deleteRecipe, { isLoading: isDeleting }] = useDeleteRecipeMutation();
+  const [deleteError, setDeleteError] = useState('');
   const { recipe, status, error } = useRecipe(id);
 
   if (status === 'idle' || status === 'loading') {
@@ -38,6 +43,25 @@ const RecipeDetailsPage = () => {
   const author = recipe.author;
   const authorName = author?.name ?? 'RecipeBox user';
   const canEdit = authUser?.id != null && String(authUser.id) === String(author?.id);
+
+  const handleDelete = async () => {
+    if (!window.confirm('Delete this recipe?')) {
+      return;
+    }
+
+    setDeleteError('');
+
+    try {
+      await deleteRecipe(recipe.id).unwrap();
+      navigate(RouterPath.recipes);
+    } catch (deleteRequestError) {
+      setDeleteError(
+        deleteRequestError?.data?.message ??
+          deleteRequestError?.message ??
+          'Failed to delete recipe.',
+      );
+    }
+  };
 
   return (
     <div className="mx-auto">
@@ -67,12 +91,25 @@ const RecipeDetailsPage = () => {
                   <span className="font-medium">{recipe.rating ?? '—'}</span>
                 </span>
                 {canEdit ? (
-                  <Button as={Link} to={buildEditRecipePath(recipe.id)} variant="outline" size="sm">
-                    Edit
-                  </Button>
+                  <>
+                    <Button as={Link} to={buildEditRecipePath(recipe.id)} variant="outline" size="sm">
+                      Edit
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      disabled={isDeleting}
+                      onClick={handleDelete}
+                    >
+                      Delete
+                    </Button>
+                  </>
                 ) : null}
               </div>
             </div>
+
+            {deleteError ? <p className="text-sm text-destructive">{deleteError}</p> : null}
 
             <div className="space-y-4">
               <h1 className="max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">

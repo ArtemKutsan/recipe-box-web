@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@/shared/api';
-import { toRecipeResponse } from '@/entities/recipe';
+import { toRecipeResponse } from '@/entities/recipe/api/toRecipeResponse';
 import { toPostResponse } from '@/entities/post';
 import { setCurrentUser } from '@/entities/auth';
 
@@ -65,6 +65,7 @@ const buildUserPostsQuery = (userId, queryParams = {}, isCurrentUser = false) =>
 export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery,
+  tagTypes: ['UserRecipes'],
   endpoints: (build) => ({
     getUserById: build.query({
       query: (userId) => `/users/${userId}`,
@@ -82,6 +83,7 @@ export const usersApi = createApi({
         pageSize: response.pageSize ?? 20,
         totalPages: response.totalPages ?? 0,
       }),
+      providesTags: [{ type: 'UserRecipes', id: 'LIST' }],
     }),
     getUserPosts: build.query({
       query: ({ userId, isCurrentUser = false, ...queryParams }) =>
