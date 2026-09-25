@@ -10,7 +10,7 @@ import {
 } from '@/entities/notification';
 import { buildPostPath, buildRecipePath } from '@/shared/config/routerPaths';
 import { Button, Modal } from '@/shared/ui';
-import NotificationIcon from '@/assets/icons/notification.svg?react';
+import BellRingIcon from '@/assets/icons/bell-ring.svg?react';
 
 function getNotificationText(notification) {
   if (notification.type === 'recipe_favorited') {
@@ -95,16 +95,16 @@ const Notifications = () => {
     <>
       <Button
         type="button"
-        variant="outline"
+        variant="ghost"
         size="icon"
-        className="relative shrink-0 bg-card"
+        className="relative shrink-0 border"
         onClick={() => setIsOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         aria-label="Open notifications"
         title="Notifications"
       >
-        <NotificationIcon aria-hidden="true" className="size-5" />
+        <BellRingIcon aria-hidden="true" className="size-6" />
         {unreadCount > 0 ? (
           <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-secondary px-1 text-[10px] leading-4 text-secondary-foreground">
             {unreadCount}
@@ -127,9 +127,7 @@ const Notifications = () => {
           </div>
         ) : null}
         {isLoading ? <p className="text-sm text-muted-foreground">Loading...</p> : null}
-        {isError ? (
-          <p className="text-sm text-destructive">Failed to load notifications.</p>
-        ) : null}
+        {isError ? <p className="text-sm text-destructive">Failed to load notifications.</p> : null}
         {!isLoading && !isError && notifications.length === 0 ? (
           <p className="text-sm text-muted-foreground">No notifications yet.</p>
         ) : null}
