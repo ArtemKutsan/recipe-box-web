@@ -4,7 +4,7 @@ import Button from '../Button';
 const SIBLING_COUNT = 1;
 
 const getPageItems = (currentPage, totalPages) => {
-  if (totalPages <= 7) {
+  if (totalPages <= 4) {
     return Array.from({ length: totalPages }, (_, index) => index + 1);
   }
 
@@ -40,11 +40,15 @@ const Pagination = ({ page, totalPages, onPageChange, className }) => {
   }
 
   return (
-    <nav className={cn('flex items-center justify-center gap-2', className)} aria-label="Pagination">
+    <nav
+      className={cn('flex items-center justify-center gap-1 sm:gap-2', className)}
+      aria-label="Pagination"
+    >
       <Button
         type="button"
         variant="ghost"
         size="icon"
+        className="shrink-0"
         aria-label="Previous page"
         disabled={!canGoPrevious}
         onClick={() => onPageChange(page - 1)}
@@ -59,6 +63,7 @@ const Pagination = ({ page, totalPages, onPageChange, className }) => {
             key={item}
             variant={item === page ? 'secondary' : 'ghost'}
             size="icon"
+            className="shrink-0"
             aria-label={`Page ${item}`}
             aria-current={item === page ? 'page' : undefined}
             onClick={() => onPageChange(item)}
@@ -68,7 +73,7 @@ const Pagination = ({ page, totalPages, onPageChange, className }) => {
         ) : (
           <span
             key={item}
-            className="flex size-10 items-center justify-center text-sm text-muted-foreground"
+            className="flex size-10 shrink-0 items-center justify-center text-sm text-muted-foreground"
             aria-hidden="true"
           >
             ...
@@ -80,6 +85,7 @@ const Pagination = ({ page, totalPages, onPageChange, className }) => {
         type="button"
         variant="ghost"
         size="icon"
+        className="shrink-0"
         aria-label="Next page"
         disabled={!canGoNext}
         onClick={() => onPageChange(page + 1)}
