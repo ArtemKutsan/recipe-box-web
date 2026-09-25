@@ -8,6 +8,7 @@ import {
 } from '@/entities/meal-plan';
 import {
   buildMealPlan,
+  calculateDailyCalories,
   emptyMealPlan,
   getDays,
   mealPeriods,
@@ -45,6 +46,10 @@ const MealPlannerPage = () => {
         mealPlan: storedMealPlan,
       }),
     [days, storedMealPlan],
+  );
+  const dailyCalories = useMemo(
+    () => calculateDailyCalories({ days, rows: mealPlan }),
+    [days, mealPlan],
   );
 
   if (isMealPlanLoading) {
@@ -86,6 +91,7 @@ const MealPlannerPage = () => {
       <MealPlannerCalendar
         days={days}
         rows={mealPlan}
+        dailyCalories={dailyCalories}
         onAddMeal={setSelectedSlot}
         onRemoveMeal={handleUpdateMealPlanSlot}
       />

@@ -5,13 +5,13 @@ const columnTemplate = {
   gridTemplateColumns: 'repeat(7, minmax(116px, 1fr))',
 };
 
-const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
+const MealPlannerCalendar = ({ days, rows, dailyCalories, onAddMeal, onRemoveMeal }) => {
   return (
     <div className="w-full max-w-5xl overflow-x-auto pb-6">
       <div className="min-w-[280px] space-y-3">
         <div className="grid gap-3" style={columnTemplate}>
           {/* <div /> */}
-          {days.map((day) => (
+          {days.map((day, index) => (
             <div
               key={day.label}
               className={
@@ -20,7 +20,12 @@ const MealPlannerCalendar = ({ days, rows, onAddMeal, onRemoveMeal }) => {
                   : 'min-h-12 flex items-center justify-center px-4 py-2 text-sm font-medium'
               }
             >
-              {day.label}
+              <div className="flex flex-col items-center gap-1">
+                <span>{day.label}</span>
+                <span className="text-xs font-normal text-muted-foreground">
+                  {dailyCalories[index]?.calories ?? 0} kcal
+                </span>
+              </div>
             </div>
           ))}
         </div>

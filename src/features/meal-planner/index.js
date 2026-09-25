@@ -4,3 +4,4 @@ export { emptyMealPlan } from './model/emptyMealPlan';
 export { getDays } from './model/days';
 export { mealPeriods } from './config/mealPeriods';
 export { buildMealPlan } from './lib/buildMealPlan';
+export { calculateDailyCalories } from './lib/calculateDailyCalories';
