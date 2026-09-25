@@ -13,6 +13,7 @@ import {
   getDays,
   mealPeriods,
   MealPlannerCalendar,
+  MealPlannerStats,
   MealRecipeModal,
 } from '@/features/meal-planner';
 
@@ -87,6 +88,7 @@ const MealPlannerPage = () => {
         <p>Plan your meals for the week</p>
       </header>
       {updateError ? <p className="text-sm text-destructive">{updateError}</p> : null}
+      <MealPlannerStats days={days} rows={mealPlan} dailyCalories={dailyCalories} />
       {/* Пустой слот передаёт сюда day и mealPeriod через onAddMeal */}
       <MealPlannerCalendar
         days={days}
