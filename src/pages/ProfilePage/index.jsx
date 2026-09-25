@@ -203,7 +203,7 @@ const ProfilePage = () => {
         <p>{isCurrentUserProfile ? 'Your RecipeBox account' : 'Public RecipeBox profile'}</p>
       </header>
 
-      <div className="flex items-center gap-6 rounded-2xl border p-6">
+      <div className="flex flex-col items-center gap-6 rounded-2xl border bg-card p-5 sm:flex-row sm:items-center sm:p-6">
         <div className="flex shrink-0 flex-col items-center gap-3">
           <div className="relative">
             <UserAvatar src={user.avatarUrl} alt={displayName} className="size-24" />
@@ -239,30 +239,30 @@ const ProfilePage = () => {
           ) : null}
         </div>
 
-        <div className="flex min-w-0 flex-col gap-3">
+        <div className="flex min-w-0 flex-1 flex-col gap-3 self-stretch text-center sm:self-auto sm:text-left">
           <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-semibold">{displayName}</h2>
+            <h2 className="break-words text-xl font-semibold sm:text-2xl">{displayName}</h2>
             <span className="text-sm text-muted-foreground">User #{user.id}</span>
           </div>
-          <p className="max-w-2xl text-sm leading-6 text-muted-foreground">{profileBio}</p>
+          <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">{profileBio}</p>
         </div>
       </div>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <div className="rounded-2xl border p-4">
-          <div className="text-sm text-muted-foreground">Recipes</div>
-          <div className="mt-2 text-2xl font-semibold tracking-tight">{total}</div>
+        <div className="rounded-2xl border bg-card px-4 py-3">
+          <div className="text-xs text-muted-foreground">Recipes</div>
+          <div className="mt-1 text-sm font-medium text-foreground">{total}</div>
         </div>
 
-        <div className="rounded-2xl border p-4">
-          <div className="text-sm text-muted-foreground">Posts</div>
-          <div className="mt-2 text-2xl font-semibold tracking-tight">{postsTotal}</div>
+        <div className="rounded-2xl border bg-card px-4 py-3">
+          <div className="text-xs text-muted-foreground">Posts</div>
+          <div className="mt-1 text-sm font-medium text-foreground">{postsTotal}</div>
         </div>
 
         {profileDetails.map((detail) => (
-          <div key={detail.label} className="rounded-2xl border p-4">
-            <div className="text-sm text-muted-foreground">{detail.label}</div>
-            <div className="mt-2 text-sm font-medium">{detail.value}</div>
+          <div key={detail.label} className="rounded-2xl border bg-card px-4 py-3">
+            <div className="text-xs text-muted-foreground">{detail.label}</div>
+            <div className="mt-1 text-sm font-medium text-foreground">{detail.value}</div>
           </div>
         ))}
       </section>
