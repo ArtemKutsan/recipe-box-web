@@ -3,7 +3,7 @@ import { UserAvatar } from '@/entities/user';
 import { buildPostPath, buildRecipePath, buildUserProfilePath } from '@/shared/config/routerPaths';
 import { formatPostDate } from '../../lib/formatPostDate';
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, compact = false }) => {
   const author = post.author;
   const authorName = author?.name ?? 'Unknown user';
   const postType = post.recipe ? 'Cooking result' : 'Community note';
@@ -36,7 +36,11 @@ const PostCard = ({ post }) => {
 
       <div className="space-y-2">
         <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{post.title}</h2>
-        <p className="whitespace-pre-wrap text-base leading-7 text-foreground/90">{post.body}</p>
+        <p
+          className={`whitespace-pre-wrap text-base leading-7 text-foreground/90${compact ? ' line-clamp-3 overflow-hidden' : ''}`}
+        >
+          {post.body}
+        </p>
       </div>
 
       {post.recipe ? (

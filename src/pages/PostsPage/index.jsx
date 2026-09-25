@@ -36,7 +36,7 @@ const PostsPage = () => {
       {posts.length > 0 ? (
         <div className="flex flex-col">
           {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard key={post.id} post={post} compact />
           ))}
         </div>
       ) : (
